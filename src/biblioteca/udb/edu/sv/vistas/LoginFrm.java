@@ -5,12 +5,18 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
+import biblioteca.udb.edu.sv.Application;
+import biblioteca.udb.edu.sv.tools.LogManager;
+import biblioteca.udb.edu.sv.tools.SesionUsuario;
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Fernando Flamenco
  */
 public class LoginFrm extends javax.swing.JFrame {
-
+    Logger logger = LogManager.getLogger(Application.class); // just for quick debugging
+    
     /**
      * Creates new form LoginFrm
      */
@@ -28,7 +34,7 @@ public class LoginFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jbuttonIngresar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
@@ -40,8 +46,18 @@ public class LoginFrm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextField1.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Ingresar");
+        jbuttonIngresar.setText("Ingresar");
+        jbuttonIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbuttonIngresarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Raleway", 1, 36)); // NOI18N
         jLabel1.setText("Login");
@@ -76,7 +92,7 @@ public class LoginFrm extends javax.swing.JFrame {
                                 .addComponent(jTextField1)))
                         .addGap(54, 54, 54))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(129, 129, 129))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(101, 101, 101)
@@ -103,7 +119,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -116,6 +132,44 @@ public class LoginFrm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+ 
+    private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
+        String usuario = jTextField1.getText();
+        if (usuario.isEmpty() || usuario.isBlank())
+        {
+            logger.error("Usuario no valido.");
+            return;
+        }
+        
+        // verify if the user is in the database and after veriyfing that it exists
+        // get the role of the user from the data base and assign it.
+        // this is where the UsuarioController is used.
+        
+        // String rol = ...;
+        
+        boolean isUserValid = true; // Just for testing.
+        if (isUserValid)
+        {
+            String rol = "Administrador";
+            SesionUsuario.getInstancia().iniciarSesion(1, usuario, rol);
+
+            setVisible(false);
+
+            DashboardFrm dash = new DashboardFrm();
+            dash.configurarAccesosPorRol();
+            dash.setVisible(true);
+        }
+        else
+        {
+            logger.error("El usuario no fue encontrado en la base de datos");
+            logger.error("o las credenciales del usuario estan incorrectas.");
+        }
+    }//GEN-LAST:event_jbuttonIngresarActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,7 +197,6 @@ public class LoginFrm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(LoginFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -153,7 +206,6 @@ public class LoginFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -162,5 +214,6 @@ public class LoginFrm extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jbuttonIngresar;
     // End of variables declaration//GEN-END:variables
 }

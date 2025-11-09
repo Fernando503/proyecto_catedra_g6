@@ -17,3 +17,20 @@
 2025-11-07 00:02:53 INFO  Application:28 - Iniciando sistema de Mediateca UDB.
 2025-11-07 00:04:25 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-07 00:05:44 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-09 13:02:34 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-09 13:23:21 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-09 13:24:02 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-09 13:24:05 INFO  Application:140 - Success
+2025-11-09 13:24:05 INFO  Application:140 - Success
+2025-11-09 13:24:08 INFO  Application:140 - Success
+2025-11-09 13:24:09 INFO  Application:140 - Success
+2025-11-09 13:27:57 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-09 13:28:01 INFO  Application:155 - Success
+2025-11-09 13:37:48 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-09 13:37:52 ERROR Application:141 - Usuario no valido.
+2025-11-09 13:37:54 ERROR Application:141 - Usuario no valido.
+2025-11-09 13:37:54 ERROR Application:141 - Usuario no valido.
+2025-11-09 13:37:55 ERROR Application:141 - Usuario no valido.
+2025-11-09 13:37:57 ERROR Application:166 - El usuario no fue encontrado en la base de datos
+2025-11-09 13:37:57 ERROR Application:167 - o las credenciales del usuario estan incorrectas.
+2025-11-09 13:38:15 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
