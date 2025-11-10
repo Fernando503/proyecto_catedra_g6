@@ -55,3 +55,30 @@
 2025-11-10 15:36:36 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 15:37:13 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 15:37:49 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:39:51 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:50:18 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:50:22 ERROR Application:169 - El usuario no fue encontrado en la base de datos
+2025-11-10 15:50:22 ERROR Application:170 - o las credenciales del usuario están incorrectas.
+2025-11-10 15:51:33 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:52:19 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:55:05 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:55:48 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:56:01 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:57:54 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:58:17 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 15:58:24 ERROR Application:169 - El usuario no fue encontrado en la base de datos
+2025-11-10 15:58:24 ERROR Application:170 - o las credenciales del usuario están incorrectas.
+2025-11-10 15:59:10 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:08:10 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:08:57 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:09:00 ERROR Application:151 - Usuario con estado no activo: Suspendido
+2025-11-10 16:09:05 ERROR Application:175 - El usuario no fue encontrado en la base de datos
+2025-11-10 16:09:05 ERROR Application:176 - o las credenciales del usuario están incorrectas.
+2025-11-10 16:09:09 ERROR Application:175 - El usuario no fue encontrado en la base de datos
+2025-11-10 16:09:09 ERROR Application:176 - o las credenciales del usuario están incorrectas.
+2025-11-10 16:09:14 ERROR Application:151 - Usuario con estado no activo: Suspendido
+2025-11-10 16:09:28 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:09:30 ERROR Application:151 - Usuario con estado no activo: Suspendido
+2025-11-10 16:09:58 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:10:01 ERROR Application:151 - Usuario con estado no activo: Moroso
+2025-11-10 16:11:31 INFO  Application:25 - Iniciando sistema de Mediateca UDB.

@@ -145,15 +145,13 @@ public class LoginFrm extends javax.swing.JFrame {
         }
 
         Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
-
         if (usuario != null) {
             // opcional: validar estado
             if (!"Activo".equalsIgnoreCase(usuario.getEstadoUsuario())) {
                 logger.error("Usuario con estado no activo: " + usuario.getEstadoUsuario());
-                // puedes mostrar JOptionPane también
                 return;
             }
-
+            
             // iniciar sesión
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),

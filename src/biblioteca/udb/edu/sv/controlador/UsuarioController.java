@@ -41,8 +41,10 @@ public class UsuarioController {
     }
     
     public boolean restablecerContraseña(int idUsuario) {
-        // puedes cambiar "1234" por una contraseña generada o un hash en el futuro
         return usuarioDAO.restablecerContraseña(idUsuario, "1234");
     }
-
+    
+    public boolean esUsuarioMoroso(int idUsuario) {
+        return usuarioDAO.esUsuarioMoroso(idUsuario);
+    }
 }
