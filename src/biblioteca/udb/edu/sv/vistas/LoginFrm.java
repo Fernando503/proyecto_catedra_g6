@@ -9,6 +9,7 @@ import biblioteca.udb.edu.sv.Application;
 import biblioteca.udb.edu.sv.tools.LogManager;
 import biblioteca.udb.edu.sv.tools.SesionUsuario;
 import org.apache.log4j.Logger;
+import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
 
 /**
  *
@@ -80,30 +81,30 @@ public class LoginFrm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                                .addComponent(jTextField1)))
-                        .addGap(54, 54, 54))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(129, 129, 129))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addContainerGap(122, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(142, 142, 142))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jPasswordField1)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1)
+                                .addGap(88, 88, 88))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,34 +137,29 @@ public class LoginFrm extends javax.swing.JFrame {
  
     private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
         String usuario = jTextField1.getText();
-        if (usuario.isEmpty() || usuario.isBlank())
-        {
-            logger.error("Usuario no valido.");
+        String contraseña = new String(jPasswordField1.getPassword());
+
+        if (usuario.isEmpty() || usuario.isBlank() || contraseña.isEmpty() || contraseña.isBlank()) {
+            logger.error("Usuario o contraseña no válidos.");
             return;
         }
-        
-        // verify if the user is in the database and after veriyfing that it exists
-        // get the role of the user from the data base and assign it.
-        // this is where the UsuarioController is used.
-        
-        // String rol = ...;
-        
-        boolean isUserValid = true; // Just for testing.
-        if (isUserValid)
-        {
-            String rol = "Administrador";
-            SesionUsuario.getInstancia().iniciarSesion(1, usuario, rol);
+
+        UsuarioDAO dao = new UsuarioDAO();
+        biblioteca.udb.edu.sv.entidades.Usuario usuarioValidado = dao.validarUsuario(usuario, contraseña);
+
+        if (usuarioValidado != null) {
+            SesionUsuario.getInstancia().iniciarSesion(
+                usuarioValidado.getUsuarioID(),
+                usuarioValidado.getNombre(),
+                usuarioValidado.getRol()
+            );
 
             setVisible(false);
-
             DashboardFrm dash = new DashboardFrm();
             dash.configurarAccesosPorRol();
             dash.setVisible(true);
-        }
-        else
-        {
-            logger.error("El usuario no fue encontrado en la base de datos");
-            logger.error("o las credenciales del usuario estan incorrectas.");
+        } else {
+            logger.error("El usuario no fue encontrado o las credenciales son incorrectas.");
         }
     }//GEN-LAST:event_jbuttonIngresarActionPerformed
 
