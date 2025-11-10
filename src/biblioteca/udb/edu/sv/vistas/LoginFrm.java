@@ -136,26 +136,31 @@ public class LoginFrm extends javax.swing.JFrame {
 
  
     private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
-        String correo = jTextField1.getText();
+        String correo = jTextField1.getText(); // tu campo "Usuario" lo usas como correo
         String contraseña = new String(jPasswordField1.getPassword());
 
-        if (correo.isEmpty() || correo.isBlank() || contraseña.isEmpty() || contraseña.isBlank()) {
+        if (correo.isBlank() || contraseña.isBlank()) {
             logger.error("Usuario o contraseña no válidos.");
             return;
         }
 
-        // Usar el controlador para validar contra la base de datos
         Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
 
         if (usuario != null) {
-            // Guardar datos en la sesión
+            // opcional: validar estado
+            if (!"Activo".equalsIgnoreCase(usuario.getEstadoUsuario())) {
+                logger.error("Usuario con estado no activo: " + usuario.getEstadoUsuario());
+                // puedes mostrar JOptionPane también
+                return;
+            }
+
+            // iniciar sesión
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),
                     usuario.getNombre(),
                     usuario.getRol()
             );
 
-            // Cerrar login y abrir dashboard
             setVisible(false);
             DashboardFrm dash = new DashboardFrm();
             dash.configurarAccesosPorRol();
@@ -163,7 +168,6 @@ public class LoginFrm extends javax.swing.JFrame {
         } else {
             logger.error("El usuario no fue encontrado en la base de datos");
             logger.error("o las credenciales del usuario están incorrectas.");
-            // Si quieres, puedes mostrar también un JOptionPane:
             // JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbuttonIngresarActionPerformed
@@ -172,6 +176,7 @@ public class LoginFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    
     /**
      * @param args the command line arguments
      */

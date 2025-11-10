@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biblioteca.udb.edu.sv.controlador;
 
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
 import biblioteca.udb.edu.sv.entidades.Usuario;
+import java.util.List;
 
-/**
- *
- * @author Fernando Flamenco
- */
 public class UsuarioController {
     
     private final UsuarioDAO usuarioDAO;
@@ -29,4 +21,28 @@ public class UsuarioController {
     public Usuario iniciarSesion(String correo, String contraseña) {
         return usuarioDAO.obtenerUsuarioPorCredenciales(correo, contraseña);
     }
+
+    // Métodos para el CRUD del formulario de gestión
+
+    public List<Usuario> listarUsuarios() {
+        return usuarioDAO.listarUsuarios();
+    }
+
+    public boolean agregarUsuario(Usuario usuario) {
+        return usuarioDAO.insertarUsuario(usuario);
+    }
+
+    public boolean editarUsuario(Usuario usuario) {
+        return usuarioDAO.actualizarUsuario(usuario);
+    }
+
+    public boolean eliminarUsuario(int idUsuario) {
+        return usuarioDAO.eliminarUsuario(idUsuario);
+    }
+    
+    public boolean restablecerContraseña(int idUsuario) {
+        // puedes cambiar "1234" por una contraseña generada o un hash en el futuro
+        return usuarioDAO.restablecerContraseña(idUsuario, "1234");
+    }
+
 }

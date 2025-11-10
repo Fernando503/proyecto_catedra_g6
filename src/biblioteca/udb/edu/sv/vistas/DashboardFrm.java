@@ -21,22 +21,22 @@ public class DashboardFrm extends javax.swing.JFrame {
     }
     
     public void configurarAccesosPorRol() {
-    // Ejemplo con botones
-    pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
-    pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
-    pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-    pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-    
-    
-    /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-    btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
-    btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
-    btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
-    
-    // Ejemplo con menú
-    menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-    menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
-}
+        // Ejemplo con botones
+        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
+        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
+        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
+        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
+
+
+        /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
+        btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
+        btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
+        btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
+
+        // Ejemplo con menú
+        menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
+        menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -245,6 +245,11 @@ public class DashboardFrm extends javax.swing.JFrame {
         );
 
         pnl_card_gestion_usuarios.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_gestion_usuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_gestion_usuariosMouseClicked(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         jLabel12.setText("Gestión de Usuarios");
@@ -340,6 +345,15 @@ public class DashboardFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void pnl_card_gestion_usuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_gestion_usuariosMouseClicked
+        abrirFormularioUsuarios();
+    }//GEN-LAST:event_pnl_card_gestion_usuariosMouseClicked
+
+    private void abrirFormularioUsuarios() {
+        UsuarioFrm ventanaUsuarios = new UsuarioFrm();
+        ventanaUsuarios.setVisible(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
