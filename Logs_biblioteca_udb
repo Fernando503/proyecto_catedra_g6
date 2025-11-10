@@ -82,3 +82,12 @@
 2025-11-10 16:09:58 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 16:10:01 ERROR Application:151 - Usuario con estado no activo: Moroso
 2025-11-10 16:11:31 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:13:16 ERROR Application:151 - Usuario con estado no activo: Moroso
+2025-11-10 16:13:18 ERROR Application:167 - El usuario no fue encontrado en la base de datos
+2025-11-10 16:13:18 ERROR Application:168 - o las credenciales del usuario están incorrectas.
+2025-11-10 16:15:53 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:15:56 ERROR Application:177 - El usuario no fue encontrado en la base de datos
+2025-11-10 16:15:56 ERROR Application:178 - o las credenciales del usuario están incorrectas.
+2025-11-10 16:16:19 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:16:26 ERROR Application:161 - Usuario con estado no activo: Moroso
+2025-11-10 16:16:29 ERROR Application:161 - Usuario con estado no activo: Moroso

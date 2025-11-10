@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
 import biblioteca.udb.edu.sv.controlador.UsuarioController;
 import biblioteca.udb.edu.sv.entidades.Usuario;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -148,6 +149,15 @@ public class LoginFrm extends javax.swing.JFrame {
         if (usuario != null) {
             // opcional: validar estado
             if (!"Activo".equalsIgnoreCase(usuario.getEstadoUsuario())) {
+                if (usuario.getEstadoUsuario().equalsIgnoreCase("Moroso"))
+                {
+                    JOptionPane.showMessageDialog(this, "Se le ha bloqueado el acceso debido a su estado moroso.");
+                }
+                else if (usuario.getEstadoUsuario().equalsIgnoreCase("Suspendido"))
+                {
+                    JOptionPane.showMessageDialog(this, "Se le ha bloqueado el acceso debido a su estado suspendido.");
+                }
+                
                 logger.error("Usuario con estado no activo: " + usuario.getEstadoUsuario());
                 return;
             }
@@ -166,7 +176,7 @@ public class LoginFrm extends javax.swing.JFrame {
         } else {
             logger.error("El usuario no fue encontrado en la base de datos");
             logger.error("o las credenciales del usuario están incorrectas.");
-            // JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbuttonIngresarActionPerformed
 
