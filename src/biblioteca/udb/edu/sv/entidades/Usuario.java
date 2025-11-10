@@ -1,16 +1,34 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package biblioteca.udb.edu.sv.entidades;
 
+/**
+ *
+ * @author Fernando Flamenco
+ */
 public class Usuario {
-    private int usuarioID;
+    
+    private int idUsuario;
     private String nombre;
+    private String correo;
+    private String contraseña;
     private String rol;
+    private String estadoUsuario;
 
-    public int getUsuarioID() {
-        return usuarioID;
+    public Usuario() {
     }
 
-    public void setUsuarioID(int usuarioID) {
-        this.usuarioID = usuarioID;
+    // Getters y setters
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
@@ -21,11 +39,35 @@ public class Usuario {
         this.nombre = nombre;
     }
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+
     public String getRol() {
         return rol;
     }
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getEstadoUsuario() {
+        return estadoUsuario;
+    }
+
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
     }
 }

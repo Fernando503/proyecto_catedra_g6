@@ -10,6 +10,8 @@ import biblioteca.udb.edu.sv.tools.LogManager;
 import biblioteca.udb.edu.sv.tools.SesionUsuario;
 import org.apache.log4j.Logger;
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
+import biblioteca.udb.edu.sv.controlador.UsuarioController;
+import biblioteca.udb.edu.sv.entidades.Usuario;
 
 /**
  *
@@ -17,10 +19,8 @@ import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
  */
 public class LoginFrm extends javax.swing.JFrame {
     Logger logger = LogManager.getLogger(Application.class); // just for quick debugging
+    private final UsuarioController usuarioController = new UsuarioController();
     
-    /**
-     * Creates new form LoginFrm
-     */
     public LoginFrm() {
         initComponents();
     }
@@ -136,30 +136,35 @@ public class LoginFrm extends javax.swing.JFrame {
 
  
     private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
-        String usuario = jTextField1.getText();
+        String correo = jTextField1.getText();
         String contraseña = new String(jPasswordField1.getPassword());
 
-        if (usuario.isEmpty() || usuario.isBlank() || contraseña.isEmpty() || contraseña.isBlank()) {
+        if (correo.isEmpty() || correo.isBlank() || contraseña.isEmpty() || contraseña.isBlank()) {
             logger.error("Usuario o contraseña no válidos.");
             return;
         }
 
-        UsuarioDAO dao = new UsuarioDAO();
-        biblioteca.udb.edu.sv.entidades.Usuario usuarioValidado = dao.validarUsuario(usuario, contraseña);
+        // Usar el controlador para validar contra la base de datos
+        Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
 
-        if (usuarioValidado != null) {
+        if (usuario != null) {
+            // Guardar datos en la sesión
             SesionUsuario.getInstancia().iniciarSesion(
-                usuarioValidado.getUsuarioID(),
-                usuarioValidado.getNombre(),
-                usuarioValidado.getRol()
+                    usuario.getIdUsuario(),
+                    usuario.getNombre(),
+                    usuario.getRol()
             );
 
+            // Cerrar login y abrir dashboard
             setVisible(false);
             DashboardFrm dash = new DashboardFrm();
             dash.configurarAccesosPorRol();
             dash.setVisible(true);
         } else {
-            logger.error("El usuario no fue encontrado o las credenciales son incorrectas.");
+            logger.error("El usuario no fue encontrado en la base de datos");
+            logger.error("o las credenciales del usuario están incorrectas.");
+            // Si quieres, puedes mostrar también un JOptionPane:
+            // JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbuttonIngresarActionPerformed
 
