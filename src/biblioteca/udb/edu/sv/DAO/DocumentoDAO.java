@@ -171,16 +171,16 @@ public class DocumentoDAO {
     }
 
     public List<String> obtenerColumnasDocumentos() {
-        // columnas que quieres mostrar en la tabla, en este ORDEN
+        // columnas para mostrar en la tabla, en este ORDEN
         return Arrays.asList(
-            "titulo",
-            "autor",
-            "anio_publicacion",
-            "idioma",
-            "formato",
-            "nombre_categoria",
-            "nombre_editorial",
-            "nombre_tipo"
+            "Titulo",
+            "Autor",
+            "Año de Publicacion",
+            "Idioma",
+            "Formato",
+            "Categoria",
+            "Editorial",
+            "Tipo"
         );
     }
 }

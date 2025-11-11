@@ -25,9 +25,6 @@ public class GestoresFrm extends javax.swing.JFrame {
         cargarComboBuscarPor();
     }
 
-    // ======================================================
-    // CARGAR TABLA DOCUMENTOS (DINÁMICO)
-    // ======================================================
     private void cargarTablaDocumentos() {
         DocumentoController docController = new DocumentoController();
         List<Documento> documentos = docController.obtenerDocumentos();
@@ -60,9 +57,6 @@ public class GestoresFrm extends javax.swing.JFrame {
     }
 
 
-    // ======================================================
-    // CARGAR COMBO "BUSCAR POR" (DINÁMICO)
-    // ======================================================
     private void cargarComboBuscarPor() {
         try {
             DocumentoController docController = new DocumentoController();
@@ -84,9 +78,6 @@ public class GestoresFrm extends javax.swing.JFrame {
         }
     }
 
-    // ======================================================
-    // BÚSQUEDA DINÁMICA DE DOCUMENTOS
-    // ======================================================
     private void buscarDocumentos() {
         try {
             String columna = (String) cmbBuscarPor.getSelectedItem();
@@ -94,27 +85,31 @@ public class GestoresFrm extends javax.swing.JFrame {
 
             DocumentoController docController = new DocumentoController();
             List<Documento> resultados = docController.buscarDocumentos(columna, valor);
-
-            DefaultTableModel model = new DefaultTableModel();
             List<String> columnas = docController.obtenerColumnasDocumentos();
 
-            // Crear encabezados dinámicos
-            for (String c : columnas) model.addColumn(c);
+            DefaultTableModel model = new DefaultTableModel();
 
-            // Llenar con resultados
-            for (Documento d : resultados) {
-                Object[] fila = new Object[]{
-                    d.getDocumentoID(),
-                    d.getTitulo(),
-                    d.getAutor(),
-                    d.getAñoPublicacion(),
-                    d.getIdioma(),
-                    d.getFormato(),
-                    d.getCategoria(),
-                    d.getEditorial(),
-                    d.getTipo()
-                };
-                model.addRow(fila);
+            // Crear encabezados dinámicamente
+            for (String c : columnas) {
+                model.addColumn(c);
+            }
+
+            // Llenar resultados (orden igual al DAO)
+            if (resultados != null && !resultados.isEmpty()) {
+                for (Documento d : resultados) {
+                    model.addRow(new Object[]{
+                        d.getTitulo(),            // titulo
+                        d.getAutor(),             // autor
+                        d.getAñoPublicacion(),    // anio_publicacion
+                        d.getIdioma(),            // idioma
+                        d.getFormato(),           // formato
+                        d.getCategoria(),         // nombre_categoria
+                        d.getEditorial(),         // nombre_editorial
+                        d.getTipo()               // nombre_tipo
+                    });
+                }
+            } else {
+                logger.info("No se encontraron documentos que coincidan con la búsqueda.");
             }
 
             tablaDocumentos.setModel(model);
@@ -123,6 +118,7 @@ public class GestoresFrm extends javax.swing.JFrame {
             logger.severe("Error al buscar documentos: " + e.getMessage());
         }
     }
+
 
 
     /**
