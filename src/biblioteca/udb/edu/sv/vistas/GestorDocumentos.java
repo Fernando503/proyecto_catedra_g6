@@ -478,7 +478,7 @@ public class GestorDocumentos extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Editar / Añadir (Documentos)");
+        jLabel1.setText("Editar Documentos");
 
         jPanel4.setBackground(new java.awt.Color(0, 51, 51));
 

@@ -126,14 +126,14 @@ public class DocumentoDAO {
                 + "LEFT JOIN tipos_documento t ON d.tipo_documento_id = t.tipo_documento_id "
                 + "LEFT JOIN categorias c ON d.categoria_id = c.categoria_id "
                 + "LEFT JOIN editoriales e ON d.editorial_id = e.editorial_id "
-                + "WHERE " + campoSQL + (columna.equals("anio_publicacion") ? " = ?" : " LIKE ?")
+                + "WHERE " + campoSQL + (columna.equals("año de publicacion") ? " = ?" : " LIKE ?")
                 + " LIMIT 5000";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             // Si se busca por año, usar comparación numérica
-            if (columna.equals("anio_publicacion")) {
+            if (columna.equals("año de publicacion")) {
                 try {
                     int anio = Integer.parseInt(valor);
                     ps.setInt(1, anio);

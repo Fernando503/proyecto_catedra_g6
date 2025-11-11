@@ -423,7 +423,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Editar / A&#xf1;adir (Usuarios)"/>
+            <Property name="text" type="java.lang.String" value="Editar Usuario"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel4">

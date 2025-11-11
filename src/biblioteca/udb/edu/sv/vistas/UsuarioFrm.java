@@ -334,6 +334,7 @@ public class UsuarioFrm extends javax.swing.JFrame {
             return;
         }
 
+        ventanaGestor.setTitle("Editar Usuario");
         ventanaGestor.setUsuario(u);
         ventanaGestor.setLocationRelativeTo(this);
         ventanaGestor.setVisible(true);
@@ -343,6 +344,7 @@ public class UsuarioFrm extends javax.swing.JFrame {
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         ventanaGestor.setLocationRelativeTo(this);
         ventanaGestor.setVisible(true);
+        ventanaGestor.setTitle("Nuevo Usuario");
         cargarTablaUsuarios();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -416,7 +418,8 @@ public class UsuarioFrm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new UsuarioFrm().setVisible(true));
     }
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;

@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 public class GestoresFrm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GestoresFrm.class.getName());
-    GestorDocumentos ventanaGestor = new GestorDocumentos();
+    GestorDocumentos gestorDocVentana = new GestorDocumentos();
 
     public GestoresFrm() {
         initComponents();
@@ -402,6 +402,11 @@ public class GestoresFrm extends javax.swing.JFrame {
                 btnNuevoMouseClicked(evt);
             }
         });
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("[/] Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -411,6 +416,11 @@ public class GestoresFrm extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("[-] Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnActualizar.setText("[*] Actualizar");
         btnActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -492,15 +502,16 @@ public class GestoresFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMouseClicked
-        ventanaGestor.setVisible(true);
+        gestorDocVentana.setTitle("Nuevo Documento");
+        gestorDocVentana.setVisible(true);
     }//GEN-LAST:event_btnNuevoMouseClicked
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        ventanaGestor.setVisible(true);
+       //
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        ventanaGestor.setVisible(false);
+        gestorDocVentana.setVisible(false);
     }//GEN-LAST:event_formWindowClosed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -514,6 +525,13 @@ public class GestoresFrm extends javax.swing.JFrame {
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         buscarDocumentos();
     }//GEN-LAST:event_txtBuscarActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
