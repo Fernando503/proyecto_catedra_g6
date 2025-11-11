@@ -298,6 +298,9 @@
           <Color blue="33" green="30" red="2f" type="rgb"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnl_card_gestion_docMouseClicked"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">

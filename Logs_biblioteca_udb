@@ -91,3 +91,90 @@
 2025-11-10 16:16:19 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 16:16:26 ERROR Application:161 - Usuario con estado no activo: Moroso
 2025-11-10 16:16:29 ERROR Application:161 - Usuario con estado no activo: Moroso
+2025-11-10 16:55:54 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 16:55:58 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 16:55:58 WARN  UsuarioController:32 - USR → Credenciales inválidas para: admin
+2025-11-10 16:55:58 ERROR Application:177 - El usuario no fue encontrado en la base de datos
+2025-11-10 16:55:58 ERROR Application:178 - o las credenciales del usuario están incorrectas.
+2025-11-10 16:56:06 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 16:56:06 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 16:56:07 ERROR Application:161 - Usuario con estado no activo: Moroso
+2025-11-10 17:57:22 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 17:57:34 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 17:57:37 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 17:57:37 WARN  UsuarioController:32 - USR → Credenciales inválidas para: admin
+2025-11-10 17:57:37 ERROR Application:177 - El usuario no fue encontrado en la base de datos
+2025-11-10 17:57:37 ERROR Application:178 - o las credenciales del usuario están incorrectas.
+2025-11-10 17:57:40 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 17:57:40 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 17:58:33 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 17:58:36 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 17:58:36 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 17:58:36 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 17:59:07 INFO  UsuarioController:59 - USR → Agregando nuevo usuario: tilin
+2025-11-10 17:59:07 INFO  UsuarioController:62 - USR → Usuario agregado exitosamente: tilin
+2025-11-10 17:59:08 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 17:59:39 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 17:59:44 INFO  UsuarioController:77 - USR → Editando usuario ID: 1
+2025-11-10 17:59:44 INFO  UsuarioController:80 - USR → Usuario actualizado correctamente.
+2025-11-10 17:59:44 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 18:55:17 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 18:55:20 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 18:55:20 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 18:55:20 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:12:14 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:12:18 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:12:18 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:12:18 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:13:03 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:13:06 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:13:06 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:13:06 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:33:53 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:33:56 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:33:56 WARN  UsuarioController:32 - USR → Credenciales inválidas para: admin
+2025-11-10 19:33:56 ERROR Application:176 - El usuario no fue encontrado en la base de datos
+2025-11-10 19:33:56 ERROR Application:177 - o las credenciales del usuario están incorrectas.
+2025-11-10 19:34:00 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:34:00 WARN  UsuarioController:32 - USR → Credenciales inválidas para: admin
+2025-11-10 19:34:00 ERROR Application:176 - El usuario no fue encontrado en la base de datos
+2025-11-10 19:34:00 ERROR Application:177 - o las credenciales del usuario están incorrectas.
+2025-11-10 19:34:41 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin@biblioteca.com
+2025-11-10 19:34:41 WARN  UsuarioController:32 - USR → Credenciales inválidas para: admin@biblioteca.com
+2025-11-10 19:34:41 ERROR Application:176 - El usuario no fue encontrado en la base de datos
+2025-11-10 19:34:41 ERROR Application:177 - o las credenciales del usuario están incorrectas.
+2025-11-10 19:34:43 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin@biblioteca.com
+2025-11-10 19:34:43 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: Administrador General
+2025-11-10 19:34:44 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:34:57 INFO  UsuarioController:77 - USR → Editando usuario ID: 1
+2025-11-10 19:34:57 INFO  UsuarioController:80 - USR → Usuario actualizado correctamente.
+2025-11-10 19:34:58 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:35:00 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:38:56 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:38:59 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:39:00 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:39:00 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:40:36 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:40:39 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:40:39 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:40:39 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:41:04 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:41:06 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:41:06 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:41:06 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:42:03 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:42:07 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:42:07 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:42:07 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:45:13 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:45:16 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:45:16 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:45:16 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:47:55 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 19:47:58 INFO  UsuarioController:27 - USR → Intentando iniciar sesión para correo: admin
+2025-11-10 19:47:58 INFO  UsuarioController:30 - USR → Inicio de sesión exitoso: admin
+2025-11-10 19:47:58 INFO  UsuarioController:46 - USR → Obteniendo lista de usuarios...
+2025-11-10 19:58:27 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:02:35 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:06:40 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:07:35 INFO  Application:25 - Iniciando sistema de Mediateca UDB.

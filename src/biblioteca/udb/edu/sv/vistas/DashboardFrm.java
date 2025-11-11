@@ -13,6 +13,9 @@ import biblioteca.udb.edu.sv.tools.RoleManager;
  */
 public class DashboardFrm extends javax.swing.JFrame {
 
+    UsuarioFrm ventanaUsuarios = new UsuarioFrm();
+    GestoresFrm ventanaGestores = new GestoresFrm();
+
     /**
      * Creates new form DashboardFrm
      */
@@ -201,6 +204,11 @@ public class DashboardFrm extends javax.swing.JFrame {
         );
 
         pnl_card_gestion_doc.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_gestion_doc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_gestion_docMouseClicked(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         jLabel10.setText("Gestión de documentos");
@@ -349,9 +357,16 @@ public class DashboardFrm extends javax.swing.JFrame {
         abrirFormularioUsuarios();
     }//GEN-LAST:event_pnl_card_gestion_usuariosMouseClicked
 
+    private void pnl_card_gestion_docMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_gestion_docMouseClicked
+        abrirGestores();
+    }//GEN-LAST:event_pnl_card_gestion_docMouseClicked
+
     private void abrirFormularioUsuarios() {
-        UsuarioFrm ventanaUsuarios = new UsuarioFrm();
         ventanaUsuarios.setVisible(true);
+    }
+    
+    private void abrirGestores() {
+        ventanaGestores.setVisible(true);
     }
     
     /**

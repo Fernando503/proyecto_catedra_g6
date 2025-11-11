@@ -9,7 +9,6 @@ import biblioteca.udb.edu.sv.Application;
 import biblioteca.udb.edu.sv.tools.LogManager;
 import biblioteca.udb.edu.sv.tools.SesionUsuario;
 import org.apache.log4j.Logger;
-import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
 import biblioteca.udb.edu.sv.controlador.UsuarioController;
 import biblioteca.udb.edu.sv.entidades.Usuario;
 import javax.swing.JOptionPane;
@@ -148,7 +147,7 @@ public class LoginFrm extends javax.swing.JFrame {
         Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
         if (usuario != null) {
             // opcional: validar estado
-            if (!"Activo".equalsIgnoreCase(usuario.getEstadoUsuario())) {
+            /*if (!"Activo".equalsIgnoreCase(usuario.getEstadoUsuario())) {
                 if (usuario.getEstadoUsuario().equalsIgnoreCase("Moroso"))
                 {
                     JOptionPane.showMessageDialog(this, "Se le ha bloqueado el acceso debido a su estado moroso.");
@@ -160,7 +159,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 
                 logger.error("Usuario con estado no activo: " + usuario.getEstadoUsuario());
                 return;
-            }
+            }*/
             
             // iniciar sesión
             SesionUsuario.getInstancia().iniciarSesion(
