@@ -28,11 +28,8 @@ public class Application {
         } catch (UnsupportedLookAndFeelException e) {
             logger.info("Error al instanciar lib Design: " + e.getMessage());
         }
-        SesionUsuario.getInstancia().iniciarSesion(1, "Fernando", "Administrador");
+
         LoginFrm loginView = new LoginFrm();
-        DashboardFrm dash = new DashboardFrm();
-        dash.configurarAccesosPorRol();
-        dash.setVisible(true);
+        loginView.setVisible(true);
     }
-    
 }

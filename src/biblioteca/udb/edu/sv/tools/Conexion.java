@@ -11,17 +11,21 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 
+
 /**
  * Entidad: Universidad Don Bosco
  * @author Fernando Flamenco
+ * IMPORTANTE: En esta clase no se debe de tocar los valores, todo se configura en el archivo de variables de entorno (.env)
  */
 public class Conexion {
     private static final Logger logger = LogManager.getLogger(Conexion.class);
     private static Connection conexion = null;
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String URL ="jdbc:mysql://localhost:8501/desafio_2";
-    private static final String USUARIO = "root";
-    public static final String CLAVE = "root_password";
+
+    private static final String DRIVER = ConfigLoader.get("DB_DRIVER");
+    private static final String URL = ConfigLoader.get("DB_URL");
+    private static final String USUARIO = ConfigLoader.get("DB_USER");
+    public static final String CLAVE = ConfigLoader.get("DB_PASS");
+
     
     public static Connection conectar() {
         try {

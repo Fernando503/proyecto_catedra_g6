@@ -5,15 +5,22 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
+import biblioteca.udb.edu.sv.Application;
+import biblioteca.udb.edu.sv.tools.LogManager;
+import biblioteca.udb.edu.sv.tools.SesionUsuario;
+import org.apache.log4j.Logger;
+import biblioteca.udb.edu.sv.controlador.UsuarioController;
+import biblioteca.udb.edu.sv.entidades.Usuario;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Fernando Flamenco
  */
 public class LoginFrm extends javax.swing.JFrame {
-
-    /**
-     * Creates new form LoginFrm
-     */
+    Logger logger = LogManager.getLogger(Application.class); // just for quick debugging
+    private final UsuarioController usuarioController = new UsuarioController();
+    
     public LoginFrm() {
         initComponents();
     }
@@ -28,7 +35,7 @@ public class LoginFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jbuttonIngresar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
@@ -40,8 +47,18 @@ public class LoginFrm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextField1.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Ingresar");
+        jbuttonIngresar.setText("Ingresar");
+        jbuttonIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbuttonIngresarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Raleway", 1, 36)); // NOI18N
         jLabel1.setText("Login");
@@ -64,30 +81,30 @@ public class LoginFrm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                                .addComponent(jTextField1)))
-                        .addGap(54, 54, 54))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(129, 129, 129))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addContainerGap(122, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(142, 142, 142))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jPasswordField1)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1)
+                                .addGap(88, 88, 88))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,7 +120,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -117,6 +134,40 @@ public class LoginFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+ 
+    private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
+        String correo = jTextField1.getText(); // tu campo "Usuario" lo usas como correo
+        String contraseña = new String(jPasswordField1.getPassword());
+
+        if (correo.isEmpty()|| contraseña.isEmpty()) {
+            logger.error("Usuario o contraseña no válidos.");
+            return;
+        }
+
+        Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
+        if (usuario != null) {
+            SesionUsuario.getInstancia().iniciarSesion(
+                    usuario.getIdUsuario(),
+                    usuario.getNombre(),
+                    usuario.getRol()
+            );
+
+            setVisible(false);
+            DashboardFrm dash = new DashboardFrm();
+            dash.configurarAccesosPorRol();
+            dash.setVisible(true);
+        } else {
+            logger.error("El usuario no fue encontrado en la base de datos");
+            logger.error("o las credenciales del usuario están incorrectas.");
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jbuttonIngresarActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -143,7 +194,6 @@ public class LoginFrm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(LoginFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -153,7 +203,6 @@ public class LoginFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -162,5 +211,6 @@ public class LoginFrm extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jbuttonIngresar;
     // End of variables declaration//GEN-END:variables
 }

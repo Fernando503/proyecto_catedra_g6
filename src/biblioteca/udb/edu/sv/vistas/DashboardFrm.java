@@ -13,6 +13,9 @@ import biblioteca.udb.edu.sv.tools.RoleManager;
  */
 public class DashboardFrm extends javax.swing.JFrame {
 
+    UsuarioFrm ventanaUsuarios = new UsuarioFrm();
+    GestoresFrm ventanaGestores = new GestoresFrm();
+
     /**
      * Creates new form DashboardFrm
      */
@@ -21,22 +24,22 @@ public class DashboardFrm extends javax.swing.JFrame {
     }
     
     public void configurarAccesosPorRol() {
-    // Ejemplo con botones
-    pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
-    pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
-    pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-    pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-    
-    
-    /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-    btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
-    btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
-    btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
-    
-    // Ejemplo con menú
-    menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-    menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
-}
+        // Ejemplo con botones
+        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
+        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
+        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
+        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
+
+
+        /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
+        btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
+        btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
+        btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
+
+        // Ejemplo con menú
+        menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
+        menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -201,6 +204,11 @@ public class DashboardFrm extends javax.swing.JFrame {
         );
 
         pnl_card_gestion_doc.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_gestion_doc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_gestion_docMouseClicked(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         jLabel10.setText("Gestión de documentos");
@@ -245,6 +253,11 @@ public class DashboardFrm extends javax.swing.JFrame {
         );
 
         pnl_card_gestion_usuarios.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_gestion_usuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_gestion_usuariosMouseClicked(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         jLabel12.setText("Gestión de Usuarios");
@@ -340,6 +353,22 @@ public class DashboardFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void pnl_card_gestion_usuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_gestion_usuariosMouseClicked
+        abrirFormularioUsuarios();
+    }//GEN-LAST:event_pnl_card_gestion_usuariosMouseClicked
+
+    private void pnl_card_gestion_docMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_gestion_docMouseClicked
+        abrirGestores();
+    }//GEN-LAST:event_pnl_card_gestion_docMouseClicked
+
+    private void abrirFormularioUsuarios() {
+        ventanaUsuarios.setVisible(true);
+    }
+    
+    private void abrirGestores() {
+        ventanaGestores.setVisible(true);
+    }
+    
     /**
      * @param args the command line arguments
      */

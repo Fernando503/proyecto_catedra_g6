@@ -13,9 +13,7 @@ public class RoleManager {
     private static final Map<String, Map<String, Boolean>> permisos = new HashMap<>();
 
     static {
-        // ==============================
         // ADMINISTRADOR
-        // ==============================
         Map<String, Boolean> adminPermisos = new HashMap<>();
         adminPermisos.put("GESTION_USUARIOS", true);
         adminPermisos.put("GESTION_DOCUMENTOS", true);
@@ -30,9 +28,7 @@ public class RoleManager {
         adminPermisos.put("AUDITORIA", true);
         permisos.put("Administrador", adminPermisos);
 
-        // ==============================
         // PROFESOR
-        // ==============================
         Map<String, Boolean> profesorPermisos = new HashMap<>();
         profesorPermisos.put("GESTION_USUARIOS", false);
         profesorPermisos.put("GESTION_DOCUMENTOS", true);
@@ -47,9 +43,7 @@ public class RoleManager {
         profesorPermisos.put("AUDITORIA", false);
         permisos.put("Profesor", profesorPermisos);
 
-        // ==============================
         // ALUMNO
-        // ==============================
         Map<String, Boolean> alumnoPermisos = new HashMap<>();
         alumnoPermisos.put("GESTION_USUARIOS", false);
         alumnoPermisos.put("GESTION_DOCUMENTOS", true);
