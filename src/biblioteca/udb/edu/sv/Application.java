@@ -30,9 +30,10 @@ public class Application {
         }
         SesionUsuario.getInstancia().iniciarSesion(1, "Fernando", "Administrador");
         LoginFrm loginView = new LoginFrm();
-        DashboardFrm dash = new DashboardFrm();
+        loginView.setVisible(true);
+        /*DashboardFrm dash = new DashboardFrm();
         dash.configurarAccesosPorRol();
-        dash.setVisible(true);
+        dash.setVisible(true);*/
     }
     
 }
