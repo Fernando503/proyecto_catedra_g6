@@ -139,29 +139,13 @@ public class LoginFrm extends javax.swing.JFrame {
         String correo = jTextField1.getText(); // tu campo "Usuario" lo usas como correo
         String contraseña = new String(jPasswordField1.getPassword());
 
-        if (correo.isBlank() || contraseña.isBlank()) {
+        if (correo.isEmpty()|| contraseña.isEmpty()) {
             logger.error("Usuario o contraseña no válidos.");
             return;
         }
 
         Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
         if (usuario != null) {
-            // opcional: validar estado
-            /*if (!"Activo".equalsIgnoreCase(usuario.getEstadoUsuario())) {
-                if (usuario.getEstadoUsuario().equalsIgnoreCase("Moroso"))
-                {
-                    JOptionPane.showMessageDialog(this, "Se le ha bloqueado el acceso debido a su estado moroso.");
-                }
-                else if (usuario.getEstadoUsuario().equalsIgnoreCase("Suspendido"))
-                {
-                    JOptionPane.showMessageDialog(this, "Se le ha bloqueado el acceso debido a su estado suspendido.");
-                }
-                
-                logger.error("Usuario con estado no activo: " + usuario.getEstadoUsuario());
-                return;
-            }*/
-            
-            // iniciar sesión
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),
                     usuario.getNombre(),

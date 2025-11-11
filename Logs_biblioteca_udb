@@ -213,3 +213,43 @@
 2025-11-10 23:27:08 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 23:32:06 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 23:36:13 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:17:47 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:18:28 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:20:41 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:49:57 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:50:11 ERROR UsuarioController:24 - Error en iniciarSesion: null
+2025-11-11 00:50:11 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 00:50:11 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 00:50:30 ERROR UsuarioController:24 - Error en iniciarSesion: null
+2025-11-11 00:50:30 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 00:50:30 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 00:51:22 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:53:08 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:54:01 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:54:38 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:55:53 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:56:09 ERROR UsuarioDAO:45 - Error al obtener usuario por credenciales: No value specified for parameter 1
+2025-11-11 00:56:09 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 00:56:09 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 00:56:27 ERROR UsuarioDAO:45 - Error al obtener usuario por credenciales: No value specified for parameter 1
+2025-11-11 00:56:27 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 00:56:27 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 00:57:04 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:59:41 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 00:59:59 ERROR UsuarioDAO:45 - Error al obtener usuario por credenciales: No value specified for parameter 1
+2025-11-11 00:59:59 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 00:59:59 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 01:00:15 ERROR UsuarioDAO:45 - Error al obtener usuario por credenciales: No value specified for parameter 1
+2025-11-11 01:00:15 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 01:00:15 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 01:01:37 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 01:02:16 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 01:06:41 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 01:06:57 ERROR DocumentoController:24 - Error al obtener documentos: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:06:57 ERROR DocumentoController:34 - Error al obtener tipos de documento: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:06:57 ERROR DocumentoController:43 - Error al obtener categorías: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:06:57 ERROR DocumentoController:52 - Error al obtener editoriales: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:06:57 ERROR DocumentoController:74 - Error al obtener idiomas: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:06:57 ERROR DocumentoController:83 - Error al obtener formatos: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:06:57 ERROR DocumentoController:24 - Error al obtener documentos: Uncompilable source code - Erroneous sym type: biblioteca.udb.edu.sv.tools.Conexion.getConexion
+2025-11-11 01:10:18 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
