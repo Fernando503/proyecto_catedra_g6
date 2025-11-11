@@ -40,15 +40,16 @@ public class GestoresFrm extends javax.swing.JFrame {
         // filas (MISMO ORDEN QUE LAS COLUMNAS)
         if (documentos != null) {
             for (Documento d : documentos) {
+               // al llenar la tabla, este orden debe coincidir con obtenerColumnasDocumentos()
                 model.addRow(new Object[]{
-                    d.getTitulo(),            // titulo
-                    d.getAutor(),             // autor
-                    d.getAñoPublicacion(),    // anio_publicacion
-                    d.getIdioma(),            // idioma
-                    d.getFormato(),           // formato
-                    d.getCategoria(),         // nombre_categoria
-                    d.getEditorial(),         // nombre_editorial
-                    d.getTipo()               // nombre_tipo
+                    d.getTitulo(),            // "titulo"
+                    d.getAutor(),             // "autor"
+                    d.getAñoPublicacion(),    // "anio_publicacion"
+                    d.getIdioma(),            // "idioma"
+                    d.getFormato(),           // "formato"
+                    d.getCategoria(),         // "nombre_categoria"
+                    d.getEditorial(),         // "nombre_editorial"
+                    d.getTipo()               // "nombre_tipo"
                 });
             }
         }
@@ -83,6 +84,8 @@ public class GestoresFrm extends javax.swing.JFrame {
             String columna = (String) cmbBuscarPor.getSelectedItem();
             String valor = txtBuscar.getText().trim();
 
+            logger.info(columna);
+            
             DocumentoController docController = new DocumentoController();
             List<Documento> resultados = docController.buscarDocumentos(columna, valor);
             List<String> columnas = docController.obtenerColumnasDocumentos();
@@ -374,6 +377,11 @@ public class GestoresFrm extends javax.swing.JFrame {
         });
 
         txtBuscar.setText("Buscar...");
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
 
         tablaDocumentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -502,6 +510,10 @@ public class GestoresFrm extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         buscarDocumentos();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        buscarDocumentos();
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     /**
      * @param args the command line arguments

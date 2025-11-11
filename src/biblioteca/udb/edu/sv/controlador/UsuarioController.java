@@ -3,24 +3,20 @@ package biblioteca.udb.edu.sv.controlador;
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
 import biblioteca.udb.edu.sv.entidades.Usuario;
 import biblioteca.udb.edu.sv.tools.LogManager;
+import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 
 public class UsuarioController {
-    
+
     private static final Logger logger = LogManager.getLogger(UsuarioController.class);
     private final UsuarioDAO usuarioDAO;
 
     public UsuarioController() {
         this.usuarioDAO = new UsuarioDAO();
     }
-    
-    /**
-     * Intenta iniciar sesión con las credenciales proporcionadas.
-     * @param correo Correo del usuario (campo "Usuario" del login).
-     * @param contraseña Contraseña del usuario.
-     * @return Usuario válido si las credenciales son correctas, null en caso contrario.
-     */
+
+    // LOGIN
     public Usuario iniciarSesion(String correo, String contraseña) {
         try {
             return usuarioDAO.obtenerUsuarioPorCredenciales(correo, contraseña);
@@ -30,34 +26,50 @@ public class UsuarioController {
         }
     }
 
-
+    // LISTAR
     public List<Usuario> listarUsuarios() {
         try {
             return usuarioDAO.listarUsuarios();
         } catch (Exception e) {
             logger.error("Error al listar usuarios: " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 
-    public boolean agregarUsuario(Usuario usuario) {
+    // BUSCAR
+    public List<Usuario> buscarUsuarios(String filtro) {
         try {
-            return usuarioDAO.insertarUsuario(usuario);
+            if (filtro == null || filtro.trim().isEmpty()) {
+                return listarUsuarios();
+            }
+            return usuarioDAO.buscarUsuarios(filtro.trim());
+        } catch (Exception e) {
+            logger.error("Error al buscar usuarios: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    // INSERTAR
+    public boolean agregarUsuario(Usuario u) {
+        try {
+            return usuarioDAO.insertarUsuario(u);
         } catch (Exception e) {
             logger.error("Error al agregar usuario: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean editarUsuario(Usuario usuario) {
+    // ACTUALIZAR
+    public boolean editarUsuario(Usuario u) {
         try {
-            return usuarioDAO.actualizarUsuario(usuario);
+            return usuarioDAO.actualizarUsuario(u);
         } catch (Exception e) {
             logger.error("Error al editar usuario: " + e.getMessage());
             return false;
         }
     }
 
+    // ELIMINAR
     public boolean eliminarUsuario(int idUsuario) {
         try {
             return usuarioDAO.eliminarUsuario(idUsuario);
@@ -66,14 +78,10 @@ public class UsuarioController {
             return false;
         }
     }
-    
-    /**
-     * Restablece la contraseña de un usuario a un valor por defecto.
-     * Ejemplo: "1234" o lo que quieras usar.
-     */
+
+    // RESTABLECER CONTRASEÑA (siempre 1234 como dijiste)
     public boolean restablecerContraseña(int idUsuario) {
         try {
-            // aquí puedes cambiar "1234" por lo que quieras como default
             return usuarioDAO.restablecerContraseña(idUsuario, "1234");
         } catch (Exception e) {
             logger.error("Error al restablecer contraseña: " + e.getMessage());
@@ -81,16 +89,22 @@ public class UsuarioController {
         }
     }
 
-    /**
-     * Verifica si un usuario tiene moras activas (NO pagadas).
-     * Requiere que tengas implementado el método esUsuarioMoroso en UsuarioDAO.
-     */
-    public boolean esUsuarioMoroso(int idUsuario) {
+    // OBTENER ROLES PARA EL COMBO
+    public List<String> obtenerRoles() {
         try {
-            return usuarioDAO.esUsuarioMoroso(idUsuario);
+            return usuarioDAO.obtenerRoles();
         } catch (Exception e) {
-            logger.error("Error al verificar si usuario es moroso: " + e.getMessage());
-            return false;
+            logger.error("Error al obtener roles: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public Usuario obtenerUsuarioPorId(int idUsuario) {
+        try {
+            return usuarioDAO.obtenerUsuarioPorId(idUsuario);
+        } catch (Exception e) {
+            logger.error("Error al obtener usuario por ID: " + e.getMessage());
+            return null;
         }
     }
 }

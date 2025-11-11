@@ -81,56 +81,97 @@ public class DocumentoDAO {
         return lista;
     }
     
-    public List<Documento> buscarDocumentos(String columna, String valor) {
+   public List<Documento> buscarDocumentos(String columna, String valor) {
         List<Documento> lista = new ArrayList<>();
 
-        // columnas válidas en la tabla documentos
-        List<String> columnasValidas = Arrays.asList(
-            "titulo", "autor", "anio_publicacion", "idioma", "formato", "codigo_clasificacion"
-        );
+        // Normaliza el nombre para evitar problemas de mayúsculas/minúsculas
+        columna = columna.toLowerCase();
 
-        if (!columnasValidas.contains(columna)) {
-            logger.error("Columna no válida para búsqueda: " + columna);
-            return lista;
+        String campoSQL;
+        switch (columna) {
+            case "titulo":
+                campoSQL = "d.titulo";
+                break;
+            case "autor":
+                campoSQL = "d.autor";
+                break;
+            case "año de publicacion":
+                campoSQL = "d.anio_publicacion";
+                break;
+            case "idioma":
+                campoSQL = "d.idioma";
+                break;
+            case "formato":
+                campoSQL = "d.formato";
+                break;
+            case "categoria":
+                campoSQL = "c.nombre_categoria";
+                break;
+            case "editorial":
+                campoSQL = "e.nombre_editorial";
+                break;
+            case "tipo":
+                campoSQL = "t.nombre_tipo";
+                break;
+            default:
+                System.err.println("Columna no válida para búsqueda: " + columna);
+                return lista;
         }
 
+        // Cambia el LIKE por un = si es búsqueda por año
         String sql = "SELECT d.documento_id, d.titulo, d.autor, "
-                   + "t.nombre_tipo, c.nombre_categoria, e.nombre_editorial, "
-                   + "d.idioma, d.formato, d.anio_publicacion, d.numero_paginas, d.observaciones "
-                   + "FROM documentos d "
-                   + "LEFT JOIN tipos_documento t ON d.tipo_documento_id = t.tipo_documento_id "
-                   + "LEFT JOIN categorias c ON d.categoria_id = c.categoria_id "
-                   + "LEFT JOIN editoriales e ON d.editorial_id = e.editorial_id "
-                   + "WHERE d." + columna + " LIKE ? AND d.habilitado = TRUE";
+                + "t.nombre_tipo, c.nombre_categoria, e.nombre_editorial, "
+                + "d.idioma, d.formato, d.anio_publicacion, d.numero_paginas, d.observaciones "
+                + "FROM documentos d "
+                + "LEFT JOIN tipos_documento t ON d.tipo_documento_id = t.tipo_documento_id "
+                + "LEFT JOIN categorias c ON d.categoria_id = c.categoria_id "
+                + "LEFT JOIN editoriales e ON d.editorial_id = e.editorial_id "
+                + "WHERE " + campoSQL + (columna.equals("anio_publicacion") ? " = ?" : " LIKE ?")
+                + " LIMIT 5000";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, "%" + valor + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Documento doc = new Documento();
-                    doc.setDocumentoID(rs.getInt("documento_id"));
-                    doc.setTitulo(rs.getString("titulo"));
-                    doc.setAutor(rs.getString("autor"));
-                    doc.setTipo(rs.getString("nombre_tipo"));
-                    doc.setCategoria(rs.getString("nombre_categoria"));
-                    doc.setEditorial(rs.getString("nombre_editorial"));
-                    doc.setIdioma(rs.getString("idioma"));
-                    doc.setFormato(rs.getString("formato"));
-                    doc.setAñoPublicacion(rs.getInt("anio_publicacion"));
-                    doc.setPaginas(rs.getInt("numero_paginas"));
-                    doc.setObservaciones(rs.getString("observaciones"));
-                    lista.add(doc);
+            // Si se busca por año, usar comparación numérica
+            if (columna.equals("anio_publicacion")) {
+                try {
+                    int anio = Integer.parseInt(valor);
+                    ps.setInt(1, anio);
+                } catch (NumberFormatException e) {
+                    System.err.println("Valor no válido para año: " + valor);
+                    return lista;
                 }
+            } else {
+                ps.setString(1, "%" + valor + "%");
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Documento doc = new Documento();
+                doc.setDocumentoID(rs.getInt("documento_id"));
+                doc.setTitulo(rs.getString("titulo"));
+                doc.setAutor(rs.getString("autor"));
+                doc.setTipo(rs.getString("nombre_tipo"));
+                doc.setCategoria(rs.getString("nombre_categoria"));
+                doc.setEditorial(rs.getString("nombre_editorial"));
+                doc.setIdioma(rs.getString("idioma"));
+                doc.setFormato(rs.getString("formato"));
+                doc.setAñoPublicacion(rs.getInt("anio_publicacion"));
+                doc.setPaginas(rs.getInt("numero_paginas"));
+                doc.setObservaciones(rs.getString("observaciones"));
+                lista.add(doc);
             }
 
         } catch (SQLException e) {
-            logger.error("Error al buscar documentos: " + e.getMessage());
+            System.err.println("Error al buscar documentos: " + e.getMessage());
         }
 
         return lista;
     }
+
+
+
  
     public List<String> obtenerIdiomas() {
         List<String> lista = new ArrayList<>();

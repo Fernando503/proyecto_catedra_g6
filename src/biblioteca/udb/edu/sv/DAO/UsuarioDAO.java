@@ -13,7 +13,7 @@ public class UsuarioDAO {
     private static final Logger logger = LogManager.getLogger(UsuarioDAO.class);
 
     // =====================================================
-    // OBTENER USUARIO POR CREDENCIALES (Login)
+    // LOGIN
     // =====================================================
     public Usuario obtenerUsuarioPorCredenciales(String correo, String contraseña) {
         String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, "
@@ -30,14 +30,14 @@ public class UsuarioDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("usuario_id"));
-                    usuario.setNombre(rs.getString("nombre"));
-                    usuario.setCorreo(rs.getString("correo"));
-                    usuario.setContraseña(rs.getString("password"));
-                    usuario.setRol(rs.getString("nombre_rol"));
-                    usuario.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                    return usuario;
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("usuario_id"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setCorreo(rs.getString("correo"));
+                    u.setContraseña(rs.getString("password"));
+                    u.setRol(rs.getString("nombre_rol"));
+                    u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                    return u;
                 }
             }
 
@@ -53,9 +53,11 @@ public class UsuarioDAO {
     // =====================================================
     public List<Usuario> listarUsuarios() {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT u.usuario_id, u.nombre, u.correo, r.nombre_rol, u.habilitado "
+
+        String sql = "SELECT u.usuario_id, u.nombre, u.correo, "
+                   + "r.nombre_rol, u.habilitado, u.fecha_registro "
                    + "FROM usuarios u "
-                   + "INNER JOIN roles r ON u.rol_id = r.rol_id";
+                   + "LEFT JOIN roles r ON u.rol_id = r.rol_id";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -68,13 +70,90 @@ public class UsuarioDAO {
                 u.setCorreo(rs.getString("correo"));
                 u.setRol(rs.getString("nombre_rol"));
                 u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                // si tu entidad tiene fechaRegistro, puedes mapearla aquí
                 lista.add(u);
             }
 
         } catch (SQLException e) {
             logger.error("Error al listar usuarios: " + e.getMessage());
         }
+
         return lista;
+    }
+
+    // =====================================================
+    // BUSCAR USUARIOS (por nombre/correo/rol)
+    // =====================================================
+    public List<Usuario> buscarUsuarios(String filtro) {
+        List<Usuario> lista = new ArrayList<>();
+
+        String sql = "SELECT u.usuario_id, u.nombre, u.correo, "
+                   + "r.nombre_rol, u.habilitado, u.fecha_registro "
+                   + "FROM usuarios u "
+                   + "LEFT JOIN roles r ON u.rol_id = r.rol_id "
+                   + "WHERE u.nombre LIKE ? "
+                   + "OR u.correo LIKE ? "
+                   + "OR r.nombre_rol LIKE ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            String like = "%" + filtro + "%";
+            ps.setString(1, like);
+            ps.setString(2, like);
+            ps.setString(3, like);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("usuario_id"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setCorreo(rs.getString("correo"));
+                    u.setRol(rs.getString("nombre_rol"));
+                    u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                    lista.add(u);
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error al buscar usuarios: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    // =====================================================
+    // OBTENER USUARIO POR ID (para editar)
+    // =====================================================
+    public Usuario obtenerUsuarioPorId(int idUsuario) {
+        String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, "
+                   + "r.nombre_rol, u.habilitado "
+                   + "FROM usuarios u "
+                   + "LEFT JOIN roles r ON u.rol_id = r.rol_id "
+                   + "WHERE u.usuario_id = ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("usuario_id"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setCorreo(rs.getString("correo"));
+                    u.setContraseña(rs.getString("password"));
+                    u.setRol(rs.getString("nombre_rol"));
+                    u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                    return u;
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error al obtener usuario por ID: " + e.getMessage());
+        }
+
+        return null;
     }
 
     // =====================================================
@@ -103,21 +182,21 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // ACTUALIZAR USUARIO
+    // ACTUALIZAR USUARIO (sin cambiar password)
     // =====================================================
     public boolean actualizarUsuario(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre=?, correo=?, password=SHA2(?, 256), "
-                   + "rol_id=?, habilitado=? WHERE usuario_id=?";
+        String sql = "UPDATE usuarios "
+                   + "SET nombre = ?, correo = ?, rol_id = ?, habilitado = ? "
+                   + "WHERE usuario_id = ?";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
-            ps.setString(3, usuario.getContraseña());
-            ps.setInt(4, obtenerRolID(con, usuario.getRol()));
-            ps.setBoolean(5, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
-            ps.setInt(6, usuario.getIdUsuario());
+            ps.setInt(3, obtenerRolID(con, usuario.getRol()));
+            ps.setBoolean(4, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
+            ps.setInt(5, usuario.getIdUsuario());
 
             ps.executeUpdate();
             return true;
@@ -131,12 +210,13 @@ public class UsuarioDAO {
     // =====================================================
     // ELIMINAR USUARIO
     // =====================================================
-    public boolean eliminarUsuario(int id) {
-        String sql = "DELETE FROM usuarios WHERE usuario_id=?";
+    public boolean eliminarUsuario(int idUsuario) {
+        String sql = "DELETE FROM usuarios WHERE usuario_id = ?";
+
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
+            ps.setInt(1, idUsuario);
             ps.executeUpdate();
             return true;
 
@@ -147,28 +227,17 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // OBTENER ROL_ID POR NOMBRE
-    // =====================================================
-    private int obtenerRolID(Connection con, String nombreRol) throws SQLException {
-        String sql = "SELECT rol_id FROM roles WHERE nombre_rol=?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, nombreRol);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt("rol_id");
-        }
-        return 3; // Por defecto: Alumno
-    }
-
-    // =====================================================
     // RESTABLECER CONTRASEÑA
     // =====================================================
     public boolean restablecerContraseña(int idUsuario, String nuevaContraseña) {
-        String sql = "UPDATE usuarios SET password=SHA2(?, 256) WHERE usuario_id=?";
+        String sql = "UPDATE usuarios SET password = SHA2(?, 256) WHERE usuario_id = ?";
+
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, nuevaContraseña);
             ps.setInt(2, idUsuario);
+
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -176,23 +245,40 @@ public class UsuarioDAO {
             return false;
         }
     }
-    
-    
-    public boolean esUsuarioMoroso(int idUsuario) {
-        String sql = "SELECT 1 FROM moras "
-                   + "WHERE usuario_id = ? AND pagado = FALSE AND habilitado = TRUE "
-                   + "LIMIT 1";
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, idUsuario);
+    // =====================================================
+    // ROLES
+    // =====================================================
+    private int obtenerRolID(Connection con, String nombreRol) throws SQLException {
+        String sql = "SELECT rol_id FROM roles WHERE nombre_rol = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombreRol);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // true si existe al menos una mora pendiente
+                if (rs.next()) {
+                    return rs.getInt("rol_id");
+                }
             }
-        } catch (SQLException e) {
-            logger.error("Error al verificar moras del usuario: " + e.getMessage());
-            return false;
         }
+        // si no lo encuentra, por defecto Alumno (3)
+        return 3;
     }
 
+    public List<String> obtenerRoles() {
+        List<String> roles = new ArrayList<>();
+        String sql = "SELECT nombre_rol FROM roles WHERE habilitado = TRUE";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                roles.add(rs.getString("nombre_rol"));
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error al obtener roles: " + e.getMessage());
+        }
+
+        return roles;
+    }
 }

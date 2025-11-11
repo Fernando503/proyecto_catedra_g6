@@ -179,3 +179,28 @@
 2025-11-10 20:06:40 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 20:07:35 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-10 20:14:17 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:16:35 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:41:59 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:42:51 ERROR DocumentoDAO:93 - Columna no válida para búsqueda: Categoria
+2025-11-10 20:42:54 ERROR DocumentoDAO:93 - Columna no válida para búsqueda: Categoria
+2025-11-10 20:43:07 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 20:43:31 ERROR DocumentoDAO:93 - Columna no válida para búsqueda: Formato
+2025-11-10 21:11:11 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:13:08 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:14:23 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:22:38 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:25:24 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:26:19 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:27:09 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:27:43 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:28:08 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:28:37 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:29:18 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 21:59:43 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 22:04:04 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 22:12:46 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 22:14:02 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-10 22:14:06 ERROR Application:176 - El usuario no fue encontrado en la base de datos
+2025-11-10 22:14:06 ERROR Application:177 - o las credenciales del usuario están incorrectas.
+2025-11-10 22:14:08 ERROR Application:176 - El usuario no fue encontrado en la base de datos
+2025-11-10 22:14:08 ERROR Application:177 - o las credenciales del usuario están incorrectas.
