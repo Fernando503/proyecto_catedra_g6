@@ -22,24 +22,25 @@ public class UsuarioDAO {
                    + "INNER JOIN roles r ON u.rol_id = r.rol_id "
                    + "WHERE u.correo = ? AND u.password = SHA2(?, 256)";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+         try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, correo);
-            ps.setString(2, contraseña);
+                ps.setString(1, correo);
+                ps.setString(2, contraseña);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Usuario u = new Usuario();
-                    u.setIdUsuario(rs.getInt("usuario_id"));
-                    u.setNombre(rs.getString("nombre"));
-                    u.setCorreo(rs.getString("correo"));
-                    u.setContraseña(rs.getString("password"));
-                    u.setRol(rs.getString("nombre_rol"));
-                    u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                    return u;
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        Usuario u = new Usuario();
+                        u.setIdUsuario(rs.getInt("usuario_id"));
+                        u.setNombre(rs.getString("nombre"));
+                        u.setCorreo(rs.getString("correo"));
+                        u.setContrasenia(rs.getString("password"));
+                        u.setRol(rs.getString("nombre_rol"));
+                        u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                        return u;
+                    }
                 }
-            }
+            
 
         } catch (SQLException e) {
             logger.error("Error al obtener usuario por credenciales: " + e.getMessage());
@@ -59,8 +60,8 @@ public class UsuarioDAO {
                    + "FROM usuarios u "
                    + "LEFT JOIN roles r ON u.rol_id = r.rol_id";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql);
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -95,25 +96,26 @@ public class UsuarioDAO {
                    + "OR u.correo LIKE ? "
                    + "OR r.nombre_rol LIKE ?";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            String like = "%" + filtro + "%";
-            ps.setString(1, like);
-            ps.setString(2, like);
-            ps.setString(3, like);
+                String like = "%" + filtro + "%";
+                ps.setString(1, like);
+                ps.setString(2, like);
+                ps.setString(3, like);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Usuario u = new Usuario();
-                    u.setIdUsuario(rs.getInt("usuario_id"));
-                    u.setNombre(rs.getString("nombre"));
-                    u.setCorreo(rs.getString("correo"));
-                    u.setRol(rs.getString("nombre_rol"));
-                    u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                    lista.add(u);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Usuario u = new Usuario();
+                        u.setIdUsuario(rs.getInt("usuario_id"));
+                        u.setNombre(rs.getString("nombre"));
+                        u.setCorreo(rs.getString("correo"));
+                        u.setRol(rs.getString("nombre_rol"));
+                        u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                        lista.add(u);
+                    }
                 }
-            }
+            
 
         } catch (SQLException e) {
             logger.error("Error al buscar usuarios: " + e.getMessage());
@@ -132,22 +134,24 @@ public class UsuarioDAO {
                    + "LEFT JOIN roles r ON u.rol_id = r.rol_id "
                    + "WHERE u.usuario_id = ?";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idUsuario);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Usuario u = new Usuario();
-                    u.setIdUsuario(rs.getInt("usuario_id"));
-                    u.setNombre(rs.getString("nombre"));
-                    u.setCorreo(rs.getString("correo"));
-                    u.setContraseña(rs.getString("password"));
-                    u.setRol(rs.getString("nombre_rol"));
-                    u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                    return u;
+                ps.setInt(1, idUsuario);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        Usuario u = new Usuario();
+                        u.setIdUsuario(rs.getInt("usuario_id"));
+                        u.setNombre(rs.getString("nombre"));
+                        u.setCorreo(rs.getString("correo"));
+                        u.setContrasenia(rs.getString("password"));
+                        u.setRol(rs.getString("nombre_rol"));
+                        u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                        return u;
+                    }
                 }
-            }
+            
 
         } catch (SQLException e) {
             logger.error("Error al obtener usuario por ID: " + e.getMessage());
@@ -163,13 +167,13 @@ public class UsuarioDAO {
         String sql = "INSERT INTO usuarios (nombre, correo, password, rol_id, habilitado) "
                    + "VALUES (?, ?, SHA2(?, 256), ?, ?)";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+         try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
-            ps.setString(3, usuario.getContraseña());
-            ps.setInt(4, obtenerRolID(con, usuario.getRol()));
+            ps.setString(3, usuario.getContrasenia());
+            ps.setInt(4, Integer.parseInt(usuario.getRol()));
             ps.setBoolean(5, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
 
             ps.executeUpdate();
@@ -189,12 +193,12 @@ public class UsuarioDAO {
                    + "SET nombre = ?, correo = ?, rol_id = ?, habilitado = ? "
                    + "WHERE usuario_id = ?";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
-            ps.setInt(3, obtenerRolID(con, usuario.getRol()));
+            ps.setInt(3, Integer.parseInt(usuario.getRol()));
             ps.setBoolean(4, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
             ps.setInt(5, usuario.getIdUsuario());
 
@@ -213,8 +217,8 @@ public class UsuarioDAO {
     public boolean eliminarUsuario(int idUsuario) {
         String sql = "DELETE FROM usuarios WHERE usuario_id = ?";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idUsuario);
             ps.executeUpdate();
@@ -232,9 +236,9 @@ public class UsuarioDAO {
     public boolean restablecerContraseña(int idUsuario, String nuevaContraseña) {
         String sql = "UPDATE usuarios SET password = SHA2(?, 256) WHERE usuario_id = ?";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
+         try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
             ps.setString(1, nuevaContraseña);
             ps.setInt(2, idUsuario);
 
@@ -267,8 +271,8 @@ public class UsuarioDAO {
         List<String> roles = new ArrayList<>();
         String sql = "SELECT nombre_rol FROM roles WHERE habilitado = TRUE";
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql);
+         try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {

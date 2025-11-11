@@ -24,7 +24,7 @@ public class DocumentoDAO {
                    + "LEFT JOIN editoriales e ON d.editorial_id = e.editorial_id "
                    + "WHERE d.habilitado = TRUE";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -69,7 +69,7 @@ public class DocumentoDAO {
 
     private List<String> cargarLista(String sql) {
         List<String> lista = new ArrayList<>();
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -129,7 +129,7 @@ public class DocumentoDAO {
                 + "WHERE " + campoSQL + (columna.equals("año de publicacion") ? " = ?" : " LIKE ?")
                 + " LIMIT 5000";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             // Si se busca por año, usar comparación numérica
@@ -176,7 +176,7 @@ public class DocumentoDAO {
     public List<String> obtenerIdiomas() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT DISTINCT idioma FROM documentos WHERE idioma IS NOT NULL AND idioma <> ''";
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -191,7 +191,7 @@ public class DocumentoDAO {
     public List<String> obtenerFormatos() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT DISTINCT formato FROM documentos WHERE formato IS NOT NULL AND formato <> ''";
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
