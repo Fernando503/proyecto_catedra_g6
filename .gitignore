@@ -14,3 +14,6 @@ Thumbs.db
 
 # Librerías externas
 lib/
+
+src/biblioteca/udb/edu/sv/configGlobal.properties
+Logs_biblioteca_udb
