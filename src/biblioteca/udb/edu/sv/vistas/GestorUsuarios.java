@@ -6,8 +6,7 @@ package biblioteca.udb.edu.sv.vistas;
 
 import biblioteca.udb.edu.sv.controlador.UsuarioController;
 import biblioteca.udb.edu.sv.entidades.Usuario;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.util.*;
 
 
@@ -24,6 +23,8 @@ public class GestorUsuarios extends javax.swing.JFrame {
      */
     public GestorUsuarios() {
         initComponents();
+        cargarRoles();
+        cargarEstados();
     }
     
     public Usuario usuario;
@@ -38,6 +39,22 @@ public class GestorUsuarios extends javax.swing.JFrame {
         jLabel1.setText(title);
     }
     
+    public void cargarRoles()
+    {
+        List<String> rolesUsuario = usuarioController.obtenerRoles();
+        DefaultComboBoxModel<String> rolesCombo = new DefaultComboBoxModel<>(rolesUsuario.toArray(new String[0]));
+
+        cmbRol.setModel(rolesCombo);
+    }
+    
+    public void cargarEstados()
+    {
+        List<String> estadosUsuario = Arrays.asList("Activo", "Inactivo");
+        DefaultComboBoxModel<String> estadosCombo = new DefaultComboBoxModel<>(estadosUsuario.toArray(new String[0]));
+        
+        cmbEstado.setModel(estadosCombo);
+    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -161,8 +178,6 @@ public class GestorUsuarios extends javax.swing.JFrame {
                 .addComponent(cmbRol, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Profesor", "Alumno" }));
-
         jPanel7.setBackground(new java.awt.Color(0, 153, 153));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -213,8 +228,6 @@ public class GestorUsuarios extends javax.swing.JFrame {
                 .addContainerGap())
             .addComponent(cmbEstado)
         );
-
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Suspendido", "Moroso" }));
 
         jPanel19.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -338,13 +351,17 @@ public class GestorUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        String rol = (String)cmbRol.getSelectedItem();
+        int rolID = usuarioController.obtenerRolId(rol);
+            
         if (usuario == null) {
             // modo nuevo
             Usuario nuevo = new Usuario();
             nuevo.setNombre(txtNombre.getText().trim());
             nuevo.setCorreo(txtCorreo.getText().trim());
-            nuevo.setContraseña(new String(txtContraseña.getPassword()));
-            nuevo.setRol((String) cmbRol.getSelectedItem());
+            nuevo.setContrasenia(new String(txtContraseña.getPassword()));
+            nuevo.setRol(rol);
+            nuevo.setRolID(rolID);
             nuevo.setEstadoUsuario((String) cmbEstado.getSelectedItem());
 
             if (usuarioController.agregarUsuario(nuevo)) {
@@ -352,10 +369,12 @@ public class GestorUsuarios extends javax.swing.JFrame {
                 dispose();
             }
         } else {
+            logger.info(usuario.getRol());
             // modo editar
             usuario.setNombre(txtNombre.getText().trim());
             usuario.setCorreo(txtCorreo.getText().trim());
-            usuario.setRol((String) cmbRol.getSelectedItem());
+            usuario.setRol(rol);
+            usuario.setRolID(rolID);
             usuario.setEstadoUsuario((String) cmbEstado.getSelectedItem());
 
             if (usuarioController.editarUsuario(usuario)) {

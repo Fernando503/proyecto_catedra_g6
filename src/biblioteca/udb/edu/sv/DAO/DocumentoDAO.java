@@ -11,7 +11,6 @@ public class DocumentoDAO {
 
     private static final Logger logger = LogManager.getLogger(DocumentoDAO.class);
 
-
     public List<Documento> listarDocumentos() {
         List<Documento> lista = new ArrayList<>();
 
@@ -24,7 +23,7 @@ public class DocumentoDAO {
                    + "LEFT JOIN editoriales e ON d.editorial_id = e.editorial_id "
                    + "WHERE d.habilitado = TRUE";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -33,12 +32,9 @@ public class DocumentoDAO {
                 doc.setDocumentoID(rs.getInt("documento_id"));
                 doc.setTitulo(rs.getString("titulo"));
                 doc.setAutor(rs.getString("autor"));
-
-                // 👇 OJO: este orden es CRÍTICO
                 doc.setTipo(rs.getString("nombre_tipo"));             // nombre_tipo
                 doc.setCategoria(rs.getString("nombre_categoria"));   // nombre_categoria
                 doc.setEditorial(rs.getString("nombre_editorial"));   // nombre_editorial
-
                 doc.setIdioma(rs.getString("idioma"));                // idioma
                 doc.setFormato(rs.getString("formato"));              // formato
                 doc.setAñoPublicacion(rs.getInt("anio_publicacion")); // año
@@ -66,10 +62,9 @@ public class DocumentoDAO {
         return cargarLista("SELECT nombre_editorial FROM editoriales");
     }
 
-
     private List<String> cargarLista(String sql) {
         List<String> lista = new ArrayList<>();
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -81,7 +76,7 @@ public class DocumentoDAO {
         return lista;
     }
     
-   public List<Documento> buscarDocumentos(String columna, String valor) {
+    public List<Documento> buscarDocumentos(String columna, String valor) {
         List<Documento> lista = new ArrayList<>();
 
         // Normaliza el nombre para evitar problemas de mayúsculas/minúsculas
@@ -129,7 +124,7 @@ public class DocumentoDAO {
                 + "WHERE " + campoSQL + (columna.equals("año de publicacion") ? " = ?" : " LIKE ?")
                 + " LIMIT 5000";
 
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             // Si se busca por año, usar comparación numérica
@@ -169,14 +164,11 @@ public class DocumentoDAO {
 
         return lista;
     }
-
-
-
  
     public List<String> obtenerIdiomas() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT DISTINCT idioma FROM documentos WHERE idioma IS NOT NULL AND idioma <> ''";
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -191,7 +183,7 @@ public class DocumentoDAO {
     public List<String> obtenerFormatos() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT DISTINCT formato FROM documentos WHERE formato IS NOT NULL AND formato <> ''";
-        try (Connection con = Conexion.getConexion();
+        try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 

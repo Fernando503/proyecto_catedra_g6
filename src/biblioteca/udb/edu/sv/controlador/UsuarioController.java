@@ -3,8 +3,7 @@ package biblioteca.udb.edu.sv.controlador;
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
 import biblioteca.udb.edu.sv.entidades.Usuario;
 import biblioteca.udb.edu.sv.tools.LogManager;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import org.apache.log4j.Logger;
 
 public class UsuarioController {
@@ -79,7 +78,7 @@ public class UsuarioController {
         }
     }
 
-    // RESTABLECER CONTRASEÑA (siempre 1234 como dijiste)
+    // RESTABLECER CONTRASEÑA
     public boolean restablecerContraseña(int idUsuario) {
         try {
             return usuarioDAO.restablecerContraseña(idUsuario, "1234");
@@ -105,6 +104,16 @@ public class UsuarioController {
         } catch (Exception e) {
             logger.error("Error al obtener usuario por ID: " + e.getMessage());
             return null;
+        }
+    }
+    
+    // OBTENER ROL_ID POR NOMBRE DE ROL
+    public int obtenerRolId(String nombreRol) {
+        try {
+            return usuarioDAO.obtenerRolID(nombreRol);
+        } catch (Exception e) {
+            logger.error("Error al obtener rol_id por nombre: " + e.getMessage());
+            return -1; // o 3 si quieres devolver el rol por defecto
         }
     }
 }

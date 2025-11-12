@@ -26,7 +26,7 @@ public class UsuarioFrm extends javax.swing.JFrame {
 
     private void cargarTablaUsuarios() {
         DefaultTableModel model = new DefaultTableModel(
-            new Object[]{"ID", "Nombre", "Correo", "Rol", "Estado"}, 0
+            new Object[]{"ID", "Nombre", "Correo", "Rol", "Estado"}, 0 // esto tambien, hay muchas cosas hard-coded que podiran hacerse dinamicas
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -56,7 +56,7 @@ public class UsuarioFrm extends javax.swing.JFrame {
         String filtro = txtBuscar.getText().trim();
 
         DefaultTableModel model = new DefaultTableModel(
-            new Object[]{"ID", "Nombre", "Correo", "Rol", "Estado"}, 0
+            new Object[]{"ID", "Nombre", "Correo", "Rol", "Estado"}, 0 // esto deberia de sacarse de la base de datos
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {

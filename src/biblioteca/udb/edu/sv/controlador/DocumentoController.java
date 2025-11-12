@@ -15,8 +15,6 @@ public class DocumentoController {
         this.documentoDAO = new DocumentoDAO();
     }
 
-
-
     public List<Documento> obtenerDocumentos() {
         try {
             return documentoDAO.listarDocumentos();
@@ -102,5 +100,4 @@ public class DocumentoController {
             return null;
         }
     }
-
 }

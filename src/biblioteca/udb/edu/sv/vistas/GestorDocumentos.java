@@ -17,10 +17,7 @@ import java.util.*;
 public class GestorDocumentos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GestorDocumentos.class.getName());
     private final DocumentoController docController = new DocumentoController();
-    
-    DocumentoController controller = new DocumentoController();
-    List<Documento> lista = controller.obtenerDocumentos();
-    
+        
     /**
      * Creates new form GestorDocumentos
      */

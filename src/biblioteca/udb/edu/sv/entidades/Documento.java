@@ -13,6 +13,8 @@ public class Documento {
     private int añoPublicacion;
     private int paginas;
     private String observaciones;
+    private String codigoClasificacion;
+    private String estadoDocumento;
 
     // Getters y setters
     public int getDocumentoID() { return documentoID; }
@@ -50,4 +52,10 @@ public class Documento {
 
     public String getObservaciones() { return observaciones; }
     public void setObservaciones(String o) { this.observaciones = o; }
+    
+    public String getCodigoClasificacion() { return codigoClasificacion; }
+    public void setCodigoClasificacion(String c) { this.codigoClasificacion = c; }
+    
+    public String getEstadoDocumento() { return estadoDocumento; }
+    public void setEstadoDocumento(String e) { this.estadoDocumento = e; }
 }

@@ -14,8 +14,9 @@ public class Usuario {
     private int idUsuario;
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String contrasenia;
     private String rol;
+    private int rol_id;
     private String estadoUsuario;
 
     public Usuario() {
@@ -23,6 +24,16 @@ public class Usuario {
 
     // Getters y setters
 
+    public int getRolID()
+    {
+        return this.rol_id;
+    }
+    
+    public void setRolID(int rol_id)
+    {
+        this.rol_id = rol_id;
+    }
+    
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -47,12 +58,12 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public String getRol() {

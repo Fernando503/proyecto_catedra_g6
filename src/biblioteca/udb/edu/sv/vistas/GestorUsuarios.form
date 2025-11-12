@@ -223,7 +223,6 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="cmbRol.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;Administrador&quot;, &quot;Profesor&quot;, &quot;Alumno&quot; }));"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
@@ -326,7 +325,6 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="cmbEstado.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;Activo&quot;, &quot;Suspendido&quot;, &quot;Moroso&quot; }));"/>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>

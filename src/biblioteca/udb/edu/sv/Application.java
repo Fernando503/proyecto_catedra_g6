@@ -31,9 +31,5 @@ public class Application {
 
         LoginFrm loginView = new LoginFrm();
         loginView.setVisible(true);
-                
-        /*DashboardFrm dash = new DashboardFrm();
-        dash.configurarAccesosPorRol();
-        dash.setVisible(true);*/
     }
 }
