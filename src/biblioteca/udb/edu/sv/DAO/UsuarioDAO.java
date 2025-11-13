@@ -1,6 +1,7 @@
 package biblioteca.udb.edu.sv.DAO;
 
-import biblioteca.udb.edu.sv.entidades.Usuario;
+import biblioteca.udb.edu.sv.entidades.*;
+import biblioteca.udb.edu.sv.tools.AuditoriaLogger;
 import biblioteca.udb.edu.sv.tools.Conexion;
 import biblioteca.udb.edu.sv.tools.LogManager;
 import java.sql.*;
@@ -12,35 +13,43 @@ public class UsuarioDAO {
 
     private static final Logger logger = LogManager.getLogger(UsuarioDAO.class);
 
-    // =====================================================
-    // LOGIN
-    // =====================================================
     public Usuario obtenerUsuarioPorCredenciales(String correo, String contraseña) {
-        String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, "
-                   + "u.habilitado, r.nombre_rol "
-                   + "FROM usuarios u "
-                   + "INNER JOIN roles r ON u.rol_id = r.rol_id "
-                   + "WHERE u.correo = ? AND u.password = SHA2(?, 256)";
+        String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, u.habilitado, u.fecha_registro, " +
+                     "r.rol_id, r.nombre_rol, r.descripcion, r.habilitado AS rol_habilitado " +
+                     "FROM usuarios u " +
+                     "INNER JOIN roles r ON u.rol_id = r.rol_id " +
+                     "WHERE u.correo = ? AND u.password = SHA2(?, 256)";
 
-         try (Connection conn = Conexion.conectar();
+        try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-                ps.setString(1, correo);
-                ps.setString(2, contraseña);
+            ps.setString(1, correo);
+            ps.setString(2, contraseña);
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        Usuario u = new Usuario();
-                        u.setIdUsuario(rs.getInt("usuario_id"));
-                        u.setNombre(rs.getString("nombre"));
-                        u.setCorreo(rs.getString("correo"));
-                        u.setContrasenia(rs.getString("password"));
-                        u.setRol(rs.getString("nombre_rol"));
-                        u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                        return u;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("usuario_id"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setCorreo(rs.getString("correo"));
+                    u.setContrasenia(rs.getString("password"));
+                    u.setHabilitado(rs.getBoolean("habilitado"));
+
+                    Timestamp ts = rs.getTimestamp("fecha_registro");
+                    if (ts != null) {
+                        u.setFechaRegistro(ts.toLocalDateTime());
                     }
+
+                    Rol rol = new Rol();
+                    rol.setRolID(rs.getInt("rol_id"));
+                    rol.setNombreRol(rs.getString("nombre_rol"));
+                    rol.setDescripcion(rs.getString("descripcion"));
+                    rol.setHabilitado(rs.getBoolean("rol_habilitado"));
+                    
+                    u.setRol(rol);
+                    return u;
                 }
-            
+            }
 
         } catch (SQLException e) {
             logger.error("Error al obtener usuario por credenciales: " + e.getMessage());
@@ -49,16 +58,13 @@ public class UsuarioDAO {
         return null;
     }
 
-    // =====================================================
-    // LISTAR USUARIOS
-    // =====================================================
     public List<Usuario> listarUsuarios() {
         List<Usuario> lista = new ArrayList<>();
 
-        String sql = "SELECT u.usuario_id, u.nombre, u.correo, "
-                   + "r.nombre_rol, u.habilitado, u.fecha_registro "
-                   + "FROM usuarios u "
-                   + "LEFT JOIN roles r ON u.rol_id = r.rol_id";
+        String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, u.habilitado, u.fecha_registro, " +
+                     "r.rol_id, r.nombre_rol, r.descripcion, r.habilitado AS rol_habilitado " +
+                     "FROM usuarios u " +
+                     "LEFT JOIN roles r ON u.rol_id = r.rol_id";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -69,9 +75,22 @@ public class UsuarioDAO {
                 u.setIdUsuario(rs.getInt("usuario_id"));
                 u.setNombre(rs.getString("nombre"));
                 u.setCorreo(rs.getString("correo"));
-                u.setRol(rs.getString("nombre_rol"));
-                u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                // si tu entidad tiene fechaRegistro, puedes mapearla aquí
+                u.setContrasenia(rs.getString("password"));
+                u.setHabilitado(rs.getBoolean("habilitado"));
+
+                Timestamp ts = rs.getTimestamp("fecha_registro");
+                if (ts != null) {
+                    u.setFechaRegistro(ts.toLocalDateTime());
+                }
+
+                Rol rol = new Rol();
+                rol.setRolID(rs.getInt("rol_id"));
+                rol.setNombreRol(rs.getString("nombre_rol"));
+                rol.setDescripcion(rs.getString("descripcion"));
+                rol.setHabilitado(rs.getBoolean("rol_habilitado"));
+
+                u.setRol(rol);
+
                 lista.add(u);
             }
 
@@ -88,8 +107,8 @@ public class UsuarioDAO {
     public List<Usuario> buscarUsuarios(String filtro) {
         List<Usuario> lista = new ArrayList<>();
 
-        String sql = "SELECT u.usuario_id, u.nombre, u.correo, "
-                   + "r.nombre_rol, u.habilitado, u.fecha_registro "
+        String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, u.habilitado, u.fecha_registro, " +
+                     "r.rol_id, r.nombre_rol, r.descripcion, r.habilitado AS rol_habilitado "
                    + "FROM usuarios u "
                    + "LEFT JOIN roles r ON u.rol_id = r.rol_id "
                    + "WHERE u.nombre LIKE ? "
@@ -110,8 +129,22 @@ public class UsuarioDAO {
                         u.setIdUsuario(rs.getInt("usuario_id"));
                         u.setNombre(rs.getString("nombre"));
                         u.setCorreo(rs.getString("correo"));
-                        u.setRol(rs.getString("nombre_rol"));
-                        u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
+                        u.setContrasenia(rs.getString("password"));
+                        u.setHabilitado(rs.getBoolean("habilitado"));
+
+                        Timestamp ts = rs.getTimestamp("fecha_registro");
+                        if (ts != null) {
+                            u.setFechaRegistro(ts.toLocalDateTime());
+                        }
+
+                        Rol rol = new Rol();
+                        rol.setRolID(rs.getInt("rol_id"));
+                        rol.setNombreRol(rs.getString("nombre_rol"));
+                        rol.setDescripcion(rs.getString("descripcion"));
+                        rol.setHabilitado(rs.getBoolean("rol_habilitado"));
+
+                        u.setRol(rol);
+
                         lista.add(u);
                     }
                 }
@@ -125,58 +158,25 @@ public class UsuarioDAO {
     }
 
     // =====================================================
-    // OBTENER USUARIO POR ID (para editar)
-    // =====================================================
-    public Usuario obtenerUsuarioPorId(int idUsuario) {
-        String sql = "SELECT u.usuario_id, u.nombre, u.correo, u.password, "
-                   + "r.nombre_rol, u.habilitado "
-                   + "FROM usuarios u "
-                   + "LEFT JOIN roles r ON u.rol_id = r.rol_id "
-                   + "WHERE u.usuario_id = ?";
-
-        try (Connection conn = Conexion.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-                ps.setInt(1, idUsuario);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        Usuario u = new Usuario();
-                        u.setIdUsuario(rs.getInt("usuario_id"));
-                        u.setNombre(rs.getString("nombre"));
-                        u.setCorreo(rs.getString("correo"));
-                        u.setContrasenia(rs.getString("password"));
-                        u.setRol(rs.getString("nombre_rol"));
-                        u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
-                        return u;
-                    }
-                }
-            
-
-        } catch (SQLException e) {
-            logger.error("Error al obtener usuario por ID: " + e.getMessage());
-        }
-
-        return null;
-    }
-
-    // =====================================================
     // INSERTAR USUARIO
     // =====================================================
     public boolean insertarUsuario(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nombre, correo, password, rol_id, habilitado) "
-                   + "VALUES (?, ?, SHA2(?, 256), ?, ?)";
+        String sql = "INSERT INTO usuarios (nombre, correo, password, rol_id, habilitado) " +
+                     "VALUES (?, ?, SHA2(?, 256), ?, ?)";
 
-         try (Connection conn = Conexion.conectar();
+        try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
             ps.setString(3, usuario.getContrasenia());
-            ps.setInt(4, Integer.parseInt(usuario.getRol()));
-            ps.setBoolean(5, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
+            ps.setInt(4, usuario.getRol().getRolID());
+            ps.setBoolean(5, usuario.getHabilitado());
 
             ps.executeUpdate();
+
+            // Auditoría
+            AuditoriaLogger.registrar("CREAR_USUARIO", "Se creó el usuario: " + usuario.getCorreo());
             return true;
 
         } catch (SQLException e) {
@@ -189,20 +189,24 @@ public class UsuarioDAO {
     // ACTUALIZAR USUARIO (sin cambiar password)
     // =====================================================
     public boolean actualizarUsuario(Usuario usuario) {
-        String sql = "UPDATE usuarios "
-                   + "SET nombre = ?, correo = ?, rol_id = ?, habilitado = ? "
-                   + "WHERE usuario_id = ?";
+        String sql = "UPDATE usuarios " +
+                     "SET nombre = ?, correo = ?, rol_id = ?, habilitado = ? " +
+                     "WHERE usuario_id = ?";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
-            ps.setInt(3, Integer.parseInt(usuario.getRol()));
-            ps.setBoolean(4, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
+            ps.setInt(3, usuario.getRol().getRolID());
+            ps.setBoolean(4, usuario.getHabilitado());
             ps.setInt(5, usuario.getIdUsuario());
 
             ps.executeUpdate();
+
+            // Auditoría
+            AuditoriaLogger.registrar("ACTUALIZAR_USUARIO", "Se actualizó el usuario ID: " + usuario.getIdUsuario());
+
             return true;
 
         } catch (SQLException e) {
@@ -222,6 +226,9 @@ public class UsuarioDAO {
 
             ps.setInt(1, idUsuario);
             ps.executeUpdate();
+            
+            // Auditoría
+            AuditoriaLogger.registrar("ELIMINAR_USUARIO", "Se actualizó el usuario ID: " + idUsuario);
             return true;
 
         } catch (SQLException e) {
@@ -242,6 +249,8 @@ public class UsuarioDAO {
             ps.setString(1, nuevaContraseña);
             ps.setInt(2, idUsuario);
 
+            // Auditoría
+            AuditoriaLogger.registrar("CAMBIAR_CONTRASEÑA_USUARIO", "Se actualizó la contraseña para el usuario con ID: " + idUsuario);
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -250,22 +259,6 @@ public class UsuarioDAO {
         }
     }
 
-    // =====================================================
-    // ROLES
-    // =====================================================
-    private int obtenerRolID(Connection con, String nombreRol) throws SQLException {
-        String sql = "SELECT rol_id FROM roles WHERE nombre_rol = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, nombreRol);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("rol_id");
-                }
-            }
-        }
-        // si no lo encuentra, por defecto Alumno (3)
-        return 3;
-    }
 
     public List<String> obtenerRoles() {
         List<String> roles = new ArrayList<>();

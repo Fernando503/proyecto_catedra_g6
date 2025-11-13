@@ -98,13 +98,4 @@ public class UsuarioController {
             return Collections.emptyList();
         }
     }
-
-    public Usuario obtenerUsuarioPorId(int idUsuario) {
-        try {
-            return usuarioDAO.obtenerUsuarioPorId(idUsuario);
-        } catch (Exception e) {
-            logger.error("Error al obtener usuario por ID: " + e.getMessage());
-            return null;
-        }
-    }
 }

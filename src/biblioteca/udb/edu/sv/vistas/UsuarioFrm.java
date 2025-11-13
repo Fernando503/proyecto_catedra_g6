@@ -40,7 +40,8 @@ public class UsuarioFrm extends javax.swing.JFrame {
                 u.getNombre(),
                 u.getCorreo(),
                 u.getRol(),
-                u.getEstadoUsuario()
+                "Activo"
+               // u.getEstadoUsuario()
             });
         }
 
@@ -70,7 +71,8 @@ public class UsuarioFrm extends javax.swing.JFrame {
                 u.getNombre(),
                 u.getCorreo(),
                 u.getRol(),
-                u.getEstadoUsuario()
+                "Activo"
+                //u.getEstadoUsuario()
             });
         }
 
@@ -321,7 +323,7 @@ public class UsuarioFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRestablecerActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int fila = tablaUsuarios.getSelectedRow();
+        /*int fila = tablaUsuarios.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un usuario.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
@@ -338,7 +340,7 @@ public class UsuarioFrm extends javax.swing.JFrame {
         ventanaGestor.setUsuario(u);
         ventanaGestor.setLocationRelativeTo(this);
         ventanaGestor.setVisible(true);
-        cargarTablaUsuarios();
+        cargarTablaUsuarios();*/
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed

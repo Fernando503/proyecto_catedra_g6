@@ -11,6 +11,7 @@ import biblioteca.udb.edu.sv.tools.SesionUsuario;
 import org.apache.log4j.Logger;
 import biblioteca.udb.edu.sv.controlador.UsuarioController;
 import biblioteca.udb.edu.sv.entidades.Usuario;
+import biblioteca.udb.edu.sv.tools.AuditoriaLogger;
 import javax.swing.JOptionPane;
 
 /**
@@ -144,14 +145,15 @@ public class LoginFrm extends javax.swing.JFrame {
             return;
         }
 
-        Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
+        Usuario usuario = usuarioController.iniciarSesion(correo + "@udb.edu.sv", contraseña);
         if (usuario != null) {
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),
                     usuario.getNombre(),
-                    usuario.getRol()
+                    usuario.getRol().getNombreRol()
             );
 
+            AuditoriaLogger.registrar("LOGIN", "Inicio de sesión correctamente");
             setVisible(false);
             DashboardFrm dash = new DashboardFrm();
             dash.configurarAccesosPorRol();

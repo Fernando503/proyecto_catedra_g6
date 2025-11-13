@@ -338,7 +338,7 @@ public class GestorUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (usuario == null) {
+        /*if (usuario == null) {
             // modo nuevo
             Usuario nuevo = new Usuario();
             nuevo.setNombre(txtNombre.getText().trim());
@@ -362,7 +362,7 @@ public class GestorUsuarios extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente.");
                 dispose();
             }
-        }
+        }*/
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -375,7 +375,7 @@ public class GestorUsuarios extends javax.swing.JFrame {
             txtNombre.setText(usuario.getNombre());
             txtCorreo.setText(usuario.getCorreo());
             cmbRol.setSelectedItem(usuario.getRol());
-            cmbEstado.setSelectedItem(usuario.getEstadoUsuario());
+            cmbEstado.setSelectedItem("Activo");
         }
     }//GEN-LAST:event_formWindowOpened
 
