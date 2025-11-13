@@ -1,0 +1,19 @@
+# Archivos de NetBeans
+nbproject/private/
+build/
+dist/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.log
+*.class
+*.tmp
+
+# Librerías externas
+lib/
+
+src/biblioteca/udb/edu/sv/configGlobal.properties
+Logs_biblioteca_udb

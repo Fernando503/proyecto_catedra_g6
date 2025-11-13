@@ -360,8 +360,7 @@ public class GestorUsuarios extends javax.swing.JFrame {
             nuevo.setNombre(txtNombre.getText().trim());
             nuevo.setCorreo(txtCorreo.getText().trim());
             nuevo.setContrasenia(new String(txtContraseña.getPassword()));
-            nuevo.setRol(rol);
-            nuevo.setRolID(rolID);
+            nuevo.setRol((String) cmbRol.getSelectedItem());
             nuevo.setEstadoUsuario((String) cmbEstado.getSelectedItem());
 
             if (usuarioController.agregarUsuario(nuevo)) {

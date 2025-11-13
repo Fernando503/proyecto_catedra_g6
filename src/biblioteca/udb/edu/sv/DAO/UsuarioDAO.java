@@ -36,7 +36,6 @@ public class UsuarioDAO {
                         u.setCorreo(rs.getString("correo"));
                         u.setContrasenia(rs.getString("password"));
                         u.setRol(rs.getString("nombre_rol"));
-                        u.setRolID(rs.getInt("rol_id"));
                         u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
                         return u;
                     }
@@ -112,7 +111,6 @@ public class UsuarioDAO {
                         u.setNombre(rs.getString("nombre"));
                         u.setCorreo(rs.getString("correo"));
                         u.setRol(rs.getString("nombre_rol"));
-                        u.setRolID(rs.getInt("rol_id"));
                         u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
                         lista.add(u);
                     }
@@ -149,7 +147,6 @@ public class UsuarioDAO {
                         u.setCorreo(rs.getString("correo"));
                         u.setContrasenia(rs.getString("password"));
                         u.setRol(rs.getString("nombre_rol"));
-                        u.setRolID(rs.getInt("rol_id"));
                         u.setEstadoUsuario(rs.getBoolean("habilitado") ? "Activo" : "Inactivo");
                         return u;
                     }
@@ -176,7 +173,7 @@ public class UsuarioDAO {
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
             ps.setString(3, usuario.getContrasenia());
-            ps.setInt(4, usuario.getRolID());
+            ps.setInt(4, Integer.parseInt(usuario.getRol()));
             ps.setBoolean(5, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
 
             ps.executeUpdate();
@@ -201,9 +198,9 @@ public class UsuarioDAO {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getCorreo());
-            ps.setInt(3, usuario.getRolID());
-            ps.setBoolean(4, usuario.getEstadoUsuario().equalsIgnoreCase("Activo")); //<-- lo siento demasiado forzado esto de pero no se si trabajaremos con mas estados luego
-            ps.setInt(5, usuario.getIdUsuario());                                    //    pero por el momento quedaria de esta forma
+            ps.setInt(3, Integer.parseInt(usuario.getRol()));
+            ps.setBoolean(4, usuario.getEstadoUsuario().equalsIgnoreCase("Activo"));
+            ps.setInt(5, usuario.getIdUsuario());
 
             ps.executeUpdate();
             return true;
@@ -276,7 +273,7 @@ public class UsuarioDAO {
         List<String> roles = new ArrayList<>();
         String sql = "SELECT nombre_rol FROM roles WHERE habilitado = TRUE";
 
-        try (Connection conn = Conexion.conectar();
+         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
