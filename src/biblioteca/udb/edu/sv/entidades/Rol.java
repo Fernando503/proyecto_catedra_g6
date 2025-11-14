@@ -57,6 +57,9 @@ public class Rol {
         this.habilitado = habilitado;
     }
     
-    
+    @Override
+    public String toString() {
+        return nombreRol;
+    }
     
 }

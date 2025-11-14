@@ -145,8 +145,18 @@ public class LoginFrm extends javax.swing.JFrame {
             return;
         }
 
-        Usuario usuario = usuarioController.iniciarSesion(correo + "@udb.edu.sv", contraseña);
+        Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
         if (usuario != null) {
+            if(usuario.getHabilitado().equals(false)){
+                JOptionPane.showMessageDialog(
+                    null,
+                    "El usuario esta inhabilitado",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),
                     usuario.getNombre(),

@@ -1,6 +1,7 @@
 package biblioteca.udb.edu.sv.controlador;
 
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
+import biblioteca.udb.edu.sv.entidades.Rol;
 import biblioteca.udb.edu.sv.entidades.Usuario;
 import biblioteca.udb.edu.sv.tools.LogManager;
 import java.util.Collections;
@@ -90,12 +91,21 @@ public class UsuarioController {
     }
 
     // OBTENER ROLES PARA EL COMBO
-    public List<String> obtenerRoles() {
+    public List<Rol> obtenerRoles() {
         try {
             return usuarioDAO.obtenerRoles();
         } catch (Exception e) {
             logger.error("Error al obtener roles: " + e.getMessage());
             return Collections.emptyList();
+        }
+    }
+    
+    public Rol obtenerRolByNombre(String nombreRol){
+        try {
+            return usuarioDAO.obtenerRolByNombre(nombreRol);
+        } catch (Exception e) {
+            logger.error("Error al obtener rol: " + e.getMessage());
+            return null;
         }
     }
 }

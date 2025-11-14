@@ -219,7 +219,7 @@ public class UsuarioDAO {
     // ELIMINAR USUARIO
     // =====================================================
     public boolean eliminarUsuario(int idUsuario) {
-        String sql = "DELETE FROM usuarios WHERE usuario_id = ?";
+        String sql = "UPDATE usuarios SET habilitado = false WHERE usuario_id = ?";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -260,22 +260,45 @@ public class UsuarioDAO {
     }
 
 
-    public List<String> obtenerRoles() {
-        List<String> roles = new ArrayList<>();
-        String sql = "SELECT nombre_rol FROM roles WHERE habilitado = TRUE";
+    public List<Rol> obtenerRoles() {
+        List<Rol> roles = new ArrayList<>();
+        String sql = "SELECT rol_id, nombre_rol FROM roles WHERE habilitado = TRUE";
 
          try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                roles.add(rs.getString("nombre_rol"));
+             while (rs.next()) {
+                Rol rol = new Rol();
+                rol.setRolID(rs.getInt("rol_id"));
+                rol.setNombreRol(rs.getString("nombre_rol"));
+                roles.add(rol);
             }
-
         } catch (SQLException e) {
             logger.error("Error al obtener roles: " + e.getMessage());
         }
-
         return roles;
+    }
+    
+    public Rol obtenerRolByNombre(String nombreRol){
+        Rol rol = null;
+        String sql = "SELECT * FROM roles WHERE habilitado = TRUE AND nombre_rol = ?";
+
+         try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             ps.setString(1, nombreRol);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                   rol = new Rol();
+                   rol.setRolID(rs.getInt("rol_id"));
+                   rol.setNombreRol(rs.getString("nombre_rol"));
+                   rol.setDescripcion(rs.getString("descripcion"));
+                   rol.setHabilitado(rs.getBoolean("habilitado"));
+               }
+            }
+        } catch (SQLException e) {
+            logger.error("Error al obtener rol: " + e.getMessage());
+        }
+        return rol;
     }
 }

@@ -13,7 +13,6 @@ import biblioteca.udb.edu.sv.tools.*;
  */
 public class DashboardFrm extends javax.swing.JFrame {
 
-    UsuarioFrm ventanaUsuarios = new UsuarioFrm();
     GestoresFrm ventanaGestores = new GestoresFrm();
     SesionUsuario sesion = SesionUsuario.getInstancia();
 
@@ -27,23 +26,12 @@ public class DashboardFrm extends javax.swing.JFrame {
     
     public void configurarAccesosPorRol() {
         // Ejemplo con botones
-        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
-        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
-        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
+        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS","LISTAR"));
+        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS","LISTAR"));
+        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS","LISTAR"));
+        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA","LISTAR"));
         lbl_username_up.setText(sesion.getNombre());
         
-        
-
-
-        /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-        btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
-        btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
-        btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
-
-        // Ejemplo con menú
-        menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-        menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
     }
 
     /**
@@ -292,17 +280,17 @@ public class DashboardFrm extends javax.swing.JFrame {
         pnl_card_gestion_usuarios.setLayout(pnl_card_gestion_usuariosLayout);
         pnl_card_gestion_usuariosLayout.setHorizontalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addGap(46, 46, 46)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
+                .addContainerGap(65, Short.MAX_VALUE)
                 .addComponent(lbl_gestion_usuario)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addGap(61, 61, 61))
         );
         pnl_card_gestion_usuariosLayout.setVerticalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
+            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
                 .addComponent(lbl_gestion_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pnl_card_config.setBackground(new java.awt.Color(47, 48, 51));
@@ -397,7 +385,9 @@ public class DashboardFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_pnl_card_configMouseClicked
 
     private void abrirFormularioUsuarios() {
-        ventanaUsuarios.setVisible(true);
+       GestionUsuariosFrm userFrm = new GestionUsuariosFrm(DashboardFrm.this);
+       setVisible(false);
+       userFrm.setVisible(true);
     }
     
     private void abrirGestores() {

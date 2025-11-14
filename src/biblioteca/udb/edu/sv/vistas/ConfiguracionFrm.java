@@ -14,6 +14,7 @@ import java.awt.HeadlessException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
 
 
@@ -44,7 +45,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_id_config.setVisible(false);
         modeloConfiguracion = (DefaultTableModel) tbl_configuracion.getModel();
         cargarDatosConfig(configController.listar());
-         modeloAuditoria = (DefaultTableModel) tbl_auditoria.getModel();
+        modeloAuditoria = (DefaultTableModel) tbl_auditoria.getModel();
         cargarAuditoria(auditController.listar());
     }
      
@@ -84,6 +85,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_parametro_config.setText("");
         txt_valor_config.setText("");
         txt_descripcion_config.setText("");
+        txt_parametro_config.setEditable(true);
     }
 
     /**
@@ -295,12 +297,36 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_configuracion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_configuracionMouseClicked(evt);
+            }
         });
         scp_tbl_config.setViewportView(tbl_configuracion);
+        if (tbl_configuracion.getColumnModel().getColumnCount() > 0) {
+            tbl_configuracion.getColumnModel().getColumn(0).setMaxWidth(50);
+            tbl_configuracion.getColumnModel().getColumn(1).setMinWidth(200);
+            tbl_configuracion.getColumnModel().getColumn(1).setPreferredWidth(200);
+            tbl_configuracion.getColumnModel().getColumn(1).setMaxWidth(200);
+            tbl_configuracion.getColumnModel().getColumn(2).setMinWidth(200);
+            tbl_configuracion.getColumnModel().getColumn(2).setPreferredWidth(200);
+            tbl_configuracion.getColumnModel().getColumn(2).setMaxWidth(200);
+            tbl_configuracion.getColumnModel().getColumn(4).setMinWidth(75);
+            tbl_configuracion.getColumnModel().getColumn(4).setPreferredWidth(75);
+            tbl_configuracion.getColumnModel().getColumn(4).setMaxWidth(75);
+        }
 
         javax.swing.GroupLayout pnl_menu_configLayout = new javax.swing.GroupLayout(pnl_menu_config);
         pnl_menu_config.setLayout(pnl_menu_configLayout);
@@ -325,7 +351,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             .addGroup(pnl_menu_configLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnl_acciones_config, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(315, Short.MAX_VALUE))
+                .addContainerGap(307, Short.MAX_VALUE))
             .addGroup(pnl_menu_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_menu_configLayout.createSequentialGroup()
                     .addContainerGap()
@@ -385,7 +411,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             pnl_menu_auditoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_menu_auditoriaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scp_auditoria, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addComponent(scp_auditoria, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -416,7 +442,34 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_pnl_config_volverMouseClicked
 
     private void btn_agregar_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_configActionPerformed
-        // TODO add your handling code here:
+       try {
+            String parametro = txt_parametro_config.getText();
+            String valor = txt_valor_config.getText();
+            String descripcion = txt_descripcion_config.getText();
+
+            Configuracion add = new Configuracion();
+
+            add.setParametro(parametro);
+            add.setValor(valor);
+            add.setDescripcion(descripcion);
+            add.setHabilitado(true);
+
+            // Enviar al controlador
+            boolean exito = configController.insertar(add);
+
+            if (exito) {
+                limpiarConfig();
+                cargarDatosConfig(configController.listar());
+                cargarAuditoria(auditController.listar());
+                JOptionPane.showMessageDialog(null, "Configuración agregada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al agregar la configuración.");
+            }
+
+        } catch (HeadlessException e) {
+            logger.error("Error al procesar la configuración: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
     }//GEN-LAST:event_btn_agregar_configActionPerformed
 
     private void btn_editar_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_configActionPerformed
@@ -440,6 +493,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             if (exito) {
                 limpiarConfig();
                 cargarDatosConfig(configController.listar());
+                cargarAuditoria(auditController.listar());
                 JOptionPane.showMessageDialog(null, "Configuración actualizada correctamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al actualizar el configuración.");
@@ -452,12 +506,38 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_editar_configActionPerformed
 
     private void btn_eliminar_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_configActionPerformed
-        // TODO add your handling code here:
+        if(txt_id_config.getText().length() > 0){
+            if (JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar la configuración con ID: " +  txt_id_config.getText() , "WARNING",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                boolean exito = configController.eliminar(Integer.parseInt(txt_id_config.getText()));
+                if (exito) {
+                    limpiarConfig();
+                    cargarDatosConfig(configController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Configuración eliminada correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar configuración.");
+                }
+            }
+        }else {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar una configuración antes de eliminarlo.");
+        }
     }//GEN-LAST:event_btn_eliminar_configActionPerformed
 
     private void btn_limpiar_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_configActionPerformed
         limpiarConfig();
     }//GEN-LAST:event_btn_limpiar_configActionPerformed
+
+    private void tbl_configuracionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_configuracionMouseClicked
+        limpiarConfig();
+        int index = tbl_configuracion.getSelectedRow();
+        TableModel modeloConfig = tbl_configuracion.getModel();
+        txt_id_config.setText(modeloConfig.getValueAt(index, 0).toString());
+        txt_parametro_config.setText(modeloConfig.getValueAt(index, 1).toString());
+        txt_valor_config.setText(modeloConfig.getValueAt(index, 2).toString());
+        txt_descripcion_config.setText(modeloConfig.getValueAt(index, 3).toString());
+        txt_parametro_config.setEditable(false);
+    }//GEN-LAST:event_tbl_configuracionMouseClicked
 
     /**
      * @param args the command line arguments
