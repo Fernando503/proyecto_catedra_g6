@@ -11,6 +11,7 @@ import biblioteca.udb.edu.sv.tools.SesionUsuario;
 import org.apache.log4j.Logger;
 import biblioteca.udb.edu.sv.controlador.UsuarioController;
 import biblioteca.udb.edu.sv.entidades.Usuario;
+import biblioteca.udb.edu.sv.tools.AuditoriaLogger;
 import javax.swing.JOptionPane;
 
 /**
@@ -146,12 +147,23 @@ public class LoginFrm extends javax.swing.JFrame {
 
         Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
         if (usuario != null) {
+            if(usuario.getHabilitado().equals(false)){
+                JOptionPane.showMessageDialog(
+                    null,
+                    "El usuario esta inhabilitado",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),
                     usuario.getNombre(),
-                    usuario.getRol()
+                    usuario.getRol().getNombreRol()
             );
 
+            AuditoriaLogger.registrar("LOGIN", "Inicio de sesión correctamente");
             setVisible(false);
             DashboardFrm dash = new DashboardFrm();
             dash.configurarAccesosPorRol();

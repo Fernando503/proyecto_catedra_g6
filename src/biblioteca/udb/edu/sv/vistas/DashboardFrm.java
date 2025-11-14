@@ -5,7 +5,7 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
-import biblioteca.udb.edu.sv.tools.RoleManager;
+import biblioteca.udb.edu.sv.tools.*;
 
 /**
  *
@@ -13,8 +13,9 @@ import biblioteca.udb.edu.sv.tools.RoleManager;
  */
 public class DashboardFrm extends javax.swing.JFrame {
 
-    UsuarioFrm ventanaUsuarios = new UsuarioFrm();
     GestoresFrm ventanaGestores = new GestoresFrm();
+    SesionUsuario sesion = SesionUsuario.getInstancia();
+
 
     /**
      * Creates new form DashboardFrm
@@ -25,20 +26,12 @@ public class DashboardFrm extends javax.swing.JFrame {
     
     public void configurarAccesosPorRol() {
         // Ejemplo con botones
-        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
-        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
-        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-
-
-        /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-        btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
-        btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
-        btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
-
-        // Ejemplo con menú
-        menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-        menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
+        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS","LISTAR"));
+        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS","LISTAR"));
+        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS","LISTAR"));
+        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA","LISTAR"));
+        lbl_username_up.setText(sesion.getNombre());
+        
     }
 
     /**
@@ -51,6 +44,8 @@ public class DashboardFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        lbl_username_up = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         pnl_card_documentos = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -64,27 +59,46 @@ public class DashboardFrm extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         pnl_card_gestion_doc = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
+        lbl_gestion_documentos = new javax.swing.JLabel();
         pnl_card_pres_dev = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
+        lbl_prestamos_devoluciones = new javax.swing.JLabel();
         pnl_card_gestion_usuarios = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
+        lbl_gestion_usuario = new javax.swing.JLabel();
         pnl_card_config = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
+        lbl_configuracion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(14, 20, 56));
+        jPanel1.setPreferredSize(new java.awt.Dimension(771, 90));
+
+        lbl_username_up.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_username_up.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_username_up.setText("Usuario");
+
+        jLabel14.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 215, 0));
+        jLabel14.setText("Mediateca UDB");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbl_username_up, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 59, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_username_up)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pnl_card_documentos.setBackground(new java.awt.Color(105, 95, 254));
@@ -210,8 +224,8 @@ public class DashboardFrm extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel10.setText("Gestión de documentos");
+        lbl_gestion_documentos.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_gestion_documentos.setText("Gestión de documentos");
 
         javax.swing.GroupLayout pnl_card_gestion_docLayout = new javax.swing.GroupLayout(pnl_card_gestion_doc);
         pnl_card_gestion_doc.setLayout(pnl_card_gestion_docLayout);
@@ -219,21 +233,21 @@ public class DashboardFrm extends javax.swing.JFrame {
             pnl_card_gestion_docLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_gestion_docLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addComponent(jLabel10)
+                .addComponent(lbl_gestion_documentos)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         pnl_card_gestion_docLayout.setVerticalGroup(
             pnl_card_gestion_docLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_docLayout.createSequentialGroup()
                 .addContainerGap(39, Short.MAX_VALUE)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbl_gestion_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
 
         pnl_card_pres_dev.setBackground(new java.awt.Color(47, 48, 51));
 
-        jLabel9.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel9.setText("Préstamos / Devoluciones");
+        lbl_prestamos_devoluciones.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_prestamos_devoluciones.setText("Préstamos / Devoluciones");
 
         javax.swing.GroupLayout pnl_card_pres_devLayout = new javax.swing.GroupLayout(pnl_card_pres_dev);
         pnl_card_pres_dev.setLayout(pnl_card_pres_devLayout);
@@ -241,14 +255,14 @@ public class DashboardFrm extends javax.swing.JFrame {
             pnl_card_pres_devLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_pres_devLayout.createSequentialGroup()
                 .addContainerGap(35, Short.MAX_VALUE)
-                .addComponent(jLabel9)
+                .addComponent(lbl_prestamos_devoluciones)
                 .addGap(33, 33, 33))
         );
         pnl_card_pres_devLayout.setVerticalGroup(
             pnl_card_pres_devLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_pres_devLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbl_prestamos_devoluciones, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
@@ -259,53 +273,58 @@ public class DashboardFrm extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel12.setText("Gestión de Usuarios");
+        lbl_gestion_usuario.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_gestion_usuario.setText("Gestión de Usuarios");
 
         javax.swing.GroupLayout pnl_card_gestion_usuariosLayout = new javax.swing.GroupLayout(pnl_card_gestion_usuarios);
         pnl_card_gestion_usuarios.setLayout(pnl_card_gestion_usuariosLayout);
         pnl_card_gestion_usuariosLayout.setHorizontalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jLabel12)
-                .addContainerGap(80, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
+                .addContainerGap(65, Short.MAX_VALUE)
+                .addComponent(lbl_gestion_usuario)
+                .addGap(61, 61, 61))
         );
         pnl_card_gestion_usuariosLayout.setVerticalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(lbl_gestion_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pnl_card_config.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_config.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_configMouseClicked(evt);
+            }
+        });
 
-        jLabel11.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel11.setText("Configuración");
+        lbl_configuracion.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_configuracion.setText("Configuración");
 
         javax.swing.GroupLayout pnl_card_configLayout = new javax.swing.GroupLayout(pnl_card_config);
         pnl_card_config.setLayout(pnl_card_configLayout);
         pnl_card_configLayout.setHorizontalGroup(
             pnl_card_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_configLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel11)
-                .addGap(81, 81, 81))
+            .addGroup(pnl_card_configLayout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addComponent(lbl_configuracion)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnl_card_configLayout.setVerticalGroup(
             pnl_card_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_configLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(lbl_configuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(63, 63, 63)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,7 +365,7 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnl_card_config, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_card_gestion_usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
@@ -361,12 +380,24 @@ public class DashboardFrm extends javax.swing.JFrame {
         abrirGestores();
     }//GEN-LAST:event_pnl_card_gestion_docMouseClicked
 
+    private void pnl_card_configMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_configMouseClicked
+        redirectConfig();
+    }//GEN-LAST:event_pnl_card_configMouseClicked
+
     private void abrirFormularioUsuarios() {
-        ventanaUsuarios.setVisible(true);
+       GestionUsuariosFrm userFrm = new GestionUsuariosFrm(DashboardFrm.this);
+       setVisible(false);
+       userFrm.setVisible(true);
     }
     
     private void abrirGestores() {
         ventanaGestores.setVisible(true);
+    }
+    
+    private void redirectConfig(){
+        ConfiguracionFrm config = new ConfiguracionFrm(DashboardFrm.this);
+        setVisible(false);
+        config.setVisible(true);
     }
     
     /**
@@ -406,9 +437,7 @@ public class DashboardFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -416,11 +445,15 @@ public class DashboardFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lbl_configuracion;
+    private javax.swing.JLabel lbl_gestion_documentos;
+    private javax.swing.JLabel lbl_gestion_usuario;
+    private javax.swing.JLabel lbl_prestamos_devoluciones;
+    private javax.swing.JLabel lbl_username_up;
     private javax.swing.JPanel pnl_card_config;
     private javax.swing.JPanel pnl_card_documentos;
     private javax.swing.JPanel pnl_card_gestion_doc;
