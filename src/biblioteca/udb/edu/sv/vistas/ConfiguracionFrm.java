@@ -118,6 +118,10 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         btn_limpiar_config = new javax.swing.JButton();
         scp_tbl_config = new javax.swing.JScrollPane();
         tbl_configuracion = new javax.swing.JTable();
+        pnl_menu_editorial = new javax.swing.JPanel();
+        pnl_menu_tipo_documentos = new javax.swing.JPanel();
+        pnl_menu_estado_ejemplar = new javax.swing.JPanel();
+        pnl_menu_estado_prestamo = new javax.swing.JPanel();
         pnl_menu_auditoria = new javax.swing.JPanel();
         scp_auditoria = new javax.swing.JScrollPane();
         tbl_auditoria = new javax.swing.JTable();
@@ -363,6 +367,58 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
 
         tabConfig.addTab("Configuración", pnl_menu_config);
 
+        javax.swing.GroupLayout pnl_menu_editorialLayout = new javax.swing.GroupLayout(pnl_menu_editorial);
+        pnl_menu_editorial.setLayout(pnl_menu_editorialLayout);
+        pnl_menu_editorialLayout.setHorizontalGroup(
+            pnl_menu_editorialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1095, Short.MAX_VALUE)
+        );
+        pnl_menu_editorialLayout.setVerticalGroup(
+            pnl_menu_editorialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
+
+        tabConfig.addTab("Editoriales", pnl_menu_editorial);
+
+        javax.swing.GroupLayout pnl_menu_tipo_documentosLayout = new javax.swing.GroupLayout(pnl_menu_tipo_documentos);
+        pnl_menu_tipo_documentos.setLayout(pnl_menu_tipo_documentosLayout);
+        pnl_menu_tipo_documentosLayout.setHorizontalGroup(
+            pnl_menu_tipo_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1095, Short.MAX_VALUE)
+        );
+        pnl_menu_tipo_documentosLayout.setVerticalGroup(
+            pnl_menu_tipo_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
+
+        tabConfig.addTab("Tipos de documentos", pnl_menu_tipo_documentos);
+
+        javax.swing.GroupLayout pnl_menu_estado_ejemplarLayout = new javax.swing.GroupLayout(pnl_menu_estado_ejemplar);
+        pnl_menu_estado_ejemplar.setLayout(pnl_menu_estado_ejemplarLayout);
+        pnl_menu_estado_ejemplarLayout.setHorizontalGroup(
+            pnl_menu_estado_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1095, Short.MAX_VALUE)
+        );
+        pnl_menu_estado_ejemplarLayout.setVerticalGroup(
+            pnl_menu_estado_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
+
+        tabConfig.addTab("Estado de ejemplares", pnl_menu_estado_ejemplar);
+
+        javax.swing.GroupLayout pnl_menu_estado_prestamoLayout = new javax.swing.GroupLayout(pnl_menu_estado_prestamo);
+        pnl_menu_estado_prestamo.setLayout(pnl_menu_estado_prestamoLayout);
+        pnl_menu_estado_prestamoLayout.setHorizontalGroup(
+            pnl_menu_estado_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1095, Short.MAX_VALUE)
+        );
+        pnl_menu_estado_prestamoLayout.setVerticalGroup(
+            pnl_menu_estado_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
+
+        tabConfig.addTab("Estado de prestamo", pnl_menu_estado_prestamo);
+
         tbl_auditoria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -590,6 +646,10 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private javax.swing.JPanel pnl_header_config;
     private javax.swing.JPanel pnl_menu_auditoria;
     private javax.swing.JPanel pnl_menu_config;
+    private javax.swing.JPanel pnl_menu_editorial;
+    private javax.swing.JPanel pnl_menu_estado_ejemplar;
+    private javax.swing.JPanel pnl_menu_estado_prestamo;
+    private javax.swing.JPanel pnl_menu_tipo_documentos;
     private javax.swing.JScrollPane scp_auditoria;
     private javax.swing.JScrollPane scp_tbl_config;
     private javax.swing.JTabbedPane tabConfig;
