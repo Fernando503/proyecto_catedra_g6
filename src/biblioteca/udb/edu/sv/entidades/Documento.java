@@ -9,10 +9,11 @@ public class Documento {
     private String editorial;
     private String idioma;
     private String formato;
-    private String estado;
+    private Boolean estado;
     private int añoPublicacion;
     private int paginas;
     private String observaciones;
+    private String codigo;
 
     // Getters y setters
     public int getDocumentoID() { return documentoID; }
@@ -39,8 +40,8 @@ public class Documento {
     public String getFormato() { return formato; }
     public void setFormato(String f) { this.formato = f; }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String e) { this.estado = e; }
+    public Boolean getEstado() { return estado; }
+    public void setEstado(Boolean e) { this.estado = e; }
 
     public int getAñoPublicacion() { return añoPublicacion; }
     public void setAñoPublicacion(int a) { this.añoPublicacion = a; }
@@ -50,4 +51,7 @@ public class Documento {
 
     public String getObservaciones() { return observaciones; }
     public void setObservaciones(String o) { this.observaciones = o; }
+    
+    public String getCodigo() { return codigo; }
+    public void setCodigo(String c) { this.codigo = c; }
 }

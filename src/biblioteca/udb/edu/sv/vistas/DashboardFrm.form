@@ -43,6 +43,7 @@
                       <Component id="pnl_card_documentos" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                       <Component id="lbl_ejemplares_count" min="-2" max="-2" attributes="0"/>
+                      <Component id="lbl_ejemplares_count" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
@@ -61,6 +62,7 @@
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="pnl_card_documentos" min="-2" max="-2" attributes="0"/>
                   <Component id="lbl_ejemplares_count" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbl_ejemplares_count" min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -75,6 +77,7 @@
                   <Component id="pnl_card_gestion_usuarios" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="46" max="32767" attributes="0"/>
+              <EmptySpace pref="46" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -88,11 +91,21 @@
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[771, 90]"/>
         </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[771, 90]"/>
+        </Property>
       </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jLabel14" min="-2" pref="437" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="lbl_username_up" min="-2" pref="249" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+              </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel14" min="-2" pref="437" max="-2" attributes="0"/>
@@ -112,9 +125,41 @@
                   </Group>
                   <EmptySpace pref="21" max="32767" attributes="0"/>
               </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lbl_username_up" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel14" alignment="3" pref="35" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="21" max="32767" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lbl_username_up">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="d7" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Usuario"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel14">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="d7" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Mediateca UDB"/>
+          </Properties>
+        </Component>
+      </SubComponents>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lbl_username_up">
           <Properties>
@@ -162,6 +207,18 @@
                           <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+              <Group type="102" attributes="0">
+                  <EmptySpace pref="46" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="lbl_documentos_count" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="lbl_documento_counter" min="-2" pref="36" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -173,13 +230,21 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lbl_documento_counter" min="-2" pref="31" max="-2" attributes="0"/>
                   <EmptySpace pref="20" max="32767" attributes="0"/>
+                  <Component id="lbl_documentos_count" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lbl_documento_counter" min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lbl_documentos_count">
+        <Component class="javax.swing.JLabel" name="lbl_documentos_count">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="1"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="1"/>
             </Property>
@@ -187,7 +252,11 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_documento_counter">
+        <Component class="javax.swing.JLabel" name="lbl_documento_counter">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="0"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="0"/>
             </Property>
@@ -196,6 +265,7 @@
         </Component>
       </SubComponents>
     </Container>
+    <Container class="javax.swing.JPanel" name="lbl_ejemplares_count">
     <Container class="javax.swing.JPanel" name="lbl_ejemplares_count">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -208,11 +278,17 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace pref="52" max="32767" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="lbl_ejemplares_counter" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="lbl_ejemplares_counter" min="-2" pref="33" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
@@ -229,6 +305,9 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lbl_ejemplares_counter" min="-2" pref="28" max="-2" attributes="0"/>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lbl_ejemplares_counter" min="-2" pref="28" max="-2" attributes="0"/>
+                  <EmptySpace pref="22" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -239,11 +318,18 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="1"/>
             </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="1"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Ejemplares"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_ejemplares_counter">
+        <Component class="javax.swing.JLabel" name="lbl_ejemplares_counter">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="0"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="0"/>
             </Property>
@@ -271,6 +357,14 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="lbl_prestamos_counter" min="-2" pref="33" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="lbl_prestamos_count" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="58" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="lbl_prestamos_counter" min="-2" pref="33" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -282,13 +376,21 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lbl_prestamos_counter" min="-2" pref="32" max="-2" attributes="0"/>
                   <EmptySpace pref="20" max="32767" attributes="0"/>
+                  <Component id="lbl_prestamos_count" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lbl_prestamos_counter" min="-2" pref="32" max="-2" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lbl_prestamos_count">
+        <Component class="javax.swing.JLabel" name="lbl_prestamos_count">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="1"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="1"/>
             </Property>
@@ -296,7 +398,11 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_prestamos_counter">
+        <Component class="javax.swing.JLabel" name="lbl_prestamos_counter">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="0"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="0"/>
             </Property>
@@ -323,7 +429,15 @@
                           <Component id="lbl_mora_counter" max="32767" attributes="0"/>
                       </Group>
                       <Component id="lbl_moras_count" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="77" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                          <Component id="lbl_mora_counter" max="32767" attributes="0"/>
+                      </Group>
+                      <Component id="lbl_moras_count" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -336,13 +450,21 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lbl_mora_counter" pref="28" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  <Component id="lbl_moras_count" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lbl_mora_counter" pref="28" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lbl_moras_count">
+        <Component class="javax.swing.JLabel" name="lbl_moras_count">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="1"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="1"/>
             </Property>
@@ -350,7 +472,11 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_mora_counter">
+        <Component class="javax.swing.JLabel" name="lbl_mora_counter">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Raleway" size="18" style="0"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Raleway" size="18" style="0"/>
             </Property>
@@ -375,6 +501,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                   <Component id="lbl_gestion_documentos" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbl_gestion_documentos" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="46" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -384,12 +511,14 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace pref="39" max="32767" attributes="0"/>
                   <Component id="lbl_gestion_documentos" min="-2" pref="72" max="-2" attributes="0"/>
+                  <Component id="lbl_gestion_documentos" min="-2" pref="72" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JLabel" name="lbl_gestion_documentos">
         <Component class="javax.swing.JLabel" name="lbl_gestion_documentos">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -413,6 +542,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace pref="35" max="32767" attributes="0"/>
                   <Component id="lbl_prestamos_devoluciones" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbl_prestamos_devoluciones" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -422,12 +552,14 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="lbl_prestamos_devoluciones" min="-2" pref="72" max="-2" attributes="0"/>
+                  <Component id="lbl_prestamos_devoluciones" min="-2" pref="72" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JLabel" name="lbl_prestamos_devoluciones">
         <Component class="javax.swing.JLabel" name="lbl_prestamos_devoluciones">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -455,6 +587,10 @@
                   <EmptySpace pref="65" max="32767" attributes="0"/>
                   <Component id="lbl_gestion_usuario" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="65" max="32767" attributes="0"/>
+                  <Component id="lbl_gestion_usuario" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -464,11 +600,16 @@
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                   <Component id="lbl_gestion_usuario" min="-2" pref="72" max="-2" attributes="0"/>
                   <EmptySpace pref="44" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                  <Component id="lbl_gestion_usuario" min="-2" pref="72" max="-2" attributes="0"/>
+                  <EmptySpace pref="44" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JLabel" name="lbl_gestion_usuario">
         <Component class="javax.swing.JLabel" name="lbl_gestion_usuario">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -488,10 +629,16 @@
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnl_card_configMouseClicked"/>
       </Events>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pnl_card_configMouseClicked"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
+                  <Component id="lbl_configuracion" min="-2" max="-2" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
                   <Component id="lbl_configuracion" min="-2" max="-2" attributes="0"/>
@@ -505,11 +652,15 @@
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="lbl_configuracion" min="-2" pref="72" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="lbl_configuracion" min="-2" pref="72" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JLabel" name="lbl_configuracion">
         <Component class="javax.swing.JLabel" name="lbl_configuracion">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
