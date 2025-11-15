@@ -80,7 +80,7 @@ public class UsuarioController {
         }
     }
 
-    // RESTABLECER CONTRASEÑA (siempre 1234 como dijiste)
+    // RESTABLECER CONTRASEÑA
     public boolean restablecerContraseña(int idUsuario) {
         try {
             return usuarioDAO.restablecerContraseña(idUsuario, "1234");
