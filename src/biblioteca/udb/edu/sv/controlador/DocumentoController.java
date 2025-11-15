@@ -52,15 +52,6 @@ public class DocumentoController {
         }
     }
 
-    public List<String> obtenerCategorias() {
-        try {
-            return documentoDAO.obtenerCategorias();
-        } catch (Exception e) {
-            logger.error("Error al obtener categorías: " + e.getMessage());
-            return null;
-        }
-    }
-
     public List<String> obtenerEditoriales() {
         try {
             return documentoDAO.obtenerEditoriales();

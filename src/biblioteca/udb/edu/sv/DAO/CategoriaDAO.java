@@ -42,6 +42,36 @@ public class CategoriaDAO {
         }
         return lista;
     }
+    
+    // ---------------------------------------------------------
+    // LISTAR TODAS LAS CATEGORÍAS (ACTIVAS)
+    // ---------------------------------------------------------
+    public List<Categoria> listarCategoriasActivas() {
+        List<Categoria> lista = new ArrayList<>();
+
+        String sql = "SELECT categoria_id, nombre_categoria, descripcion, habilitado "
+                   + "FROM categorias WHERE habilitado = TRUE";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Categoria c = new Categoria();
+
+                c.setCategoriaId(rs.getInt("categoria_id"));
+                c.setNombreCategoria(rs.getString("nombre_categoria"));
+                c.setDescripcion(rs.getString("descripcion"));
+                c.setHabilitado(rs.getBoolean("habilitado"));
+
+                lista.add(c);
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error al listar categorías: " + e.getMessage());
+        }
+        return lista;
+    }
 
     // ---------------------------------------------------------
     // BUSCAR POR FILTRO (LIKE)
@@ -139,7 +169,7 @@ public class CategoriaDAO {
     // ELIMINAR CATEGORÍA
     // ---------------------------------------------------------
     public boolean eliminarCategoria(int id) {
-        String sql = "DELETE FROM categorias WHERE categoria_id = ?";
+        String sql = "UPDATE categorias SET habilitado = 0 WHERE categoria_id = ?";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -147,13 +177,13 @@ public class CategoriaDAO {
             ps.setInt(1, id);
             ps.executeUpdate();
 
-            AuditoriaLogger.registrar("ELIMINAR_CATEGORIA",
-                    "Se eliminó la categoría ID: " + id);
+            AuditoriaLogger.registrar("INHABILITAR_CATEGORIA",
+                    "Se inhabilitó la categoría ID: " + id);
 
             return true;
 
         } catch (SQLException e) {
-            logger.error("Error al eliminar categoría: " + e.getMessage());
+            logger.error("Error al inhabilitar categoría: " + e.getMessage());
             return false;
         }
     }

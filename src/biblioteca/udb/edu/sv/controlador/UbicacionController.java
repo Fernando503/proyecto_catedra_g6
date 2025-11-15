@@ -25,6 +25,15 @@ public class UbicacionController {
             return Collections.emptyList();
         }
     }
+    
+    public List<Ubicacion> listarUbicacionesActivas() {
+        try {
+            return ubicacionDAO.listarUbicacionesActivas();
+        } catch (Exception e) {
+            logger.error("Error al obtener ubicaciones (activas): " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
 
     public List<Ubicacion> buscarUbicaciones(String filtro) {
         try {

@@ -65,3 +65,10 @@
 2025-11-15 12:19:41 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-15 12:21:44 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
 2025-11-15 12:22:25 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:25:19 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:27:05 ERROR CategoriaDAO:156 - Error al eliminar categoría: Cannot delete or update a parent row: a foreign key constraint fails (`pro_catedra_g6`.`documentos`, CONSTRAINT `fk_doc_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`categoria_id`) ON UPDATE CASCADE)
+2025-11-15 12:35:07 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:42:15 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:46:55 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:48:33 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:49:30 INFO  Application:25 - Iniciando sistema de Mediateca UDB.

@@ -25,6 +25,15 @@ public class CategoriaController {
             return Collections.emptyList();
         }
     }
+    
+    public List<Categoria> listarCategoriasActivas() {
+        try {
+            return categoriaDAO.listarCategoriasActivas();
+        } catch (Exception e) {
+            logger.error("Error al obtener categorías (activas): " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
 
     public List<Categoria> buscarCategorias(String filtro) {
         try {

@@ -44,6 +44,38 @@ public class UbicacionDAO {
         }
         return lista;
     }
+    
+    // ---------------------------------------------------------
+    // LISTAR TODAS LAS UBICACIONES
+    // ---------------------------------------------------------
+    public List<Ubicacion> listarUbicacionesActivas() {
+        List<Ubicacion> lista = new ArrayList<>();
+
+        String sql = "SELECT ubicacion_id, sala, estanteria, nivel, codigo_rack, descripcion, habilitado "
+                   + "FROM ubicaciones WHERE habilitado = TRUE";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Ubicacion u = new Ubicacion(
+                    rs.getInt("ubicacion_id"),
+                    rs.getString("sala"),
+                    rs.getString("estanteria"),
+                    rs.getString("nivel"),
+                    rs.getString("codigo_rack"),
+                    rs.getString("descripcion"),
+                    rs.getBoolean("habilitado")
+                );
+                lista.add(u);
+            }
+
+        } catch (SQLException e) {
+            logger.error("Error al listar ubicaciones: " + e.getMessage());
+        }
+        return lista;
+    }
 
     // ---------------------------------------------------------
     // BUSCAR POR FILTRO
@@ -153,8 +185,8 @@ public class UbicacionDAO {
     // ---------------------------------------------------------
     // ELIMINAR UBICACIÓN
     // ---------------------------------------------------------
-    public boolean eliminarUbicacion(Integer id) {
-        String sql = "DELETE FROM ubicaciones WHERE ubicacion_id = ?";
+    public boolean eliminarUbicacion(int id) {
+        String sql = "UPDATE ubicaciones SET habilitado = 0 WHERE ubicacion_id = ?";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -162,16 +194,17 @@ public class UbicacionDAO {
             ps.setInt(1, id);
             ps.executeUpdate();
 
-            AuditoriaLogger.registrar("ELIMINAR_UBICACION",
-                    "Se eliminó ubicación ID: " + id);
+            AuditoriaLogger.registrar("INHABILITAR_UBICACION",
+                    "Se inhabilitó la ubicación ID: " + id);
 
             return true;
 
         } catch (SQLException e) {
-            logger.error("Error al eliminar ubicación: " + e.getMessage());
+            logger.error("Error al inhabilitar ubicación: " + e.getMessage());
             return false;
         }
     }
+
     
     public List<String> obtenerEstados() {
         List<String> estados = new ArrayList<>();

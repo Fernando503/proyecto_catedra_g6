@@ -70,9 +70,9 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
         cmb_categoria.removeAllItems();
         cmb_categoria.addItem("Seleccione...");
-        List<String> listaCategorias = documentoController.obtenerCategorias();
+        List<Categoria> listaCategorias = categoriaController.listarCategoriasActivas(); // talvez hacer esto mismo con las otras combobox?
         listaCategorias.forEach(i -> {
-            cmb_categoria.addItem(i);
+            cmb_categoria.addItem(i.getNombreCategoria());
         });
 
         cmb_formato.removeAllItems();
@@ -99,7 +99,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
     
     private void cargarCategorias()
     {
-        cargarDatosCategorias(categoriaController.listarCategorias());
+        cargarDatosCategorias(categoriaController.listarCategoriasActivas());
         btn_agregar_categorias.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "AGREGAR"));
         btn_editar_categorias.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "MODIFICAR"));
         btn_eliminar_categorias.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "ELIMINAR"));
@@ -114,7 +114,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
     
     private void cargarUbicaciones()
     {
-        cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+        cargarDatosUbicaciones(ubicacionController.listarUbicacionesActivas());
         btn_agregar_ubicaciones.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "AGREGAR"));
         btn_editar_ubicaciones.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "MODIFICAR"));
         btn_eliminar_ubicaciones.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "ELIMINAR"));
@@ -1545,7 +1545,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarCategoria();
-                cargarDatosCategorias(categoriaController.listarCategorias());
+                cargarDatosCategorias(categoriaController.listarCategoriasActivas());
                 
                 limpiarDocumento();
                 cargarDocumentos();
@@ -1595,7 +1595,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarCategoria();
-                cargarDatosCategorias(categoriaController.listarCategorias());
+                cargarDatosCategorias(categoriaController.listarCategoriasActivas());
                 
                 limpiarDocumento();
                 cargarDocumentos();
@@ -1634,7 +1634,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarCategoria();
-                cargarDatosCategorias(categoriaController.listarCategorias());
+                cargarDatosCategorias(categoriaController.listarCategoriasActivas());
                 
                 limpiarDocumento();
                 cargarDocumentos();
@@ -1719,7 +1719,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarUbicaciones();
-                cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+                cargarDatosUbicaciones(ubicacionController.listarUbicacionesActivas());
                 JOptionPane.showMessageDialog(null, "Ubicación agregada correctamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al agregar la ubicación.");
@@ -1769,7 +1769,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarUbicaciones();
-                cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+                cargarDatosUbicaciones(ubicacionController.listarUbicacionesActivas());
                 JOptionPane.showMessageDialog(null, "Ubicación modificada correctamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al actualizar la ubicación.");
@@ -1804,7 +1804,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarUbicaciones();
-                cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+                cargarDatosUbicaciones(ubicacionController.listarUbicacionesActivas());
                 JOptionPane.showMessageDialog(null, "Ubicación eliminada correctamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al eliminar la ubicación.");
