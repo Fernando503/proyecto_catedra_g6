@@ -9,8 +9,10 @@ import biblioteca.udb.edu.sv.controlador.UsuarioController;
 import biblioteca.udb.edu.sv.entidades.*;
 import biblioteca.udb.edu.sv.tools.LogManager;
 import biblioteca.udb.edu.sv.tools.RoleManager;
+import biblioteca.udb.edu.sv.tools.Validaciones;
 import java.awt.HeadlessException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
@@ -48,11 +50,10 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
         btn_eliminar_usuario.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "ELIMINAR"));
 
         cmb_roles_usuario.removeAllItems();
-        cmb_roles_usuario.addItem("Seleccione...");
-        List<Rol> listaRoles = usuarioController.obtenerRoles();
-        listaRoles.forEach(rol -> {
-            cmb_roles_usuario.addItem(rol.getNombreRol());
-        });
+        List<Rol> roles = new ArrayList<>();
+        roles.add(new Rol(0, "Seleccione...","", true));
+        roles.addAll(usuarioController.obtenerRoles());
+        cmb_roles_usuario.setModel(new DefaultComboBoxModel<>(roles.toArray(new Rol[0])));
 
     }
     
@@ -70,14 +71,16 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
         });
     }
    
-   private void limpiarUsuario () {
-       txt_id_usuario.setText("");
-       txt_nombre_usuario.setText("");
-       txt_correo_usuario.setText("");
-       txt_password_usuario.setText("");
-       txt_re_password.setText("");
-       cmb_roles_usuario.setSelectedIndex(0);
-   }
+    private void limpiarUsuario () {
+        txt_id_usuario.setText("");
+        txt_nombre_usuario.setText("");
+        txt_correo_usuario.setText("");
+        txt_password_usuario.setText("");
+        txt_re_password.setText("");
+        if (cmb_roles_usuario.getItemCount() > 0) {
+            cmb_roles_usuario.setSelectedIndex(0);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -181,8 +184,6 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
         lbl_repeat_password.setText("Repita contraseña:");
 
         lbl_rol_usuario.setText("Rol:");
-
-        cmb_roles_usuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout pnl_datos_usuariosLayout = new javax.swing.GroupLayout(pnl_datos_usuarios);
         pnl_datos_usuarios.setLayout(pnl_datos_usuariosLayout);
@@ -396,9 +397,11 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
                 .addComponent(pnl_header_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnl_datos_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnl_acciones_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pnl_datos_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 3, Short.MAX_VALUE))
+                    .addComponent(pnl_acciones_usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnl_filtro_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scp_tbl_usuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -416,46 +419,41 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
 
     private void btn_agregar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_usuarioActionPerformed
         try {
-            
-            char[] pass1 = txt_password_usuario.getPassword();
-            char[] pass2 = txt_re_password.getPassword();
-            String rolName = cmb_roles_usuario.getSelectedItem().toString();
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_nombre_usuario,txt_correo_usuario,txt_password_usuario,txt_re_password}, new JComboBox[]{cmb_roles_usuario})) {
+                char[] pass1 = txt_password_usuario.getPassword();
+                char[] pass2 = txt_re_password.getPassword();
 
-            boolean iguales = Arrays.equals(pass1, pass2);
+                boolean iguales = Arrays.equals(pass1, pass2);
 
-            if (!iguales) {
-                JOptionPane.showMessageDialog(null, "Las contraseñas ingresadas no coinciden.");
-                return;
-            }
-            if("Seleccione...".equals(rolName.trim())){
-                JOptionPane.showMessageDialog(null, "Debese seleccionar un rol.");
-                return;
-            }
-            
-            String nombre = txt_nombre_usuario.getText();
-            String correo = txt_correo_usuario.getText();
-            String password = new String(txt_password_usuario.getPassword());
+                if (!iguales) {
+                    JOptionPane.showMessageDialog(null, "Las contraseñas ingresadas no coinciden.");
+                    return;
+                }
 
-            Rol rolUserSelected = usuarioController.obtenerRolByNombre(rolName);
-            Usuario modelAction = new Usuario();
-            LocalDateTime ahora = LocalDateTime.now();
-           
-            modelAction.setNombre(nombre);
-            modelAction.setCorreo(correo);
-            modelAction.setContrasenia(password);
-            modelAction.setRol(rolUserSelected);
-            modelAction.setFechaRegistro(ahora);
-            modelAction.setHabilitado(true);
+                String nombre = txt_nombre_usuario.getText();
+                String correo = txt_correo_usuario.getText();
+                String password = new String(txt_password_usuario.getPassword());
+                Rol rolUsuario = (Rol) cmb_roles_usuario.getSelectedItem();
+                Usuario modelAction = new Usuario();
+                LocalDateTime ahora = LocalDateTime.now();
 
-            // Enviar al controlador
-            boolean exito = usuarioController.agregarUsuario(modelAction);
+                modelAction.setNombre(nombre);
+                modelAction.setCorreo(correo);
+                modelAction.setContrasenia(password);
+                modelAction.setRol(rolUsuario);
+                modelAction.setFechaRegistro(ahora);
+                modelAction.setHabilitado(true);
 
-            if (exito) {
-                limpiarUsuario();
-                cargarDatosUsuarios(usuarioController.listarUsuarios());
-                JOptionPane.showMessageDialog(null, "Usuario agregado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al agregar el usuario.");
+                // Enviar al controlador
+                boolean exito = usuarioController.agregarUsuario(modelAction);
+
+                if (exito) {
+                    limpiarUsuario();
+                    cargarDatosUsuarios(usuarioController.listarUsuarios());
+                    JOptionPane.showMessageDialog(null, "Usuario agregado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al agregar el usuario.");
+                }
             }
 
         } catch (HeadlessException e) {
@@ -466,39 +464,31 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
 
     private void btn_editar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_usuarioActionPerformed
         try {
-            if(txt_id_usuario.getText().equals("")){
-                JOptionPane.showMessageDialog(null, "No es posible actualizar el usuario, no existe el registro.");
-                return;
-            }
-           
-            String rolName = cmb_roles_usuario.getSelectedItem().toString();
-            if("Seleccione...".equals(rolName.trim())){
-                JOptionPane.showMessageDialog(null, "Debese seleccionar un rol.");
-                return;
-            }
-            Integer id = Integer.parseInt(txt_id_usuario.getText());
-            String nombre = txt_nombre_usuario.getText();
-            String correo = txt_correo_usuario.getText();
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_nombre_usuario,txt_correo_usuario,txt_password_usuario,txt_re_password}, new JComboBox[]{cmb_roles_usuario})) {
+          
+                Integer id = Integer.parseInt(txt_id_usuario.getText());
+                String nombre = txt_nombre_usuario.getText();
+                String correo = txt_correo_usuario.getText();
+                Rol rolUsuario = (Rol) cmb_roles_usuario.getSelectedItem();
+              
+                Usuario modelAction = new Usuario();
+              
+                modelAction.setIdUsuario(id);
+                modelAction.setNombre(nombre);
+                modelAction.setCorreo(correo);
+                modelAction.setRol(rolUsuario);
+                modelAction.setHabilitado(true);
 
-            Rol rolUserSelected = usuarioController.obtenerRolByNombre(rolName);
-            Usuario modelAction = new Usuario();
-            LocalDateTime ahora = LocalDateTime.now();
-           
-            modelAction.setIdUsuario(id);
-            modelAction.setNombre(nombre);
-            modelAction.setCorreo(correo);
-            modelAction.setRol(rolUserSelected);
-            modelAction.setHabilitado(true);
+                // Enviar al controlador
+                boolean exito = usuarioController.editarUsuario(modelAction);
 
-            // Enviar al controlador
-            boolean exito = usuarioController.editarUsuario(modelAction);
-
-            if (exito) {
-                limpiarUsuario();
-                cargarDatosUsuarios(usuarioController.listarUsuarios());
-                JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al actualizar el usuario.");
+                if (exito) {
+                    limpiarUsuario();
+                    cargarDatosUsuarios(usuarioController.listarUsuarios());
+                    JOptionPane.showMessageDialog(null, "Usuario modificado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar el usuario.");
+                }
             }
 
         } catch (HeadlessException e) {
@@ -536,7 +526,15 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
         txt_id_usuario.setText(modeloUser.getValueAt(index, 0).toString());
         txt_nombre_usuario.setText(modeloUser.getValueAt(index, 1).toString());
         txt_correo_usuario.setText(modeloUser.getValueAt(index, 2).toString());
-        cmb_roles_usuario.setSelectedItem(modeloUser.getValueAt(index, 3).toString());
+        
+        String nombreRol = modeloUser.getValueAt(index, 3).toString();
+        for (int i = 0; i < cmb_roles_usuario.getItemCount(); i++) {
+            Rol r = (Rol) cmb_roles_usuario.getItemAt(i);
+            if (r.getNombreRol().equalsIgnoreCase(nombreRol)) {
+                cmb_roles_usuario.setSelectedIndex(i);
+                break;
+            }
+        }
     }//GEN-LAST:event_tbl_usuariosMouseClicked
 
     private void btn_buscar_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscar_usuarioMouseClicked
@@ -585,7 +583,7 @@ public class GestionUsuariosFrm extends javax.swing.JFrame {
     private javax.swing.JButton btn_editar_usuario;
     private javax.swing.JButton btn_eliminar_usuario;
     private javax.swing.JButton btn_limpiar_usuario;
-    private javax.swing.JComboBox<String> cmb_roles_usuario;
+    private javax.swing.JComboBox<Rol> cmb_roles_usuario;
     private javax.swing.JLabel lbl_btn_volver_usuario;
     private javax.swing.JLabel lbl_correo_usuario;
     private javax.swing.JLabel lbl_nombre_usuario;
