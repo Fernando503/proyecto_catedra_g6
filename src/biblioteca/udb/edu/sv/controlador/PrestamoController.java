@@ -5,7 +5,6 @@
  */
 package biblioteca.udb.edu.sv.controlador;
 
-import biblioteca.udb.edu.sv.DAO.EstadoPrestamoDAO;
 import biblioteca.udb.edu.sv.DAO.PrestamoDAO;
 import biblioteca.udb.edu.sv.entidades.Prestamo;
 import biblioteca.udb.edu.sv.entidades.Usuario;

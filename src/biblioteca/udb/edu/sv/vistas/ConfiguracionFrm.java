@@ -8,11 +8,15 @@ package biblioteca.udb.edu.sv.vistas;
 import biblioteca.udb.edu.sv.controlador.AuditoriaController;
 import biblioteca.udb.edu.sv.controlador.ConfiguracionController;
 import biblioteca.udb.edu.sv.controlador.EditorialController;
+import biblioteca.udb.edu.sv.controlador.EstadoEjemplarController;
+import biblioteca.udb.edu.sv.controlador.EstadoPrestamoController;
 import biblioteca.udb.edu.sv.controlador.TipoDocumentoController;
 import biblioteca.udb.edu.sv.entidades.Auditoria;
 import biblioteca.udb.edu.sv.entidades.Ciudad;
 import biblioteca.udb.edu.sv.entidades.Configuracion;
 import biblioteca.udb.edu.sv.entidades.Editorial;
+import biblioteca.udb.edu.sv.entidades.EstadoEjemplar;
+import biblioteca.udb.edu.sv.entidades.EstadoPrestamo;
 import biblioteca.udb.edu.sv.entidades.Pais;
 import biblioteca.udb.edu.sv.entidades.TipoDocumento;
 import biblioteca.udb.edu.sv.tools.LogManager;
@@ -43,10 +47,14 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private final DefaultTableModel modeloAuditoria;
     private final DefaultTableModel modelTipoDocumento;
     private final DefaultTableModel modelEditoriales;
+    private final DefaultTableModel modelEstadoEjemplar;
+    private final DefaultTableModel modelEstadoPrestamo;
     private final ConfiguracionController configController = new ConfiguracionController();
     private final AuditoriaController auditController = new AuditoriaController();
     private final TipoDocumentoController tipoDocController = new TipoDocumentoController();
     private final EditorialController editorialController = new EditorialController();
+    private final EstadoEjemplarController estadoEjempController = new EstadoEjemplarController();
+    private final EstadoPrestamoController estadoPrestController = new EstadoPrestamoController();
 
 
     /**
@@ -61,6 +69,8 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_id_config.setVisible(false);
         txt_id_tip_doc.setVisible(false);
         txt_id_editorial.setVisible(false);
+        txt_id_est_ejemplar.setVisible(false);
+        txt_id_est_prestamo.setVisible(false);
         
         // INICIALIZACION DE TABLAS
         modeloConfiguracion = (DefaultTableModel) tbl_configuracion.getModel();
@@ -71,6 +81,10 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         cargarTipoDocumento(tipoDocController.listar());
         modelEditoriales = (DefaultTableModel) tbl_editoriales.getModel();
         cargarDatosEditoriales(editorialController.listar());
+        modelEstadoEjemplar = (DefaultTableModel) tbl_estado_ejemplar.getModel();
+        cargarEstadoEjemplar(estadoEjempController.listar());
+        modelEstadoPrestamo = (DefaultTableModel) tbl_estado_prestamo.getModel();
+        cargarEstadoPrestamo(estadoPrestController.listar());
         
         //INICIALIZACION DE COMBOS
         List<Pais> paises = new ArrayList<>();
@@ -127,6 +141,30 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         });
     }
     
+    private void cargarEstadoEjemplar (List<EstadoEjemplar> estEje){
+        modelEstadoEjemplar.setRowCount(0);// Limpiar tabla
+        estEje.forEach(ee -> {
+            modelEstadoEjemplar.addRow(new Object[]{
+                ee.getEstadoEjemplarID(),
+                ee.getNombre(),
+                ee.getDescripcion(),
+                ee.getHabilitado()
+            });
+        });
+    }
+    
+    private void cargarEstadoPrestamo (List<EstadoPrestamo> estPres){
+        modelEstadoPrestamo.setRowCount(0);// Limpiar tabla
+        estPres.forEach(ep -> {
+            modelEstadoPrestamo.addRow(new Object[]{
+                ep.getEstadoPrestamoID(),
+                ep.getNombre(),
+                ep.getDescripcion(),
+                ep.getHabilitado()
+            });
+        });
+    }
+    
     private void cargarDatosEditoriales (List<Editorial> edito){
         modelEditoriales.setRowCount(0);// Limpiar tabla
         edito.forEach(e -> {
@@ -156,6 +194,18 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_id_tip_doc.setText("");
         txt_nombre_tip_doc.setText("");
         txt_descripcion_tip_doc.setText("");
+    }
+    
+    private void limpiarEstEjemplar(){
+        txt_id_est_ejemplar.setText("");
+        txt_nombre_est_ejemplar.setText("");
+        txt_descripcion_est_ejemplar.setText("");
+    }
+    
+    private void limpiarEstPrestamo(){
+        txt_id_est_prestamo.setText("");
+        txt_nombre_est_prestamo.setText("");
+        txt_descripcion_est_prestamo.setText("");
     }
 
     private void limpiarEditorial(){
@@ -253,7 +303,39 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_buscar_tip_doc = new javax.swing.JTextField();
         btn_buscar_tip_doc = new javax.swing.JButton();
         pnl_menu_estado_ejemplar = new javax.swing.JPanel();
+        pnl_datos_est_ejemplar = new javax.swing.JPanel();
+        txt_nombre_est_ejemplar = new javax.swing.JTextField();
+        txt_descripcion_est_ejemplar = new javax.swing.JTextField();
+        txt_id_est_ejemplar = new javax.swing.JTextField();
+        lbl_nombre_est_ejemplar = new javax.swing.JLabel();
+        lbl_descripcion_est_ejemplar = new javax.swing.JLabel();
+        pnl_acciones_est_ejemplar = new javax.swing.JPanel();
+        btn_agregar_est_ejemplar = new javax.swing.JButton();
+        btn_editar_est_ejemplar = new javax.swing.JButton();
+        btn_eliminar_est_ejemplar = new javax.swing.JButton();
+        btn_limpiar_est_ejemplar = new javax.swing.JButton();
+        pnl_buscar_est_ejemplar = new javax.swing.JPanel();
+        txt_buscar_est_ejemplar = new javax.swing.JTextField();
+        btn_buscar_est_ejemplar = new javax.swing.JButton();
+        scp_tbl_est_ejemplar = new javax.swing.JScrollPane();
+        tbl_estado_ejemplar = new javax.swing.JTable();
         pnl_menu_estado_prestamo = new javax.swing.JPanel();
+        pnl_datos_est_prestamo = new javax.swing.JPanel();
+        txt_nombre_est_prestamo = new javax.swing.JTextField();
+        txt_descripcion_est_prestamo = new javax.swing.JTextField();
+        txt_id_est_prestamo = new javax.swing.JTextField();
+        lbl_nombre_est_prestamo = new javax.swing.JLabel();
+        lbl_descripcion_est_prestamo = new javax.swing.JLabel();
+        pnl_acciones_est_prestamo = new javax.swing.JPanel();
+        btn_agregar_est_prestamo = new javax.swing.JButton();
+        btn_editar_est_prestamo = new javax.swing.JButton();
+        btn_eliminar_est_prestamo = new javax.swing.JButton();
+        btn_limpiar_est_prestamo = new javax.swing.JButton();
+        pnl_buscar_est_prestamo = new javax.swing.JPanel();
+        txt_buscar_est_prestamo = new javax.swing.JTextField();
+        btn_buscar_est_prestamo = new javax.swing.JButton();
+        scp_tbl_est_prestamo = new javax.swing.JScrollPane();
+        tbl_estado_prestamo = new javax.swing.JTable();
         pnl_menu_auditoria = new javax.swing.JPanel();
         scp_auditoria = new javax.swing.JScrollPane();
         tbl_auditoria = new javax.swing.JTable();
@@ -488,7 +570,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             .addGroup(pnl_menu_configLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnl_acciones_config, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(315, Short.MAX_VALUE))
+                .addContainerGap(304, Short.MAX_VALUE))
             .addGroup(pnl_menu_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_menu_configLayout.createSequentialGroup()
                     .addContainerGap()
@@ -750,7 +832,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnl_buscar_editorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scp_tbl_editoriales, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addComponent(scp_tbl_editoriales, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -956,28 +1038,401 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
 
         tabConfig.addTab("Tipos de documentos", pnl_menu_tipo_documentos);
 
+        pnl_datos_est_ejemplar.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
+
+        lbl_nombre_est_ejemplar.setText("Nombre:");
+
+        lbl_descripcion_est_ejemplar.setText("Descripción:");
+
+        javax.swing.GroupLayout pnl_datos_est_ejemplarLayout = new javax.swing.GroupLayout(pnl_datos_est_ejemplar);
+        pnl_datos_est_ejemplar.setLayout(pnl_datos_est_ejemplarLayout);
+        pnl_datos_est_ejemplarLayout.setHorizontalGroup(
+            pnl_datos_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_est_ejemplarLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txt_id_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(pnl_datos_est_ejemplarLayout.createSequentialGroup()
+                .addGap(71, 71, 71)
+                .addGroup(pnl_datos_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_nombre_est_ejemplar)
+                    .addComponent(lbl_descripcion_est_ejemplar))
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_nombre_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_descripcion_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(326, Short.MAX_VALUE))
+        );
+        pnl_datos_est_ejemplarLayout.setVerticalGroup(
+            pnl_datos_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_est_ejemplarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_id_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_nombre_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_nombre_est_ejemplar))
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_descripcion_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_descripcion_est_ejemplar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnl_acciones_est_ejemplar.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
+
+        btn_agregar_est_ejemplar.setText("Agregar");
+        btn_agregar_est_ejemplar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_agregar_est_ejemplarMouseClicked(evt);
+            }
+        });
+        btn_agregar_est_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregar_est_ejemplarActionPerformed(evt);
+            }
+        });
+
+        btn_editar_est_ejemplar.setText("Editar");
+        btn_editar_est_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_est_ejemplarActionPerformed(evt);
+            }
+        });
+
+        btn_eliminar_est_ejemplar.setText("Eliminar");
+        btn_eliminar_est_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_est_ejemplarActionPerformed(evt);
+            }
+        });
+
+        btn_limpiar_est_ejemplar.setText("Limpiar");
+        btn_limpiar_est_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_est_ejemplarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_acciones_est_ejemplarLayout = new javax.swing.GroupLayout(pnl_acciones_est_ejemplar);
+        pnl_acciones_est_ejemplar.setLayout(pnl_acciones_est_ejemplarLayout);
+        pnl_acciones_est_ejemplarLayout.setHorizontalGroup(
+            pnl_acciones_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_est_ejemplarLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(pnl_acciones_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_limpiar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_editar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_agregar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+        pnl_acciones_est_ejemplarLayout.setVerticalGroup(
+            pnl_acciones_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_est_ejemplarLayout.createSequentialGroup()
+                .addComponent(btn_agregar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_editar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_eliminar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_limpiar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        pnl_buscar_est_ejemplar.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar"));
+
+        btn_buscar_est_ejemplar.setText("Buscar");
+        btn_buscar_est_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_buscar_est_ejemplarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_buscar_est_ejemplarLayout = new javax.swing.GroupLayout(pnl_buscar_est_ejemplar);
+        pnl_buscar_est_ejemplar.setLayout(pnl_buscar_est_ejemplarLayout);
+        pnl_buscar_est_ejemplarLayout.setHorizontalGroup(
+            pnl_buscar_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_buscar_est_ejemplarLayout.createSequentialGroup()
+                .addComponent(txt_buscar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_buscar_est_ejemplar)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pnl_buscar_est_ejemplarLayout.setVerticalGroup(
+            pnl_buscar_est_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txt_buscar_est_ejemplar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btn_buscar_est_ejemplar, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        tbl_estado_ejemplar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Nombre", "Descripción", "Habilitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_estado_ejemplar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_estado_ejemplarMouseClicked(evt);
+            }
+        });
+        scp_tbl_est_ejemplar.setViewportView(tbl_estado_ejemplar);
+        if (tbl_estado_ejemplar.getColumnModel().getColumnCount() > 0) {
+            tbl_estado_ejemplar.getColumnModel().getColumn(0).setMaxWidth(50);
+            tbl_estado_ejemplar.getColumnModel().getColumn(1).setMinWidth(300);
+            tbl_estado_ejemplar.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tbl_estado_ejemplar.getColumnModel().getColumn(1).setMaxWidth(300);
+            tbl_estado_ejemplar.getColumnModel().getColumn(3).setMinWidth(75);
+            tbl_estado_ejemplar.getColumnModel().getColumn(3).setPreferredWidth(75);
+            tbl_estado_ejemplar.getColumnModel().getColumn(3).setMaxWidth(75);
+        }
+
         javax.swing.GroupLayout pnl_menu_estado_ejemplarLayout = new javax.swing.GroupLayout(pnl_menu_estado_ejemplar);
         pnl_menu_estado_ejemplar.setLayout(pnl_menu_estado_ejemplarLayout);
         pnl_menu_estado_ejemplarLayout.setHorizontalGroup(
             pnl_menu_estado_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1095, Short.MAX_VALUE)
+            .addGroup(pnl_menu_estado_ejemplarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_menu_estado_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_menu_estado_ejemplarLayout.createSequentialGroup()
+                        .addComponent(pnl_datos_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addComponent(pnl_acciones_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnl_buscar_est_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scp_tbl_est_ejemplar))
+                .addContainerGap())
         );
         pnl_menu_estado_ejemplarLayout.setVerticalGroup(
             pnl_menu_estado_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 584, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_menu_estado_ejemplarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_menu_estado_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnl_acciones_est_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_datos_est_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnl_buscar_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scp_tbl_est_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(139, 139, 139))
         );
 
         tabConfig.addTab("Estado de ejemplares", pnl_menu_estado_ejemplar);
+
+        pnl_datos_est_prestamo.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
+
+        lbl_nombre_est_prestamo.setText("Nombre:");
+
+        lbl_descripcion_est_prestamo.setText("Descripción:");
+
+        javax.swing.GroupLayout pnl_datos_est_prestamoLayout = new javax.swing.GroupLayout(pnl_datos_est_prestamo);
+        pnl_datos_est_prestamo.setLayout(pnl_datos_est_prestamoLayout);
+        pnl_datos_est_prestamoLayout.setHorizontalGroup(
+            pnl_datos_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_est_prestamoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txt_id_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(pnl_datos_est_prestamoLayout.createSequentialGroup()
+                .addGap(71, 71, 71)
+                .addGroup(pnl_datos_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_nombre_est_prestamo)
+                    .addComponent(lbl_descripcion_est_prestamo))
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_nombre_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_descripcion_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(326, Short.MAX_VALUE))
+        );
+        pnl_datos_est_prestamoLayout.setVerticalGroup(
+            pnl_datos_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_est_prestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_id_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_nombre_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_nombre_est_prestamo))
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_descripcion_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_descripcion_est_prestamo))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnl_acciones_est_prestamo.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
+
+        btn_agregar_est_prestamo.setText("Agregar");
+        btn_agregar_est_prestamo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_agregar_est_prestamoMouseClicked(evt);
+            }
+        });
+        btn_agregar_est_prestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregar_est_prestamoActionPerformed(evt);
+            }
+        });
+
+        btn_editar_est_prestamo.setText("Editar");
+        btn_editar_est_prestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_est_prestamoActionPerformed(evt);
+            }
+        });
+
+        btn_eliminar_est_prestamo.setText("Eliminar");
+        btn_eliminar_est_prestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_est_prestamoActionPerformed(evt);
+            }
+        });
+
+        btn_limpiar_est_prestamo.setText("Limpiar");
+        btn_limpiar_est_prestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_est_prestamoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_acciones_est_prestamoLayout = new javax.swing.GroupLayout(pnl_acciones_est_prestamo);
+        pnl_acciones_est_prestamo.setLayout(pnl_acciones_est_prestamoLayout);
+        pnl_acciones_est_prestamoLayout.setHorizontalGroup(
+            pnl_acciones_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_est_prestamoLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(pnl_acciones_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_limpiar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_editar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_agregar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+        pnl_acciones_est_prestamoLayout.setVerticalGroup(
+            pnl_acciones_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_est_prestamoLayout.createSequentialGroup()
+                .addComponent(btn_agregar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_editar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_eliminar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_limpiar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        pnl_buscar_est_prestamo.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar"));
+
+        btn_buscar_est_prestamo.setText("Buscar");
+        btn_buscar_est_prestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_buscar_est_prestamoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_buscar_est_prestamoLayout = new javax.swing.GroupLayout(pnl_buscar_est_prestamo);
+        pnl_buscar_est_prestamo.setLayout(pnl_buscar_est_prestamoLayout);
+        pnl_buscar_est_prestamoLayout.setHorizontalGroup(
+            pnl_buscar_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_buscar_est_prestamoLayout.createSequentialGroup()
+                .addComponent(txt_buscar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_buscar_est_prestamo)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pnl_buscar_est_prestamoLayout.setVerticalGroup(
+            pnl_buscar_est_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txt_buscar_est_prestamo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btn_buscar_est_prestamo, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        tbl_estado_prestamo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Nombre", "Descripción", "Habilitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_estado_prestamo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_estado_prestamoMouseClicked(evt);
+            }
+        });
+        scp_tbl_est_prestamo.setViewportView(tbl_estado_prestamo);
+        if (tbl_estado_prestamo.getColumnModel().getColumnCount() > 0) {
+            tbl_estado_prestamo.getColumnModel().getColumn(0).setMaxWidth(50);
+            tbl_estado_prestamo.getColumnModel().getColumn(1).setMinWidth(300);
+            tbl_estado_prestamo.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tbl_estado_prestamo.getColumnModel().getColumn(1).setMaxWidth(300);
+            tbl_estado_prestamo.getColumnModel().getColumn(3).setMinWidth(75);
+            tbl_estado_prestamo.getColumnModel().getColumn(3).setPreferredWidth(75);
+            tbl_estado_prestamo.getColumnModel().getColumn(3).setMaxWidth(75);
+        }
 
         javax.swing.GroupLayout pnl_menu_estado_prestamoLayout = new javax.swing.GroupLayout(pnl_menu_estado_prestamo);
         pnl_menu_estado_prestamo.setLayout(pnl_menu_estado_prestamoLayout);
         pnl_menu_estado_prestamoLayout.setHorizontalGroup(
             pnl_menu_estado_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1095, Short.MAX_VALUE)
+            .addGroup(pnl_menu_estado_prestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_menu_estado_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_menu_estado_prestamoLayout.createSequentialGroup()
+                        .addComponent(pnl_datos_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addComponent(pnl_acciones_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnl_buscar_est_prestamo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scp_tbl_est_prestamo))
+                .addContainerGap())
         );
         pnl_menu_estado_prestamoLayout.setVerticalGroup(
             pnl_menu_estado_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 584, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_menu_estado_prestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_menu_estado_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnl_acciones_est_prestamo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_datos_est_prestamo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnl_buscar_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scp_tbl_est_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         tabConfig.addTab("Estado de prestamo", pnl_menu_estado_prestamo);
@@ -1011,8 +1466,9 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             tbl_auditoria.getColumnModel().getColumn(2).setMaxWidth(150);
             tbl_auditoria.getColumnModel().getColumn(3).setPreferredWidth(150);
             tbl_auditoria.getColumnModel().getColumn(3).setMaxWidth(150);
-            tbl_auditoria.getColumnModel().getColumn(4).setPreferredWidth(125);
-            tbl_auditoria.getColumnModel().getColumn(4).setMaxWidth(125);
+            tbl_auditoria.getColumnModel().getColumn(4).setMinWidth(200);
+            tbl_auditoria.getColumnModel().getColumn(4).setPreferredWidth(200);
+            tbl_auditoria.getColumnModel().getColumn(4).setMaxWidth(200);
             tbl_auditoria.getColumnModel().getColumn(5).setMinWidth(50);
             tbl_auditoria.getColumnModel().getColumn(5).setPreferredWidth(50);
         }
@@ -1030,7 +1486,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             pnl_menu_auditoriaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_menu_auditoriaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scp_auditoria, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addComponent(scp_auditoria, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1048,7 +1504,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnl_header_config, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabConfig))
+                .addComponent(tabConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -1420,6 +1876,208 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_buscar_tip_doc.setText("");
     }//GEN-LAST:event_btn_buscar_tip_docActionPerformed
 
+    private void btn_agregar_est_ejemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_agregar_est_ejemplarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_agregar_est_ejemplarMouseClicked
+
+    private void btn_agregar_est_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_est_ejemplarActionPerformed
+        try {
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_nombre_est_ejemplar,txt_descripcion_est_ejemplar}, new JComboBox[]{})) {
+                String nombreEstEjemp = txt_nombre_est_ejemplar.getText();
+                String descripcionEstEjemp = txt_descripcion_est_ejemplar.getText();
+
+                EstadoEjemplar model = new EstadoEjemplar();
+                model.setNombre(nombreEstEjemp);
+                model.setDescripcion(descripcionEstEjemp);
+                model.setHabilitado(true);
+
+                Boolean exito = estadoEjempController.insertar(model);
+
+                if (exito) {
+                    limpiarEstEjemplar();
+                    cargarEstadoEjemplar(estadoEjempController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Estado de ejemplar agregado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al agregar el estado de ejemplar.");
+                }
+            }
+            
+         } catch (HeadlessException e) {
+            logger.error("Error al procesar estado de ejemplar: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_agregar_est_ejemplarActionPerformed
+
+    private void btn_editar_est_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_est_ejemplarActionPerformed
+        try {
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_nombre_est_ejemplar,txt_descripcion_est_ejemplar}, new JComboBox[]{})) {
+                Integer idEstEjemp = Integer.parseInt(txt_id_est_ejemplar.getText());
+                String nombreEstEjemp = txt_nombre_est_ejemplar.getText();
+                String descripcionEstEjemp = txt_descripcion_est_ejemplar.getText();
+
+                EstadoEjemplar model = new EstadoEjemplar();
+                model.setEstadoEjemplarID(idEstEjemp);
+                model.setNombre(nombreEstEjemp);
+                model.setDescripcion(descripcionEstEjemp);
+                model.setHabilitado(true);
+
+                Boolean exito = estadoEjempController.actualizar(model);
+
+                if (exito) {
+                    limpiarEstEjemplar();
+                    cargarEstadoEjemplar(estadoEjempController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Estado de ejemplar actualizado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al actualizar el estado de ejemplar.");
+                }
+            }
+            
+         } catch (HeadlessException e) {
+            logger.error("Error al procesar estado de ejemplar: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_editar_est_ejemplarActionPerformed
+
+    private void btn_eliminar_est_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_est_ejemplarActionPerformed
+        if(txt_id_est_ejemplar.getText().length() > 0){
+            if (JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar el estado de ejempar con ID: " +  txt_id_est_ejemplar.getText() , "WARNING",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                boolean exito = estadoEjempController.eliminar(Integer.parseInt(txt_id_est_ejemplar.getText()));
+                if (exito) {
+                    limpiarEstEjemplar();
+                    cargarEstadoEjemplar(estadoEjempController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Estado de ejemplar eliminado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar el estado de ejemplar.");
+                }
+            }
+        }else {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un estado de ejemplar antes de eliminarlo.");
+        }
+    }//GEN-LAST:event_btn_eliminar_est_ejemplarActionPerformed
+
+    private void btn_limpiar_est_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_est_ejemplarActionPerformed
+        limpiarEstEjemplar();
+    }//GEN-LAST:event_btn_limpiar_est_ejemplarActionPerformed
+
+    private void btn_buscar_est_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_est_ejemplarActionPerformed
+        String filter = txt_buscar_est_ejemplar.getText();
+        cargarEstadoEjemplar(estadoEjempController.buscar(filter));
+        txt_buscar_est_ejemplar.setText("");
+    }//GEN-LAST:event_btn_buscar_est_ejemplarActionPerformed
+
+    private void btn_agregar_est_prestamoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_agregar_est_prestamoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_agregar_est_prestamoMouseClicked
+
+    private void btn_agregar_est_prestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_est_prestamoActionPerformed
+        try {
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_nombre_est_prestamo,txt_descripcion_est_prestamo}, new JComboBox[]{})) {
+                String nombreEstPres = txt_nombre_est_prestamo.getText();
+                String descripcionEstPres = txt_descripcion_est_prestamo.getText();
+
+                EstadoPrestamo model = new EstadoPrestamo();
+                model.setNombre(nombreEstPres);
+                model.setDescripcion(descripcionEstPres);
+                model.setHabilitado(true);
+
+                Boolean exito = estadoPrestController.insertar(model);
+
+                if (exito) {
+                    limpiarEstPrestamo();
+                    cargarEstadoPrestamo(estadoPrestController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Estado préstamo agregado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al agregar el estado de préstamo.");
+                }
+            }
+         } catch (HeadlessException e) {
+            logger.error("Error al procesar estado de préstamo: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_agregar_est_prestamoActionPerformed
+
+    private void btn_editar_est_prestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_est_prestamoActionPerformed
+        try {
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_nombre_est_prestamo,txt_descripcion_est_prestamo}, new JComboBox[]{})) {
+                Integer idEstPrest = Integer.parseInt(txt_id_est_prestamo.getText());
+                String nombreEstPres = txt_nombre_est_prestamo.getText();
+                String descripcionEstPres = txt_descripcion_est_prestamo.getText();
+
+                EstadoPrestamo model = new EstadoPrestamo();
+                model.setEstadoPrestamoID(idEstPrest);
+                model.setNombre(nombreEstPres);
+                model.setDescripcion(descripcionEstPres);
+                model.setHabilitado(true);
+
+                Boolean exito = estadoPrestController.actualizar(model);
+
+                if (exito) {
+                    limpiarEstPrestamo();
+                    cargarEstadoPrestamo(estadoPrestController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Estado préstamo modificado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al modificar el estado de préstamo.");
+                }
+            }
+         } catch (HeadlessException e) {
+            logger.error("Error al procesar estado de préstamo: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_editar_est_prestamoActionPerformed
+
+    private void btn_eliminar_est_prestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_est_prestamoActionPerformed
+         if(txt_id_est_prestamo.getText().length() > 0){
+            if (JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar el estado de préstamo con ID: " +  txt_id_est_prestamo.getText() , "WARNING",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                boolean exito = estadoPrestController.eliminar(Integer.parseInt(txt_id_est_prestamo.getText()));
+                if (exito) {
+                    limpiarEstPrestamo();
+                    cargarEstadoPrestamo(estadoPrestController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Estado de préstamo eliminado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar el estado de préstamo.");
+                }
+            }
+        }else {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un estado de préstamo antes de eliminarlo.");
+        }
+    }//GEN-LAST:event_btn_eliminar_est_prestamoActionPerformed
+
+    private void btn_limpiar_est_prestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_est_prestamoActionPerformed
+        limpiarEstPrestamo();
+    }//GEN-LAST:event_btn_limpiar_est_prestamoActionPerformed
+
+    private void btn_buscar_est_prestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_est_prestamoActionPerformed
+        String filter = txt_buscar_est_prestamo.getText();
+        cargarEstadoPrestamo(estadoPrestController.buscar(filter));
+        txt_buscar_est_prestamo.setText("");
+    }//GEN-LAST:event_btn_buscar_est_prestamoActionPerformed
+
+    private void tbl_estado_ejemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_estado_ejemplarMouseClicked
+        limpiarEstEjemplar();
+        int index = tbl_estado_ejemplar.getSelectedRow();
+        TableModel modelo = tbl_estado_ejemplar.getModel();
+        txt_id_est_ejemplar.setText(modelo.getValueAt(index, 0).toString());
+        txt_nombre_est_ejemplar.setText(modelo.getValueAt(index, 1).toString());
+        txt_descripcion_est_ejemplar.setText(Validaciones.safeGetValue(modelo, index, 2)); // posible campo vacío
+    }//GEN-LAST:event_tbl_estado_ejemplarMouseClicked
+
+    private void tbl_estado_prestamoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_estado_prestamoMouseClicked
+        limpiarEstPrestamo();
+        int index = tbl_estado_prestamo.getSelectedRow();
+        TableModel modelo = tbl_estado_prestamo.getModel();
+        txt_id_est_prestamo.setText(modelo.getValueAt(index, 0).toString());
+        txt_nombre_est_prestamo.setText(modelo.getValueAt(index, 1).toString());
+        txt_descripcion_est_prestamo.setText(Validaciones.safeGetValue(modelo, index, 2)); // posible campo vacío
+    }//GEN-LAST:event_tbl_estado_prestamoMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1458,17 +2116,27 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_agregar_config;
     private javax.swing.JButton btn_agregar_editorial;
+    private javax.swing.JButton btn_agregar_est_ejemplar;
+    private javax.swing.JButton btn_agregar_est_prestamo;
     private javax.swing.JButton btn_agregar_tip_doc;
     private javax.swing.JButton btn_buscar_editorial;
+    private javax.swing.JButton btn_buscar_est_ejemplar;
+    private javax.swing.JButton btn_buscar_est_prestamo;
     private javax.swing.JButton btn_buscar_tip_doc;
     private javax.swing.JButton btn_editar_config;
     private javax.swing.JButton btn_editar_editorial;
+    private javax.swing.JButton btn_editar_est_ejemplar;
+    private javax.swing.JButton btn_editar_est_prestamo;
     private javax.swing.JButton btn_editar_tip_doc;
     private javax.swing.JButton btn_eliminar_config;
     private javax.swing.JButton btn_eliminar_editorial;
+    private javax.swing.JButton btn_eliminar_est_ejemplar;
+    private javax.swing.JButton btn_eliminar_est_prestamo;
     private javax.swing.JButton btn_eliminar_tip_doc;
     private javax.swing.JButton btn_limpiar_config;
     private javax.swing.JButton btn_limpiar_editorial;
+    private javax.swing.JButton btn_limpiar_est_ejemplar;
+    private javax.swing.JButton btn_limpiar_est_prestamo;
     private javax.swing.JButton btn_limpiar_tip_doc;
     private javax.swing.JComboBox<Ciudad> cmb_ciudad_editorial;
     private javax.swing.JComboBox<Pais> cmb_pais_editorial;
@@ -1476,8 +2144,12 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_ciudad_editorial;
     private javax.swing.JLabel lbl_correo_editorial;
     private javax.swing.JLabel lbl_descripcion_config;
+    private javax.swing.JLabel lbl_descripcion_est_ejemplar;
+    private javax.swing.JLabel lbl_descripcion_est_prestamo;
     private javax.swing.JLabel lbl_descripcion_tip_doc;
     private javax.swing.JLabel lbl_nombre_editorial;
+    private javax.swing.JLabel lbl_nombre_est_ejemplar;
+    private javax.swing.JLabel lbl_nombre_est_prestamo;
     private javax.swing.JLabel lbl_nombre_tip_doc;
     private javax.swing.JLabel lbl_observaciones_editorial;
     private javax.swing.JLabel lbl_pais_editorial;
@@ -1488,12 +2160,18 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_valor_config;
     private javax.swing.JPanel pnl_acciones_config;
     private javax.swing.JPanel pnl_acciones_editorial;
+    private javax.swing.JPanel pnl_acciones_est_ejemplar;
+    private javax.swing.JPanel pnl_acciones_est_prestamo;
     private javax.swing.JPanel pnl_acciones_tip_doc;
     private javax.swing.JPanel pnl_buscar_editorial;
+    private javax.swing.JPanel pnl_buscar_est_ejemplar;
+    private javax.swing.JPanel pnl_buscar_est_prestamo;
     private javax.swing.JPanel pnl_buscar_tip_doc;
     private javax.swing.JPanel pnl_config_volver;
     private javax.swing.JPanel pnl_datos_config;
     private javax.swing.JPanel pnl_datos_editorial;
+    private javax.swing.JPanel pnl_datos_est_ejemplar;
+    private javax.swing.JPanel pnl_datos_est_prestamo;
     private javax.swing.JPanel pnl_datos_tip_doc;
     private javax.swing.JPanel pnl_header_config;
     private javax.swing.JPanel pnl_menu_auditoria;
@@ -1505,22 +2183,34 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private javax.swing.JScrollPane scp_auditoria;
     private javax.swing.JScrollPane scp_tbl_config;
     private javax.swing.JScrollPane scp_tbl_editoriales;
+    private javax.swing.JScrollPane scp_tbl_est_ejemplar;
+    private javax.swing.JScrollPane scp_tbl_est_prestamo;
     private javax.swing.JScrollPane scp_tbl_tip_doc;
     private javax.swing.JScrollPane scp_txt_obser_editorial;
     private javax.swing.JTabbedPane tabConfig;
     private javax.swing.JTable tbl_auditoria;
     private javax.swing.JTable tbl_configuracion;
     private javax.swing.JTable tbl_editoriales;
+    private javax.swing.JTable tbl_estado_ejemplar;
+    private javax.swing.JTable tbl_estado_prestamo;
     private javax.swing.JTable tbl_tipo_documento;
     private javax.swing.JTextField txt_buscar_editorial;
+    private javax.swing.JTextField txt_buscar_est_ejemplar;
+    private javax.swing.JTextField txt_buscar_est_prestamo;
     private javax.swing.JTextField txt_buscar_tip_doc;
     private javax.swing.JTextField txt_correo_editorial;
     private javax.swing.JTextField txt_descripcion_config;
+    private javax.swing.JTextField txt_descripcion_est_ejemplar;
+    private javax.swing.JTextField txt_descripcion_est_prestamo;
     private javax.swing.JTextField txt_descripcion_tip_doc;
     private javax.swing.JTextField txt_id_config;
     private javax.swing.JTextField txt_id_editorial;
+    private javax.swing.JTextField txt_id_est_ejemplar;
+    private javax.swing.JTextField txt_id_est_prestamo;
     private javax.swing.JTextField txt_id_tip_doc;
     private javax.swing.JTextField txt_nombre_editorial;
+    private javax.swing.JTextField txt_nombre_est_ejemplar;
+    private javax.swing.JTextField txt_nombre_est_prestamo;
     private javax.swing.JTextField txt_nombre_tip_doc;
     private javax.swing.JTextArea txt_observaciones_editorial;
     private javax.swing.JTextField txt_parametro_config;
