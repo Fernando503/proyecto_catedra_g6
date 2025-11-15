@@ -22,7 +22,12 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
     private static final Logger logger = LogManager.getLogger(GestionUsuariosFrm.class);
     public DashboardFrm dashboardFrm;
     private final DefaultTableModel modeloDocumento;
+    private final DefaultTableModel modeloCategoria;
+    private final DefaultTableModel modeloUbicacion;
+    
     private final DocumentoController documentoController = new DocumentoController();
+    private final CategoriaController categoriaController = new CategoriaController();
+    private final UbicacionController ubicacionController = new UbicacionController();
 
     /**
      * Creates new form GestionDocumentosFrm
@@ -32,10 +37,19 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
         this.dashboardFrm = dashboardFrm;
 
         initComponents();
-
+        
         modeloDocumento = (DefaultTableModel) tbl_documentos.getModel();
-        cargarDatosDocumentos(documentoController.listarDocumentos());
+        modeloCategoria = (DefaultTableModel) tbl_categorias.getModel();
+        modeloUbicacion = (DefaultTableModel) tbl_ubicaciones.getModel();
 
+        cargarDocumentos();
+        cargarCategorias();
+        cargarUbicaciones();
+    }
+    
+    private void cargarDocumentos()
+    {
+        cargarDatosDocumentos(documentoController.listarDocumentos());
         btn_agregar_documentos.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "AGREGAR"));
         btn_editar_documentos.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "MODIFICAR"));
         btn_eliminar_documentos.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "ELIMINAR"));
@@ -82,6 +96,36 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
             cmb_estado.addItem(i);
         });
     }
+    
+    private void cargarCategorias()
+    {
+        cargarDatosCategorias(categoriaController.listarCategorias());
+        btn_agregar_categorias.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "AGREGAR"));
+        btn_editar_categorias.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "MODIFICAR"));
+        btn_eliminar_categorias.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "ELIMINAR"));
+        
+        cmb_estado_categorias.removeAllItems();
+        cmb_estado_categorias.addItem("Seleccione...");
+        List<String> listaEstados = categoriaController.obtenerEstados();
+        listaEstados.forEach(i -> {
+            cmb_estado_categorias.addItem(i);
+        });
+    }
+    
+    private void cargarUbicaciones()
+    {
+        cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+        btn_agregar_ubicaciones.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "AGREGAR"));
+        btn_editar_ubicaciones.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "MODIFICAR"));
+        btn_eliminar_ubicaciones.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS", "ELIMINAR"));
+        
+        cmb_estado_ubicaciones.removeAllItems();
+        cmb_estado_ubicaciones.addItem("Seleccione...");
+        List<String> listaEstados = ubicacionController.obtenerEstados();
+        listaEstados.forEach(i -> {
+            cmb_estado_ubicaciones.addItem(i);
+        });
+    }
 
     private void cargarDatosDocumentos(List<Documento> documentos) {
         modeloDocumento.setRowCount(0); // Limpiar tabla
@@ -98,10 +142,38 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
                 doc.getIdioma(),
                 doc.getFormato(),
                 doc.getCodigo(),
-                doc.getEstado(),});
+                doc.getEstado()
+            });
+        });
+    }
+    
+    private void cargarDatosCategorias(List<Categoria> categorias) {
+        modeloCategoria.setRowCount(0); // Limpiar tabla
+        categorias.forEach(cat -> {
+            modeloCategoria.addRow(new Object[]{
+                cat.getCategoriaId(),
+                cat.getNombreCategoria(),
+                cat.getDescripcion(),
+                cat.isHabilitado()
+            });
         });
     }
 
+    private void cargarDatosUbicaciones(List<Ubicacion> ubicaciones) {
+        modeloUbicacion.setRowCount(0); // Limpiar tabla
+        ubicaciones.forEach(ubi -> {
+            modeloUbicacion.addRow(new Object[]{
+                ubi.getUbicacionID(),
+                ubi.getSala(),
+                ubi.getEstanteria(),
+                ubi.getNivel(),
+                ubi.getCodigoRack(),
+                ubi.getDescripcion(),
+                ubi.getHabilitado()
+            });
+        });
+    }
+    
     private void limpiarDocumento() {
         txt_titulo_documento.setText("");
         txt_año_documento.setText("");
@@ -116,10 +188,34 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
         cmb_idioma.setSelectedIndex(0);
         cmb_formato.setSelectedIndex(0);
     }
+    
+    private void limpiarCategoria() {
+        txt_nombre_categorias.setText("");
+        txt_descripcion_categorias.setText("");
+        cmb_estado_categorias.setSelectedIndex(0);
+    }
+    
+    private void limpiarUbicaciones() {
+        txt_sala_ubicaciones.setText("");
+        txt_estanteria_ubicaciones.setText("");
+        txt_nivel_ubicaciones.setText("");
+        txt_descripcion_ubicaciones.setText("");
+        cmb_estado_ubicaciones.setSelectedIndex(0);
+    }
 
     private void filtrarDocumentos() {
         String filter = txt_filter_documentos.getText();
         cargarDatosDocumentos(documentoController.buscarDocumentos(filter));
+    }
+    
+    private void filtrarCategorias() {
+        String filter = txt_filter_categorias.getText();
+        cargarDatosCategorias(categoriaController.buscarCategorias(filter));
+    }
+    
+    private void filtrarUbicaciones() {
+        String filter = txt_filter_ubicaciones.getText();
+        cargarDatosUbicaciones(ubicacionController.buscarUbicaciones(filter));
     }
 
     /**
@@ -131,10 +227,18 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnl_header_documentos = new javax.swing.JPanel();
-        lbl_title_documentos = new javax.swing.JLabel();
-        pnl_documentos_volver = new javax.swing.JPanel();
-        lbl_btn_volver_documentos = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        pnl_documentos = new javax.swing.JPanel();
+        pnl_filtro_documentos = new javax.swing.JPanel();
+        txt_filter_documentos = new javax.swing.JTextField();
+        btn_buscar_documentos = new javax.swing.JButton();
+        scp_tbl_documentos = new javax.swing.JScrollPane();
+        tbl_documentos = new javax.swing.JTable();
+        pnl_acciones_documentos = new javax.swing.JPanel();
+        btn_agregar_documentos = new javax.swing.JButton();
+        btn_editar_documentos = new javax.swing.JButton();
+        btn_eliminar_documentos = new javax.swing.JButton();
+        btn_limpiar_documentos = new javax.swing.JButton();
         pnl_datos_documentos = new javax.swing.JPanel();
         txt_titulo_documento = new javax.swing.JTextField();
         txt_autor_documento = new javax.swing.JTextField();
@@ -158,16 +262,58 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
         cmb_estado = new javax.swing.JComboBox<>();
         lbl_observaciones = new javax.swing.JLabel();
         txt_observaciones_documento = new javax.swing.JTextField();
-        pnl_acciones_documentos = new javax.swing.JPanel();
-        btn_agregar_documentos = new javax.swing.JButton();
-        btn_editar_documentos = new javax.swing.JButton();
-        btn_eliminar_documentos = new javax.swing.JButton();
-        btn_limpiar_documentos = new javax.swing.JButton();
-        scp_tbl_documentos = new javax.swing.JScrollPane();
-        tbl_documentos = new javax.swing.JTable();
-        pnl_filtro_documentos = new javax.swing.JPanel();
-        txt_filter_documentos = new javax.swing.JTextField();
-        btn_buscar_documentos = new javax.swing.JButton();
+        pnl_header_documentos = new javax.swing.JPanel();
+        lbl_title_documentos = new javax.swing.JLabel();
+        pnl_documentos_volver = new javax.swing.JPanel();
+        lbl_btn_volver_documentos = new javax.swing.JLabel();
+        pnl_categorias = new javax.swing.JPanel();
+        pnl_filtro_categorias = new javax.swing.JPanel();
+        txt_filter_categorias = new javax.swing.JTextField();
+        btn_buscar_categorias = new javax.swing.JButton();
+        scp_tbl_categorias = new javax.swing.JScrollPane();
+        tbl_categorias = new javax.swing.JTable();
+        pnl_acciones_categorias = new javax.swing.JPanel();
+        btn_agregar_categorias = new javax.swing.JButton();
+        btn_editar_categorias = new javax.swing.JButton();
+        btn_eliminar_categorias = new javax.swing.JButton();
+        btn_limpiar_categorias = new javax.swing.JButton();
+        pnl_datos_categorias = new javax.swing.JPanel();
+        txt_nombre_categorias = new javax.swing.JTextField();
+        lbl_nombre_categorias = new javax.swing.JLabel();
+        txt_descripcion_categorias = new javax.swing.JTextField();
+        lbl_descripcion_categorias = new javax.swing.JLabel();
+        lbl_estado_categorias = new javax.swing.JLabel();
+        cmb_estado_categorias = new javax.swing.JComboBox<>();
+        pnl_header_documentos1 = new javax.swing.JPanel();
+        lbl_title_categorias = new javax.swing.JLabel();
+        pnl_categorias_volver = new javax.swing.JPanel();
+        lbl_btn_volver_documentos1 = new javax.swing.JLabel();
+        pnl_ubicaciones = new javax.swing.JPanel();
+        pnl_filtro_ubicaciones = new javax.swing.JPanel();
+        txt_filter_ubicaciones = new javax.swing.JTextField();
+        btn_buscar_ubicaciones = new javax.swing.JButton();
+        scp_tbl_ubicaciones = new javax.swing.JScrollPane();
+        tbl_ubicaciones = new javax.swing.JTable();
+        pnl_acciones_ubicaciones = new javax.swing.JPanel();
+        btn_agregar_ubicaciones = new javax.swing.JButton();
+        btn_editar_ubicaciones = new javax.swing.JButton();
+        btn_eliminar_ubicaciones = new javax.swing.JButton();
+        btn_limpiar_ubicaciones = new javax.swing.JButton();
+        pnl_datos_ubicaciones = new javax.swing.JPanel();
+        txt_sala_ubicaciones = new javax.swing.JTextField();
+        lbl_sala_ubicaciones = new javax.swing.JLabel();
+        lbl_estanteria_ubicaciones = new javax.swing.JLabel();
+        txt_estanteria_ubicaciones = new javax.swing.JTextField();
+        txt_nivel_ubicaciones = new javax.swing.JTextField();
+        lbl_nivel_ubicaciones = new javax.swing.JLabel();
+        lbl_descripcion_ubicaciones = new javax.swing.JLabel();
+        txt_descripcion_ubicaciones = new javax.swing.JTextField();
+        lbl_estado_ubicaciones = new javax.swing.JLabel();
+        cmb_estado_ubicaciones = new javax.swing.JComboBox<>();
+        pnl_header_ubicaciones = new javax.swing.JPanel();
+        lbl_title_categorias1 = new javax.swing.JLabel();
+        pnl_categorias_volver1 = new javax.swing.JPanel();
+        lbl_btn_volver_documentos2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -176,57 +322,138 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
             }
         });
 
-        pnl_header_documentos.setBackground(new java.awt.Color(14, 20, 56));
+        pnl_filtro_documentos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filtros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Raleway", 0, 11))); // NOI18N
 
-        lbl_title_documentos.setFont(new java.awt.Font("Raleway", 1, 24)); // NOI18N
-        lbl_title_documentos.setForeground(new java.awt.Color(255, 215, 0));
-        lbl_title_documentos.setText("Gestión Documentos");
-
-        pnl_documentos_volver.setBackground(new java.awt.Color(14, 20, 56));
-        pnl_documentos_volver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnl_documentos_volverMouseClicked(evt);
+        txt_filter_documentos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_filter_documentosFocusLost(evt);
+            }
+        });
+        txt_filter_documentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_filter_documentosActionPerformed(evt);
+            }
+        });
+        txt_filter_documentos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filter_documentosKeyTyped(evt);
             }
         });
 
-        lbl_btn_volver_documentos.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
-        lbl_btn_volver_documentos.setForeground(new java.awt.Color(255, 215, 0));
-        lbl_btn_volver_documentos.setText("< Volver");
+        btn_buscar_documentos.setFont(new java.awt.Font("Raleway", 0, 11)); // NOI18N
+        btn_buscar_documentos.setText("Buscar");
+        btn_buscar_documentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_buscar_documentosMouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout pnl_documentos_volverLayout = new javax.swing.GroupLayout(pnl_documentos_volver);
-        pnl_documentos_volver.setLayout(pnl_documentos_volverLayout);
-        pnl_documentos_volverLayout.setHorizontalGroup(
-            pnl_documentos_volverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_documentos_volverLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnl_filtro_documentosLayout = new javax.swing.GroupLayout(pnl_filtro_documentos);
+        pnl_filtro_documentos.setLayout(pnl_filtro_documentosLayout);
+        pnl_filtro_documentosLayout.setHorizontalGroup(
+            pnl_filtro_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_filtro_documentosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbl_btn_volver_documentos)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(txt_filter_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_buscar_documentos)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        pnl_documentos_volverLayout.setVerticalGroup(
-            pnl_documentos_volverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_documentos_volverLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(lbl_btn_volver_documentos)
-                .addContainerGap(37, Short.MAX_VALUE))
+        pnl_filtro_documentosLayout.setVerticalGroup(
+            pnl_filtro_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_filtro_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txt_filter_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_buscar_documentos))
         );
 
-        javax.swing.GroupLayout pnl_header_documentosLayout = new javax.swing.GroupLayout(pnl_header_documentos);
-        pnl_header_documentos.setLayout(pnl_header_documentosLayout);
-        pnl_header_documentosLayout.setHorizontalGroup(
-            pnl_header_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_header_documentosLayout.createSequentialGroup()
-                .addComponent(pnl_documentos_volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(340, 340, 340)
-                .addComponent(lbl_title_documentos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        tbl_documentos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Titulo", "Autor", "Tipo", "Editorial", "Categoria", "Año", "Paginas", "Idioma", "Formato", "Codigo", "Habilitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_documentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_documentosMouseClicked(evt);
+            }
+        });
+        scp_tbl_documentos.setViewportView(tbl_documentos);
+
+        pnl_acciones_documentos.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
+
+        btn_agregar_documentos.setText("Agregar");
+        btn_agregar_documentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregar_documentosActionPerformed(evt);
+            }
+        });
+
+        btn_editar_documentos.setText("Editar");
+        btn_editar_documentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_documentosActionPerformed(evt);
+            }
+        });
+
+        btn_eliminar_documentos.setText("Eliminar");
+        btn_eliminar_documentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_documentosActionPerformed(evt);
+            }
+        });
+
+        btn_limpiar_documentos.setText("Limpiar");
+        btn_limpiar_documentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_documentosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_acciones_documentosLayout = new javax.swing.GroupLayout(pnl_acciones_documentos);
+        pnl_acciones_documentos.setLayout(pnl_acciones_documentosLayout);
+        pnl_acciones_documentosLayout.setHorizontalGroup(
+            pnl_acciones_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_acciones_documentosLayout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addGroup(pnl_acciones_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_limpiar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_editar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_agregar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42))
         );
-        pnl_header_documentosLayout.setVerticalGroup(
-            pnl_header_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnl_documentos_volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(pnl_header_documentosLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(lbl_title_documentos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        pnl_acciones_documentosLayout.setVerticalGroup(
+            pnl_acciones_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_documentosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_agregar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_editar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_eliminar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_limpiar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pnl_datos_documentos.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
@@ -361,79 +588,159 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
                 .addContainerGap(61, Short.MAX_VALUE))
         );
 
-        pnl_acciones_documentos.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
+        pnl_header_documentos.setBackground(new java.awt.Color(14, 20, 56));
 
-        btn_agregar_documentos.setText("Agregar");
-        btn_agregar_documentos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_agregar_documentosActionPerformed(evt);
+        lbl_title_documentos.setFont(new java.awt.Font("Raleway", 1, 24)); // NOI18N
+        lbl_title_documentos.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_title_documentos.setText("Gestión Documentos");
+
+        pnl_documentos_volver.setBackground(new java.awt.Color(14, 20, 56));
+        pnl_documentos_volver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_documentos_volverMouseClicked(evt);
             }
         });
 
-        btn_editar_documentos.setText("Editar");
-        btn_editar_documentos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_editar_documentosActionPerformed(evt);
-            }
-        });
+        lbl_btn_volver_documentos.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
+        lbl_btn_volver_documentos.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_btn_volver_documentos.setText("< Volver");
 
-        btn_eliminar_documentos.setText("Eliminar");
-        btn_eliminar_documentos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_eliminar_documentosActionPerformed(evt);
-            }
-        });
-
-        btn_limpiar_documentos.setText("Limpiar");
-        btn_limpiar_documentos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_limpiar_documentosActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnl_acciones_documentosLayout = new javax.swing.GroupLayout(pnl_acciones_documentos);
-        pnl_acciones_documentos.setLayout(pnl_acciones_documentosLayout);
-        pnl_acciones_documentosLayout.setHorizontalGroup(
-            pnl_acciones_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_acciones_documentosLayout.createSequentialGroup()
-                .addContainerGap(45, Short.MAX_VALUE)
-                .addGroup(pnl_acciones_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_limpiar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_eliminar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_editar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_agregar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42))
-        );
-        pnl_acciones_documentosLayout.setVerticalGroup(
-            pnl_acciones_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_acciones_documentosLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnl_documentos_volverLayout = new javax.swing.GroupLayout(pnl_documentos_volver);
+        pnl_documentos_volver.setLayout(pnl_documentos_volverLayout);
+        pnl_documentos_volverLayout.setHorizontalGroup(
+            pnl_documentos_volverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_documentos_volverLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btn_agregar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_editar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_eliminar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_limpiar_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addComponent(lbl_btn_volver_documentos)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        pnl_documentos_volverLayout.setVerticalGroup(
+            pnl_documentos_volverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_documentos_volverLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(lbl_btn_volver_documentos)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tbl_documentos.setModel(new javax.swing.table.DefaultTableModel(
+        javax.swing.GroupLayout pnl_header_documentosLayout = new javax.swing.GroupLayout(pnl_header_documentos);
+        pnl_header_documentos.setLayout(pnl_header_documentosLayout);
+        pnl_header_documentosLayout.setHorizontalGroup(
+            pnl_header_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_header_documentosLayout.createSequentialGroup()
+                .addGap(118, 118, 118)
+                .addComponent(pnl_documentos_volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(340, 340, 340)
+                .addComponent(lbl_title_documentos)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnl_header_documentosLayout.setVerticalGroup(
+            pnl_header_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnl_documentos_volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnl_header_documentosLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(lbl_title_documentos)
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnl_documentosLayout = new javax.swing.GroupLayout(pnl_documentos);
+        pnl_documentos.setLayout(pnl_documentosLayout);
+        pnl_documentosLayout.setHorizontalGroup(
+            pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1158, Short.MAX_VALUE)
+            .addGroup(pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_documentosLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnl_header_documentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnl_documentosLayout.createSequentialGroup()
+                            .addComponent(pnl_datos_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(pnl_acciones_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pnl_filtro_documentos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scp_tbl_documentos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap()))
+        );
+        pnl_documentosLayout.setVerticalGroup(
+            pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 756, Short.MAX_VALUE)
+            .addGroup(pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_documentosLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(pnl_header_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addGroup(pnl_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnl_acciones_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_datos_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_filtro_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(scp_tbl_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+
+        jTabbedPane1.addTab("Documentos", pnl_documentos);
+
+        pnl_filtro_categorias.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filtros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Raleway", 0, 11))); // NOI18N
+
+        txt_filter_categorias.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_filter_categoriasFocusLost(evt);
+            }
+        });
+        txt_filter_categorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_filter_categoriasActionPerformed(evt);
+            }
+        });
+        txt_filter_categorias.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filter_categoriasKeyTyped(evt);
+            }
+        });
+
+        btn_buscar_categorias.setFont(new java.awt.Font("Raleway", 0, 11)); // NOI18N
+        btn_buscar_categorias.setText("Buscar");
+        btn_buscar_categorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_buscar_categoriasMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_filtro_categoriasLayout = new javax.swing.GroupLayout(pnl_filtro_categorias);
+        pnl_filtro_categorias.setLayout(pnl_filtro_categoriasLayout);
+        pnl_filtro_categoriasLayout.setHorizontalGroup(
+            pnl_filtro_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_filtro_categoriasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_filter_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_buscar_categorias)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnl_filtro_categoriasLayout.setVerticalGroup(
+            pnl_filtro_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_filtro_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txt_filter_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_buscar_categorias))
+        );
+
+        tbl_categorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Titulo", "Autor", "Tipo", "Editorial", "Categoria", "Año", "Paginas", "Idioma", "Formato", "Codigo", "Habilitado"
+                "ID", "Nombre", "Descipcion", "Habilitado"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -444,87 +751,523 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tbl_documentos.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbl_categorias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_documentosMouseClicked(evt);
+                tbl_categoriasMouseClicked(evt);
             }
         });
-        scp_tbl_documentos.setViewportView(tbl_documentos);
+        scp_tbl_categorias.setViewportView(tbl_categorias);
 
-        pnl_filtro_documentos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filtros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Raleway", 0, 11))); // NOI18N
+        pnl_acciones_categorias.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
 
-        txt_filter_documentos.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txt_filter_documentosFocusLost(evt);
-            }
-        });
-        txt_filter_documentos.addActionListener(new java.awt.event.ActionListener() {
+        btn_agregar_categorias.setText("Agregar");
+        btn_agregar_categorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_filter_documentosActionPerformed(evt);
-            }
-        });
-        txt_filter_documentos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_filter_documentosKeyTyped(evt);
+                btn_agregar_categoriasActionPerformed(evt);
             }
         });
 
-        btn_buscar_documentos.setFont(new java.awt.Font("Raleway", 0, 11)); // NOI18N
-        btn_buscar_documentos.setText("Buscar");
-        btn_buscar_documentos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btn_buscar_documentosMouseClicked(evt);
+        btn_editar_categorias.setText("Editar");
+        btn_editar_categorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_categoriasActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout pnl_filtro_documentosLayout = new javax.swing.GroupLayout(pnl_filtro_documentos);
-        pnl_filtro_documentos.setLayout(pnl_filtro_documentosLayout);
-        pnl_filtro_documentosLayout.setHorizontalGroup(
-            pnl_filtro_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_filtro_documentosLayout.createSequentialGroup()
+        btn_eliminar_categorias.setText("Eliminar");
+        btn_eliminar_categorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_categoriasActionPerformed(evt);
+            }
+        });
+
+        btn_limpiar_categorias.setText("Limpiar");
+        btn_limpiar_categorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_categoriasActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_acciones_categoriasLayout = new javax.swing.GroupLayout(pnl_acciones_categorias);
+        pnl_acciones_categorias.setLayout(pnl_acciones_categoriasLayout);
+        pnl_acciones_categoriasLayout.setHorizontalGroup(
+            pnl_acciones_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_acciones_categoriasLayout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addGroup(pnl_acciones_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_limpiar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_editar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_agregar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42))
+        );
+        pnl_acciones_categoriasLayout.setVerticalGroup(
+            pnl_acciones_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_categoriasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txt_filter_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_agregar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_editar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_eliminar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_limpiar_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        pnl_datos_categorias.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
+
+        lbl_nombre_categorias.setText("Nombre:");
+
+        lbl_descripcion_categorias.setText("Descripcion:");
+
+        lbl_estado_categorias.setText("Estado:");
+
+        cmb_estado_categorias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout pnl_datos_categoriasLayout = new javax.swing.GroupLayout(pnl_datos_categorias);
+        pnl_datos_categorias.setLayout(pnl_datos_categoriasLayout);
+        pnl_datos_categoriasLayout.setHorizontalGroup(
+            pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_categoriasLayout.createSequentialGroup()
+                .addGap(121, 121, 121)
+                .addGroup(pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_nombre_categorias)
+                    .addComponent(lbl_descripcion_categorias))
+                .addGroup(pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_datos_categoriasLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_nombre_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnl_datos_categoriasLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(txt_descripcion_categorias)))
+                .addContainerGap(204, Short.MAX_VALUE))
+            .addGroup(pnl_datos_categoriasLayout.createSequentialGroup()
+                .addGap(149, 149, 149)
+                .addComponent(lbl_estado_categorias)
                 .addGap(18, 18, 18)
-                .addComponent(btn_buscar_documentos)
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addComponent(cmb_estado_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        pnl_filtro_documentosLayout.setVerticalGroup(
-            pnl_filtro_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_filtro_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(txt_filter_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(btn_buscar_documentos))
+        pnl_datos_categoriasLayout.setVerticalGroup(
+            pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_categoriasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_nombre_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_nombre_categorias))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_descripcion_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_descripcion_categorias))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnl_datos_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_estado_categorias)
+                    .addComponent(cmb_estado_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
+
+        pnl_header_documentos1.setBackground(new java.awt.Color(14, 20, 56));
+
+        lbl_title_categorias.setFont(new java.awt.Font("Raleway", 1, 24)); // NOI18N
+        lbl_title_categorias.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_title_categorias.setText("Gestión Categorias");
+
+        pnl_categorias_volver.setBackground(new java.awt.Color(14, 20, 56));
+        pnl_categorias_volver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_categorias_volverMouseClicked(evt);
+            }
+        });
+
+        lbl_btn_volver_documentos1.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
+        lbl_btn_volver_documentos1.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_btn_volver_documentos1.setText("< Volver");
+
+        javax.swing.GroupLayout pnl_categorias_volverLayout = new javax.swing.GroupLayout(pnl_categorias_volver);
+        pnl_categorias_volver.setLayout(pnl_categorias_volverLayout);
+        pnl_categorias_volverLayout.setHorizontalGroup(
+            pnl_categorias_volverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_categorias_volverLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_btn_volver_documentos1)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        pnl_categorias_volverLayout.setVerticalGroup(
+            pnl_categorias_volverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_categorias_volverLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(lbl_btn_volver_documentos1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnl_header_documentos1Layout = new javax.swing.GroupLayout(pnl_header_documentos1);
+        pnl_header_documentos1.setLayout(pnl_header_documentos1Layout);
+        pnl_header_documentos1Layout.setHorizontalGroup(
+            pnl_header_documentos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_header_documentos1Layout.createSequentialGroup()
+                .addGap(118, 118, 118)
+                .addComponent(pnl_categorias_volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(340, 340, 340)
+                .addComponent(lbl_title_categorias)
+                .addContainerGap(386, Short.MAX_VALUE))
+        );
+        pnl_header_documentos1Layout.setVerticalGroup(
+            pnl_header_documentos1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnl_categorias_volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnl_header_documentos1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(lbl_title_categorias)
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnl_categoriasLayout = new javax.swing.GroupLayout(pnl_categorias);
+        pnl_categorias.setLayout(pnl_categoriasLayout);
+        pnl_categoriasLayout.setHorizontalGroup(
+            pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1158, Short.MAX_VALUE)
+            .addGroup(pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_categoriasLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnl_header_documentos1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnl_categoriasLayout.createSequentialGroup()
+                            .addComponent(pnl_datos_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(pnl_acciones_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pnl_filtro_categorias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scp_tbl_categorias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap()))
+        );
+        pnl_categoriasLayout.setVerticalGroup(
+            pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 722, Short.MAX_VALUE)
+            .addGroup(pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_categoriasLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(pnl_header_documentos1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addGroup(pnl_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnl_acciones_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_datos_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_filtro_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(scp_tbl_categorias, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+
+        jTabbedPane1.addTab("Categorias", pnl_categorias);
+
+        pnl_filtro_ubicaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filtros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Raleway", 0, 11))); // NOI18N
+
+        txt_filter_ubicaciones.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_filter_ubicacionesFocusLost(evt);
+            }
+        });
+        txt_filter_ubicaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_filter_ubicacionesActionPerformed(evt);
+            }
+        });
+        txt_filter_ubicaciones.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_filter_ubicacionesKeyTyped(evt);
+            }
+        });
+
+        btn_buscar_ubicaciones.setFont(new java.awt.Font("Raleway", 0, 11)); // NOI18N
+        btn_buscar_ubicaciones.setText("Buscar");
+        btn_buscar_ubicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_buscar_ubicacionesMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_filtro_ubicacionesLayout = new javax.swing.GroupLayout(pnl_filtro_ubicaciones);
+        pnl_filtro_ubicaciones.setLayout(pnl_filtro_ubicacionesLayout);
+        pnl_filtro_ubicacionesLayout.setHorizontalGroup(
+            pnl_filtro_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_filtro_ubicacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_filter_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_buscar_ubicaciones)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnl_filtro_ubicacionesLayout.setVerticalGroup(
+            pnl_filtro_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_filtro_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(txt_filter_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_buscar_ubicaciones))
+        );
+
+        tbl_ubicaciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Sala", "Estanteria", "Nivel", "Codigo", "Descipcion", "Habilitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_ubicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_ubicacionesMouseClicked(evt);
+            }
+        });
+        scp_tbl_ubicaciones.setViewportView(tbl_ubicaciones);
+
+        pnl_acciones_ubicaciones.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
+
+        btn_agregar_ubicaciones.setText("Agregar");
+        btn_agregar_ubicaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregar_ubicacionesActionPerformed(evt);
+            }
+        });
+
+        btn_editar_ubicaciones.setText("Editar");
+        btn_editar_ubicaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_ubicacionesActionPerformed(evt);
+            }
+        });
+
+        btn_eliminar_ubicaciones.setText("Eliminar");
+        btn_eliminar_ubicaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_ubicacionesActionPerformed(evt);
+            }
+        });
+
+        btn_limpiar_ubicaciones.setText("Limpiar");
+        btn_limpiar_ubicaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_ubicacionesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_acciones_ubicacionesLayout = new javax.swing.GroupLayout(pnl_acciones_ubicaciones);
+        pnl_acciones_ubicaciones.setLayout(pnl_acciones_ubicacionesLayout);
+        pnl_acciones_ubicacionesLayout.setHorizontalGroup(
+            pnl_acciones_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_acciones_ubicacionesLayout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addGroup(pnl_acciones_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_limpiar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_editar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_agregar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42))
+        );
+        pnl_acciones_ubicacionesLayout.setVerticalGroup(
+            pnl_acciones_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_ubicacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_agregar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_editar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_eliminar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_limpiar_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        pnl_datos_ubicaciones.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
+
+        lbl_sala_ubicaciones.setText("Sala:");
+
+        lbl_estanteria_ubicaciones.setText("Estanteria:");
+
+        lbl_nivel_ubicaciones.setText("Nivel:");
+
+        lbl_descripcion_ubicaciones.setText("Descripcion:");
+
+        lbl_estado_ubicaciones.setText("Estado:");
+
+        cmb_estado_ubicaciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout pnl_datos_ubicacionesLayout = new javax.swing.GroupLayout(pnl_datos_ubicaciones);
+        pnl_datos_ubicaciones.setLayout(pnl_datos_ubicacionesLayout);
+        pnl_datos_ubicacionesLayout.setHorizontalGroup(
+            pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                        .addGap(173, 173, 173)
+                        .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                                .addComponent(lbl_descripcion_ubicaciones)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_descripcion_ubicaciones))
+                            .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                                .addComponent(lbl_nivel_ubicaciones)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_nivel_ubicaciones))
+                            .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                                .addComponent(lbl_estanteria_ubicaciones)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_estanteria_ubicaciones))
+                            .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                                .addComponent(lbl_sala_ubicaciones)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_sala_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                        .addGap(200, 200, 200)
+                        .addComponent(lbl_estado_ubicaciones)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmb_estado_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(205, Short.MAX_VALUE))
+        );
+        pnl_datos_ubicacionesLayout.setVerticalGroup(
+            pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_ubicacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_sala_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_sala_ubicaciones))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_estanteria_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_estanteria_ubicaciones))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_nivel_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_nivel_ubicaciones))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_descripcion_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_descripcion_ubicaciones))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnl_datos_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_estado_ubicaciones)
+                    .addComponent(cmb_estado_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        pnl_header_ubicaciones.setBackground(new java.awt.Color(14, 20, 56));
+
+        lbl_title_categorias1.setFont(new java.awt.Font("Raleway", 1, 24)); // NOI18N
+        lbl_title_categorias1.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_title_categorias1.setText("Gestión Ubicaciones");
+
+        pnl_categorias_volver1.setBackground(new java.awt.Color(14, 20, 56));
+        pnl_categorias_volver1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_categorias_volver1MouseClicked(evt);
+            }
+        });
+
+        lbl_btn_volver_documentos2.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
+        lbl_btn_volver_documentos2.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_btn_volver_documentos2.setText("< Volver");
+
+        javax.swing.GroupLayout pnl_categorias_volver1Layout = new javax.swing.GroupLayout(pnl_categorias_volver1);
+        pnl_categorias_volver1.setLayout(pnl_categorias_volver1Layout);
+        pnl_categorias_volver1Layout.setHorizontalGroup(
+            pnl_categorias_volver1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_categorias_volver1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_btn_volver_documentos2)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        pnl_categorias_volver1Layout.setVerticalGroup(
+            pnl_categorias_volver1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_categorias_volver1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(lbl_btn_volver_documentos2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnl_header_ubicacionesLayout = new javax.swing.GroupLayout(pnl_header_ubicaciones);
+        pnl_header_ubicaciones.setLayout(pnl_header_ubicacionesLayout);
+        pnl_header_ubicacionesLayout.setHorizontalGroup(
+            pnl_header_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_header_ubicacionesLayout.createSequentialGroup()
+                .addGap(118, 118, 118)
+                .addComponent(pnl_categorias_volver1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(340, 340, 340)
+                .addComponent(lbl_title_categorias1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnl_header_ubicacionesLayout.setVerticalGroup(
+            pnl_header_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnl_categorias_volver1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnl_header_ubicacionesLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(lbl_title_categorias1)
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnl_ubicacionesLayout = new javax.swing.GroupLayout(pnl_ubicaciones);
+        pnl_ubicaciones.setLayout(pnl_ubicacionesLayout);
+        pnl_ubicacionesLayout.setHorizontalGroup(
+            pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1158, Short.MAX_VALUE)
+            .addGroup(pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_ubicacionesLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnl_header_ubicaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnl_ubicacionesLayout.createSequentialGroup()
+                            .addComponent(pnl_datos_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(pnl_acciones_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pnl_filtro_ubicaciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scp_tbl_ubicaciones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap()))
+        );
+        pnl_ubicacionesLayout.setVerticalGroup(
+            pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 721, Short.MAX_VALUE)
+            .addGroup(pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_ubicacionesLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(pnl_header_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addGroup(pnl_ubicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnl_acciones_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_datos_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_filtro_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(scp_tbl_ubicaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+
+        jTabbedPane1.addTab("Ubicaciones", pnl_ubicaciones);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnl_header_documentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pnl_datos_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pnl_acciones_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(pnl_filtro_documentos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(scp_tbl_documentos, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnl_header_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnl_acciones_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnl_datos_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pnl_filtro_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scp_tbl_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 750, Short.MAX_VALUE)
         );
 
         pack();
@@ -585,7 +1328,7 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
 
             if (exito) {
                 limpiarDocumento();
-                cargarDatosDocumentos(documentoController.listarDocumentos());
+                cargarDocumentos();
                 JOptionPane.showMessageDialog(null, "Documento agregado correctamente.");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al agregar el documento.");
@@ -743,6 +1486,340 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_formWindowClosed
 
+    private void txt_filter_categoriasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_filter_categoriasFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_filter_categoriasFocusLost
+
+    private void txt_filter_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_filter_categoriasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_filter_categoriasActionPerformed
+
+    private void txt_filter_categoriasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_filter_categoriasKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_filter_categoriasKeyTyped
+
+    private void btn_buscar_categoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscar_categoriasMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_buscar_categoriasMouseClicked
+
+    private void tbl_categoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_categoriasMouseClicked
+        limpiarCategoria();
+        int index = tbl_categorias.getSelectedRow();
+        TableModel modelo = tbl_categorias.getModel();
+
+        String estado = "Habilitado";
+        if (modelo.getValueAt(index, 3).toString().equalsIgnoreCase("false"))
+            estado = "Deshabilitado";
+
+        txt_nombre_categorias.setText(modelo.getValueAt(index, 1).toString());
+        
+        Object value = modelo.getValueAt(index, 2);
+        txt_descripcion_categorias.setText(value != null ? value.toString() : "");
+        
+        cmb_estado_categorias.setSelectedItem(estado);
+    }//GEN-LAST:event_tbl_categoriasMouseClicked
+
+    private void btn_agregar_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_categoriasActionPerformed
+        try {
+            String nombre = txt_nombre_categorias.getText().trim();
+            String descripcion = txt_descripcion_categorias.getText().trim();
+            String estadoStr = cmb_estado_categorias.getSelectedItem().toString();
+            boolean estado = estadoStr.equalsIgnoreCase("Habilitado");
+
+            if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "El nombre de la categoría es obligatorio.");
+                return;
+            }
+
+            if ("Seleccione...".equals(estadoStr)) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un estado válido.");
+                return;
+            }
+
+            Categoria c = new Categoria();
+            c.setNombreCategoria(nombre);
+            c.setDescripcion(descripcion);
+            c.setHabilitado(estado);
+
+            boolean exito = categoriaController.agregarCategoria(c);
+
+            if (exito) {
+                limpiarCategoria();
+                cargarDatosCategorias(categoriaController.listarCategorias());
+                
+                limpiarDocumento();
+                cargarDocumentos();
+                
+                JOptionPane.showMessageDialog(null, "Categoría agregada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al agregar la categoría.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_agregar_categoriasActionPerformed
+
+    private void btn_editar_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_categoriasActionPerformed
+         try {
+            int fila = tbl_categorias.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar una categoría para editar.");
+                return;
+            }
+
+            Integer id = Integer.parseInt(tbl_categorias.getValueAt(fila, 0).toString());
+
+            String nombre = txt_nombre_categorias.getText().trim();
+            String descripcion = txt_descripcion_categorias.getText().trim();
+            String estadoStr = cmb_estado_categorias.getSelectedItem().toString();
+            boolean estado = estadoStr.equalsIgnoreCase("Habilitado");
+
+            if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "El nombre de la categoría es obligatorio.");
+                return;
+            }
+
+            if ("Seleccione...".equals(estadoStr)) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un estado válido.");
+                return;
+            }
+
+            Categoria c = new Categoria();
+            c.setCategoriaId(id);
+            c.setNombreCategoria(nombre);
+            c.setDescripcion(descripcion);
+            c.setHabilitado(estado);
+
+            boolean exito = categoriaController.actualizarCategoria(c);
+
+            if (exito) {
+                limpiarCategoria();
+                cargarDatosCategorias(categoriaController.listarCategorias());
+                
+                limpiarDocumento();
+                cargarDocumentos();
+                
+                JOptionPane.showMessageDialog(null, "Categoría modificada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al actualizar la categoría.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_editar_categoriasActionPerformed
+
+    private void btn_eliminar_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_categoriasActionPerformed
+        int fila = tbl_categorias.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar una categoría antes de eliminarla.");
+            return;
+        }
+
+        String idStr = tbl_categorias.getValueAt(fila, 0).toString();
+        String nombre = tbl_categorias.getValueAt(fila, 1).toString();
+        int id = Integer.parseInt(idStr);
+
+        int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "¿Está seguro de eliminar la categoría: " + nombre + "?",
+                "WARNING",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            boolean exito = categoriaController.eliminarCategoria(id);
+
+            if (exito) {
+                limpiarCategoria();
+                cargarDatosCategorias(categoriaController.listarCategorias());
+                
+                limpiarDocumento();
+                cargarDocumentos();
+                
+                JOptionPane.showMessageDialog(null, "Categoría eliminada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar la categoría.");
+            }
+        }
+    }//GEN-LAST:event_btn_eliminar_categoriasActionPerformed
+
+    private void btn_limpiar_categoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_categoriasActionPerformed
+        limpiarCategoria();
+    }//GEN-LAST:event_btn_limpiar_categoriasActionPerformed
+
+    private void pnl_categorias_volverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_categorias_volverMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnl_categorias_volverMouseClicked
+
+    private void txt_filter_ubicacionesFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_filter_ubicacionesFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_filter_ubicacionesFocusLost
+
+    private void txt_filter_ubicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_filter_ubicacionesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_filter_ubicacionesActionPerformed
+
+    private void txt_filter_ubicacionesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_filter_ubicacionesKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_filter_ubicacionesKeyTyped
+
+    private void btn_buscar_ubicacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_buscar_ubicacionesMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_buscar_ubicacionesMouseClicked
+
+    private void tbl_ubicacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_ubicacionesMouseClicked
+        limpiarUbicaciones();
+        int index = tbl_ubicaciones.getSelectedRow();
+        TableModel modelo = tbl_ubicaciones.getModel();
+        
+        String estado = "Habilitado";
+        if (modelo.getValueAt(index, 6).toString().equalsIgnoreCase("false"))
+            estado = "Deshabilitado";
+        
+        txt_sala_ubicaciones.setText(modelo.getValueAt(index, 1).toString());
+        txt_estanteria_ubicaciones.setText(modelo.getValueAt(index, 2).toString());
+        txt_nivel_ubicaciones.setText(modelo.getValueAt(index, 3).toString());
+        
+        Object value = modelo.getValueAt(index, 5);
+        txt_descripcion_ubicaciones.setText(value != null ? value.toString() : "");
+        
+        cmb_estado_ubicaciones.setSelectedItem(estado);
+    }//GEN-LAST:event_tbl_ubicacionesMouseClicked
+
+    private void btn_agregar_ubicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_ubicacionesActionPerformed
+        try {
+            String sala = txt_sala_ubicaciones.getText().trim();
+            String estanteria = txt_estanteria_ubicaciones.getText().trim();
+            String nivel = txt_nivel_ubicaciones.getText().trim();
+            String descripcion = txt_descripcion_ubicaciones.getText().trim();
+
+            boolean estado = cmb_estado_ubicaciones.getSelectedItem().toString().equalsIgnoreCase("Habilitado");
+
+            if (sala.isEmpty() || estanteria.isEmpty() || nivel.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Todos los campos obligatorios deben estar llenos.");
+                return;
+            }
+            
+            if ("Seleccione...".equals(cmb_estado_ubicaciones.getSelectedItem().toString())) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un estado válido.");
+                return;
+            }
+            Ubicacion u = new Ubicacion();
+            u.setSala(sala);
+            u.setEstanteria(estanteria);
+            u.setNivel(nivel);
+            u.setDescripcion(descripcion);
+            u.setHabilitado(estado);
+            u.setCodigoRack(ubicacionController.generarCodigo(u));
+
+            boolean exito = ubicacionController.agregarUbicacion(u);
+
+            if (exito) {
+                limpiarUbicaciones();
+                cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+                JOptionPane.showMessageDialog(null, "Ubicación agregada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al agregar la ubicación.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_agregar_ubicacionesActionPerformed
+
+    private void btn_editar_ubicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_ubicacionesActionPerformed
+        try {
+            int fila = tbl_ubicaciones.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar una ubicación para editar.");
+                return;
+            }
+
+            Integer id = Integer.parseInt(tbl_ubicaciones.getValueAt(fila, 0).toString());
+
+            String sala = txt_sala_ubicaciones.getText().trim();
+            String estanteria = txt_estanteria_ubicaciones.getText().trim();
+            String nivel = txt_nivel_ubicaciones.getText().trim();
+            String descripcion = txt_descripcion_ubicaciones.getText().trim();
+            boolean estado = cmb_estado_ubicaciones.getSelectedItem().toString().equalsIgnoreCase("Habilitado");
+
+            if (sala.isEmpty() || estanteria.isEmpty() || nivel.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Todos los campos obligatorios deben estar llenos.");
+                return;
+            }
+
+            if ("Seleccione...".equals(cmb_estado_ubicaciones.getSelectedItem().toString())) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un estado válido.");
+                return;
+            }
+
+            Ubicacion u = new Ubicacion();
+            u.setUbicacionID(id);
+            u.setSala(sala);
+            u.setEstanteria(estanteria);
+            u.setNivel(nivel);
+            u.setDescripcion(descripcion);
+            u.setHabilitado(estado);
+            u.setCodigoRack(ubicacionController.generarCodigo(u));
+
+            boolean exito = ubicacionController.actualizarUbicacion(u);
+
+            if (exito) {
+                limpiarUbicaciones();
+                cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+                JOptionPane.showMessageDialog(null, "Ubicación modificada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al actualizar la ubicación.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_editar_ubicacionesActionPerformed
+
+    private void btn_eliminar_ubicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_ubicacionesActionPerformed
+        int fila = tbl_ubicaciones.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar una ubicación antes de eliminarla.");
+            return;
+        }
+
+        String idStr = tbl_ubicaciones.getValueAt(fila, 0).toString();
+        String nombre = tbl_ubicaciones.getValueAt(fila, 1).toString(); // sala
+        int id = Integer.parseInt(idStr);
+
+        int confirm = JOptionPane.showConfirmDialog(
+            null,
+            "¿Está seguro de eliminar la ubicación con ID: " + idStr + "?",
+            "WARNING",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            boolean exito = ubicacionController.eliminarUbicacion(id);
+
+            if (exito) {
+                limpiarUbicaciones();
+                cargarDatosUbicaciones(ubicacionController.listarUbicaciones());
+                JOptionPane.showMessageDialog(null, "Ubicación eliminada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar la ubicación.");
+            }
+        }
+    }//GEN-LAST:event_btn_eliminar_ubicacionesActionPerformed
+
+    private void btn_limpiar_ubicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_ubicacionesActionPerformed
+        limpiarUbicaciones();
+    }//GEN-LAST:event_btn_limpiar_ubicacionesActionPerformed
+
+    private void pnl_categorias_volver1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_categorias_volver1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnl_categorias_volver1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -778,42 +1855,92 @@ public class GestionDocumentosFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_agregar_categorias;
     private javax.swing.JButton btn_agregar_documentos;
+    private javax.swing.JButton btn_agregar_ubicaciones;
+    private javax.swing.JButton btn_buscar_categorias;
     private javax.swing.JButton btn_buscar_documentos;
+    private javax.swing.JButton btn_buscar_ubicaciones;
+    private javax.swing.JButton btn_editar_categorias;
     private javax.swing.JButton btn_editar_documentos;
+    private javax.swing.JButton btn_editar_ubicaciones;
+    private javax.swing.JButton btn_eliminar_categorias;
     private javax.swing.JButton btn_eliminar_documentos;
+    private javax.swing.JButton btn_eliminar_ubicaciones;
+    private javax.swing.JButton btn_limpiar_categorias;
     private javax.swing.JButton btn_limpiar_documentos;
+    private javax.swing.JButton btn_limpiar_ubicaciones;
     private javax.swing.JComboBox<String> cmb_categoria;
     private javax.swing.JComboBox<String> cmb_editorial;
     private javax.swing.JComboBox<String> cmb_estado;
+    private javax.swing.JComboBox<String> cmb_estado_categorias;
+    private javax.swing.JComboBox<String> cmb_estado_ubicaciones;
     private javax.swing.JComboBox<String> cmb_formato;
     private javax.swing.JComboBox<String> cmb_idioma;
     private javax.swing.JComboBox<String> cmb_tipo;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lbl_autor;
     private javax.swing.JLabel lbl_año;
     private javax.swing.JLabel lbl_btn_volver_documentos;
+    private javax.swing.JLabel lbl_btn_volver_documentos1;
+    private javax.swing.JLabel lbl_btn_volver_documentos2;
     private javax.swing.JLabel lbl_categoria;
+    private javax.swing.JLabel lbl_descripcion_categorias;
+    private javax.swing.JLabel lbl_descripcion_ubicaciones;
     private javax.swing.JLabel lbl_editorial;
     private javax.swing.JLabel lbl_estado;
+    private javax.swing.JLabel lbl_estado_categorias;
+    private javax.swing.JLabel lbl_estado_ubicaciones;
+    private javax.swing.JLabel lbl_estanteria_ubicaciones;
     private javax.swing.JLabel lbl_formato;
     private javax.swing.JLabel lbl_idioma_documento;
+    private javax.swing.JLabel lbl_nivel_ubicaciones;
+    private javax.swing.JLabel lbl_nombre_categorias;
     private javax.swing.JLabel lbl_observaciones;
     private javax.swing.JLabel lbl_paginas;
+    private javax.swing.JLabel lbl_sala_ubicaciones;
     private javax.swing.JLabel lbl_tipo;
+    private javax.swing.JLabel lbl_title_categorias;
+    private javax.swing.JLabel lbl_title_categorias1;
     private javax.swing.JLabel lbl_title_documentos;
     private javax.swing.JLabel lbl_titulo;
+    private javax.swing.JPanel pnl_acciones_categorias;
     private javax.swing.JPanel pnl_acciones_documentos;
+    private javax.swing.JPanel pnl_acciones_ubicaciones;
+    private javax.swing.JPanel pnl_categorias;
+    private javax.swing.JPanel pnl_categorias_volver;
+    private javax.swing.JPanel pnl_categorias_volver1;
+    private javax.swing.JPanel pnl_datos_categorias;
     private javax.swing.JPanel pnl_datos_documentos;
+    private javax.swing.JPanel pnl_datos_ubicaciones;
+    private javax.swing.JPanel pnl_documentos;
     private javax.swing.JPanel pnl_documentos_volver;
+    private javax.swing.JPanel pnl_filtro_categorias;
     private javax.swing.JPanel pnl_filtro_documentos;
+    private javax.swing.JPanel pnl_filtro_ubicaciones;
     private javax.swing.JPanel pnl_header_documentos;
+    private javax.swing.JPanel pnl_header_documentos1;
+    private javax.swing.JPanel pnl_header_ubicaciones;
+    private javax.swing.JPanel pnl_ubicaciones;
+    private javax.swing.JScrollPane scp_tbl_categorias;
     private javax.swing.JScrollPane scp_tbl_documentos;
+    private javax.swing.JScrollPane scp_tbl_ubicaciones;
+    private javax.swing.JTable tbl_categorias;
     private javax.swing.JTable tbl_documentos;
+    private javax.swing.JTable tbl_ubicaciones;
     private javax.swing.JTextField txt_autor_documento;
     private javax.swing.JTextField txt_año_documento;
+    private javax.swing.JTextField txt_descripcion_categorias;
+    private javax.swing.JTextField txt_descripcion_ubicaciones;
+    private javax.swing.JTextField txt_estanteria_ubicaciones;
+    private javax.swing.JTextField txt_filter_categorias;
     private javax.swing.JTextField txt_filter_documentos;
+    private javax.swing.JTextField txt_filter_ubicaciones;
+    private javax.swing.JTextField txt_nivel_ubicaciones;
+    private javax.swing.JTextField txt_nombre_categorias;
     private javax.swing.JTextField txt_observaciones_documento;
     private javax.swing.JTextField txt_paginas_documento;
+    private javax.swing.JTextField txt_sala_ubicaciones;
     private javax.swing.JTextField txt_titulo_documento;
     // End of variables declaration//GEN-END:variables
 }

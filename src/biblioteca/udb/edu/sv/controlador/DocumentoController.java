@@ -118,6 +118,9 @@ public class DocumentoController {
             int idTipo = obtenerIdTipo(d.getTipo());
             int idCategoria = obtenerIdCategoria(d.getCategoria());
             int idEditorial = obtenerIdEditorial(d.getEditorial());
+            
+            d.setCodigo(generarCodigo(d));
+            
             return documentoDAO.actualizarDocumento(d, idTipo, idCategoria, idEditorial);
         } catch (Exception e) {
             logger.error("Error al actualizar documento: " + e.getMessage());
