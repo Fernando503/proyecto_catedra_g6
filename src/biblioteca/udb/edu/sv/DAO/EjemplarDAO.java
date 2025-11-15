@@ -200,7 +200,6 @@ public class EjemplarDAO {
         doc.setEditorial(rs.getString("editorial"));
         doc.setIdioma(rs.getString("idioma"));
         doc.setFormato(rs.getString("formato"));
-        doc.setEstado(rs.getString("estado"));
         doc.setAñoPublicacion(rs.getInt("año_publicacion"));
         doc.setPaginas(rs.getInt("paginas"));
         doc.setObservaciones(rs.getString("doc_observaciones"));
