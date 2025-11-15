@@ -14,6 +14,19 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author rdura
  */
+
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+// OBSOLETO
+
 public class GestoresFrm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GestoresFrm.class.getName());
