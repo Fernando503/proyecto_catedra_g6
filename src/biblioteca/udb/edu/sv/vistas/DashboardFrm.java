@@ -8,9 +8,6 @@ package biblioteca.udb.edu.sv.vistas;
 import biblioteca.udb.edu.sv.controlador.EstadisticaController;
 import biblioteca.udb.edu.sv.entidades.Estadistica;
 import biblioteca.udb.edu.sv.tools.*;
-import biblioteca.udb.edu.sv.controlador.EstadisticaController;
-import biblioteca.udb.edu.sv.entidades.Estadistica;
-import biblioteca.udb.edu.sv.tools.*;
 
 /**
  *
@@ -18,7 +15,6 @@ import biblioteca.udb.edu.sv.tools.*;
  */
 public class DashboardFrm extends javax.swing.JFrame {
 
-    GestoresFrm ventanaGestores = new GestoresFrm();
     SesionUsuario sesion = SesionUsuario.getInstancia();
     EstadisticaController estadisticaController = new EstadisticaController();
     Estadistica estadistica;
@@ -43,30 +39,10 @@ public class DashboardFrm extends javax.swing.JFrame {
             lbl_prestamos_counter.setText(String.valueOf(estadistica.getPrestamosActivos()));
             lbl_mora_counter.setText(String.valueOf(estadistica.getMorasPendientes()));
         }
-        
-        if(sesion.getNombre().equals("Administrador")){
-            estadistica = estadisticaController.obtenerEstadistica(sesion.getIdUsuario(), true);
-            lbl_documento_counter.setText(String.valueOf(estadistica.getTotalDocumentos()));
-            lbl_ejemplares_counter.setText(String.valueOf(estadistica.getTotalEjemplares()));
-            lbl_prestamos_counter.setText(String.valueOf(estadistica.getPrestamosActivos()));
-            lbl_mora_counter.setText(String.valueOf(estadistica.getMorasPendientes()));
-        } else {
-            estadistica = estadisticaController.obtenerEstadistica(sesion.getIdUsuario(), false);
-            lbl_documento_counter.setText(String.valueOf(estadistica.getTotalDocumentos()));
-            lbl_ejemplares_counter.setText(String.valueOf(estadistica.getTotalEjemplares()));
-            lbl_prestamos_counter.setText(String.valueOf(estadistica.getPrestamosActivos()));
-            lbl_mora_counter.setText(String.valueOf(estadistica.getMorasPendientes()));
-        }
     }
     
     public void configurarAccesosPorRol() {
         // Ejemplo con botones
-        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS","LISTAR"));
-        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS","LISTAR"));
-        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS","LISTAR"));
-        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA","LISTAR"));
-        lbl_username_up.setText(sesion.getNombre());
-        
         pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS","LISTAR"));
         pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS","LISTAR"));
         pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS","LISTAR"));
@@ -87,53 +63,30 @@ public class DashboardFrm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lbl_username_up = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        lbl_username_up = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         pnl_card_documentos = new javax.swing.JPanel();
-        lbl_documentos_count = new javax.swing.JLabel();
-        lbl_documento_counter = new javax.swing.JLabel();
-        lbl_ejemplares_count = new javax.swing.JPanel();
         lbl_documentos_count = new javax.swing.JLabel();
         lbl_documento_counter = new javax.swing.JLabel();
         lbl_ejemplares_count = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         lbl_ejemplares_counter = new javax.swing.JLabel();
-        lbl_ejemplares_counter = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        lbl_prestamos_count = new javax.swing.JLabel();
-        lbl_prestamos_counter = new javax.swing.JLabel();
         lbl_prestamos_count = new javax.swing.JLabel();
         lbl_prestamos_counter = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         lbl_moras_count = new javax.swing.JLabel();
         lbl_mora_counter = new javax.swing.JLabel();
-        lbl_moras_count = new javax.swing.JLabel();
-        lbl_mora_counter = new javax.swing.JLabel();
         pnl_card_gestion_doc = new javax.swing.JPanel();
-        lbl_gestion_documentos = new javax.swing.JLabel();
         lbl_gestion_documentos = new javax.swing.JLabel();
         pnl_card_pres_dev = new javax.swing.JPanel();
         lbl_prestamos_devoluciones = new javax.swing.JLabel();
-        lbl_prestamos_devoluciones = new javax.swing.JLabel();
         pnl_card_gestion_usuarios = new javax.swing.JPanel();
         lbl_gestion_usuario = new javax.swing.JLabel();
-        lbl_gestion_usuario = new javax.swing.JLabel();
         pnl_card_config = new javax.swing.JPanel();
-        lbl_configuracion = new javax.swing.JLabel();
         lbl_configuracion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(14, 20, 56));
-        jPanel1.setPreferredSize(new java.awt.Dimension(771, 90));
-
-        lbl_username_up.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_username_up.setForeground(new java.awt.Color(255, 215, 0));
-        lbl_username_up.setText("Usuario");
-
-        jLabel14.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 215, 0));
-        jLabel14.setText("Mediateca UDB");
         jPanel1.setPreferredSize(new java.awt.Dimension(771, 90));
 
         lbl_username_up.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
@@ -154,21 +107,9 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbl_username_up, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(69, 69, 69))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbl_username_up, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_username_up)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
-                .addContainerGap(21, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -181,11 +122,7 @@ public class DashboardFrm extends javax.swing.JFrame {
 
         lbl_documentos_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_documentos_count.setText("Documentos");
-        lbl_documentos_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_documentos_count.setText("Documentos");
 
-        lbl_documento_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
-        lbl_documento_counter.setText("120");
         lbl_documento_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
         lbl_documento_counter.setText("120");
 
@@ -194,14 +131,6 @@ public class DashboardFrm extends javax.swing.JFrame {
         pnl_card_documentosLayout.setHorizontalGroup(
             pnl_card_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_documentosLayout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
-                .addGroup(pnl_card_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_documentosLayout.createSequentialGroup()
-                        .addComponent(lbl_documentos_count)
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_documentosLayout.createSequentialGroup()
-                        .addComponent(lbl_documento_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(79, 79, 79))))
                 .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(pnl_card_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_documentosLayout.createSequentialGroup()
@@ -219,37 +148,16 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_documento_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
-                .addComponent(lbl_documentos_count)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_documento_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         lbl_ejemplares_count.setBackground(new java.awt.Color(7, 180, 238));
-        lbl_ejemplares_count.setBackground(new java.awt.Color(7, 180, 238));
 
-        jLabel2.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         jLabel2.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         jLabel2.setText("Ejemplares");
 
         lbl_ejemplares_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
         lbl_ejemplares_counter.setText("120");
-        lbl_ejemplares_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
-        lbl_ejemplares_counter.setText("120");
 
-        javax.swing.GroupLayout lbl_ejemplares_countLayout = new javax.swing.GroupLayout(lbl_ejemplares_count);
-        lbl_ejemplares_count.setLayout(lbl_ejemplares_countLayout);
-        lbl_ejemplares_countLayout.setHorizontalGroup(
-            lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(lbl_ejemplares_countLayout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
-                .addGroup(lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lbl_ejemplares_countLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(50, 50, 50))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lbl_ejemplares_countLayout.createSequentialGroup()
-                        .addComponent(lbl_ejemplares_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77))))
         javax.swing.GroupLayout lbl_ejemplares_countLayout = new javax.swing.GroupLayout(lbl_ejemplares_count);
         lbl_ejemplares_count.setLayout(lbl_ejemplares_countLayout);
         lbl_ejemplares_countLayout.setHorizontalGroup(
@@ -267,14 +175,8 @@ public class DashboardFrm extends javax.swing.JFrame {
         lbl_ejemplares_countLayout.setVerticalGroup(
             lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lbl_ejemplares_countLayout.createSequentialGroup()
-        lbl_ejemplares_countLayout.setVerticalGroup(
-            lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(lbl_ejemplares_countLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_ejemplares_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_ejemplares_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -284,11 +186,7 @@ public class DashboardFrm extends javax.swing.JFrame {
 
         lbl_prestamos_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_prestamos_count.setText("Prestamos");
-        lbl_prestamos_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_prestamos_count.setText("Prestamos");
 
-        lbl_prestamos_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
-        lbl_prestamos_counter.setText("120");
         lbl_prestamos_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
         lbl_prestamos_counter.setText("120");
 
@@ -297,13 +195,6 @@ public class DashboardFrm extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(lbl_prestamos_count)
-                .addContainerGap(58, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbl_prestamos_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82))
                 .addGap(50, 50, 50)
                 .addComponent(lbl_prestamos_count)
                 .addContainerGap(58, Short.MAX_VALUE))
@@ -320,21 +211,13 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_prestamos_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
-                .addComponent(lbl_prestamos_count)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_prestamos_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(254, 138, 139));
 
         lbl_moras_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_moras_count.setText("Moras");
-        lbl_moras_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_moras_count.setText("Moras");
 
-        lbl_mora_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
-        lbl_mora_counter.setText("120");
         lbl_mora_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
         lbl_mora_counter.setText("120");
 
@@ -343,13 +226,6 @@ public class DashboardFrm extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(77, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(lbl_mora_counter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(lbl_moras_count))
-                .addGap(70, 70, 70))
                 .addContainerGap(77, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -366,10 +242,6 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_mora_counter, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                 .addGap(19, 19, 19))
-                .addComponent(lbl_moras_count)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_mora_counter, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
         );
 
         pnl_card_gestion_doc.setBackground(new java.awt.Color(47, 48, 51));
@@ -381,8 +253,6 @@ public class DashboardFrm extends javax.swing.JFrame {
 
         lbl_gestion_documentos.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_gestion_documentos.setText("Gestión de documentos");
-        lbl_gestion_documentos.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_gestion_documentos.setText("Gestión de documentos");
 
         javax.swing.GroupLayout pnl_card_gestion_docLayout = new javax.swing.GroupLayout(pnl_card_gestion_doc);
         pnl_card_gestion_doc.setLayout(pnl_card_gestion_docLayout);
@@ -391,7 +261,6 @@ public class DashboardFrm extends javax.swing.JFrame {
             .addGroup(pnl_card_gestion_docLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addComponent(lbl_gestion_documentos)
-                .addComponent(lbl_gestion_documentos)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         pnl_card_gestion_docLayout.setVerticalGroup(
@@ -399,14 +268,11 @@ public class DashboardFrm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_docLayout.createSequentialGroup()
                 .addContainerGap(39, Short.MAX_VALUE)
                 .addComponent(lbl_gestion_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(lbl_gestion_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
 
         pnl_card_pres_dev.setBackground(new java.awt.Color(47, 48, 51));
 
-        lbl_prestamos_devoluciones.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_prestamos_devoluciones.setText("Préstamos / Devoluciones");
         lbl_prestamos_devoluciones.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_prestamos_devoluciones.setText("Préstamos / Devoluciones");
 
@@ -417,14 +283,12 @@ public class DashboardFrm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_pres_devLayout.createSequentialGroup()
                 .addContainerGap(35, Short.MAX_VALUE)
                 .addComponent(lbl_prestamos_devoluciones)
-                .addComponent(lbl_prestamos_devoluciones)
                 .addGap(33, 33, 33))
         );
         pnl_card_pres_devLayout.setVerticalGroup(
             pnl_card_pres_devLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_pres_devLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbl_prestamos_devoluciones, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(lbl_prestamos_devoluciones, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
@@ -438,8 +302,6 @@ public class DashboardFrm extends javax.swing.JFrame {
 
         lbl_gestion_usuario.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_gestion_usuario.setText("Gestión de Usuarios");
-        lbl_gestion_usuario.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_gestion_usuario.setText("Gestión de Usuarios");
 
         javax.swing.GroupLayout pnl_card_gestion_usuariosLayout = new javax.swing.GroupLayout(pnl_card_gestion_usuarios);
         pnl_card_gestion_usuarios.setLayout(pnl_card_gestion_usuariosLayout);
@@ -449,17 +311,9 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addContainerGap(65, Short.MAX_VALUE)
                 .addComponent(lbl_gestion_usuario)
                 .addGap(61, 61, 61))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addContainerGap(65, Short.MAX_VALUE)
-                .addComponent(lbl_gestion_usuario)
-                .addGap(61, 61, 61))
         );
         pnl_card_gestion_usuariosLayout.setVerticalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(lbl_gestion_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
             .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(lbl_gestion_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -472,14 +326,7 @@ public class DashboardFrm extends javax.swing.JFrame {
                 pnl_card_configMouseClicked(evt);
             }
         });
-        pnl_card_config.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnl_card_configMouseClicked(evt);
-            }
-        });
 
-        lbl_configuracion.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        lbl_configuracion.setText("Configuración");
         lbl_configuracion.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_configuracion.setText("Configuración");
 
@@ -491,17 +338,10 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addGap(87, 87, 87)
                 .addComponent(lbl_configuracion)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnl_card_configLayout.createSequentialGroup()
-                .addGap(87, 87, 87)
-                .addComponent(lbl_configuracion)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnl_card_configLayout.setVerticalGroup(
             pnl_card_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_configLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(lbl_configuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(33, 33, 33)
                 .addComponent(lbl_configuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -511,7 +351,6 @@ public class DashboardFrm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(63, 63, 63)
@@ -529,7 +368,6 @@ public class DashboardFrm extends javax.swing.JFrame {
                         .addComponent(pnl_card_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54)
                         .addComponent(lbl_ejemplares_count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbl_ejemplares_count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(44, 44, 44)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
@@ -544,7 +382,6 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pnl_card_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_ejemplares_count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_ejemplares_count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(104, 104, 104)
@@ -555,7 +392,6 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnl_card_config, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_card_gestion_usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(46, Short.MAX_VALUE))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -575,21 +411,16 @@ public class DashboardFrm extends javax.swing.JFrame {
         redirectConfig();
     }//GEN-LAST:event_pnl_card_configMouseClicked
 
-    private void pnl_card_configMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_configMouseClicked
-        redirectConfig();
-    }//GEN-LAST:event_pnl_card_configMouseClicked
-
     private void abrirFormularioUsuarios() {
-       GestionUsuariosFrm userFrm = new GestionUsuariosFrm(DashboardFrm.this);
-       setVisible(false);
-       userFrm.setVisible(true);
        GestionUsuariosFrm userFrm = new GestionUsuariosFrm(DashboardFrm.this);
        setVisible(false);
        userFrm.setVisible(true);
     }
     
-    private void abrirGestores() {
-        ventanaGestores.setVisible(true);
+    private void abrirFormularioDocumentos() {
+       GestionDocumentosFrm docsFrm = new GestionDocumentosFrm(DashboardFrm.this);
+       setVisible(false);
+       docsFrm.setVisible(true);
     }
     
     private void redirectConfig(){
@@ -635,24 +466,10 @@ public class DashboardFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JLabel lbl_configuracion;
-    private javax.swing.JLabel lbl_documento_counter;
-    private javax.swing.JLabel lbl_documentos_count;
-    private javax.swing.JPanel lbl_ejemplares_count;
-    private javax.swing.JLabel lbl_ejemplares_counter;
-    private javax.swing.JLabel lbl_gestion_documentos;
-    private javax.swing.JLabel lbl_gestion_usuario;
-    private javax.swing.JLabel lbl_mora_counter;
-    private javax.swing.JLabel lbl_moras_count;
-    private javax.swing.JLabel lbl_prestamos_count;
-    private javax.swing.JLabel lbl_prestamos_counter;
-    private javax.swing.JLabel lbl_prestamos_devoluciones;
-    private javax.swing.JLabel lbl_username_up;
     private javax.swing.JLabel lbl_configuracion;
     private javax.swing.JLabel lbl_documento_counter;
     private javax.swing.JLabel lbl_documentos_count;
