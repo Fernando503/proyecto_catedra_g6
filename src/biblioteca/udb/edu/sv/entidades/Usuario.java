@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package biblioteca.udb.edu.sv.entidades;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -15,25 +16,23 @@ public class Usuario {
     private String nombre;
     private String correo;
     private String contrasenia;
-    private String rol;
-    private int rol_id;
-    private String estadoUsuario;
+    private Rol rol;
+    private LocalDateTime fechaRegistro;
+    private Boolean habilitado;
 
     public Usuario() {
     }
 
-    // Getters y setters
+    public Usuario(int idUsuario, String nombre, String correo, String contrasenia, Rol rol, LocalDateTime fechaRegistro, Boolean habilitado) {
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.correo = correo;
+        this.contrasenia = contrasenia;
+        this.rol = rol;
+        this.fechaRegistro = fechaRegistro;
+        this.habilitado = habilitado;
+    }
 
-    public int getRolID()
-    {
-        return this.rol_id;
-    }
-    
-    public void setRolID(int rol_id)
-    {
-        this.rol_id = rol_id;
-    }
-    
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -66,19 +65,29 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 
-    public String getEstadoUsuario() {
-        return estadoUsuario;
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setEstadoUsuario(String estadoUsuario) {
-        this.estadoUsuario = estadoUsuario;
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
+
+    public Boolean getHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(Boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
+   
 }

@@ -21,11 +21,11 @@ public class GestoresFrm extends javax.swing.JFrame {
 
     public GestoresFrm() {
         initComponents();
-        cargarTablaDocumentos();
-        cargarComboBuscarPor();
+    //    cargarTablaDocumentos();
+    //    cargarComboBuscarPor();
     }
 
-    private void cargarTablaDocumentos() {
+    /*private void cargarTablaDocumentos() {
         DocumentoController docController = new DocumentoController();
         List<Documento> documentos = docController.obtenerDocumentos();
         List<String> columnas = docController.obtenerColumnasDocumentos();
@@ -122,7 +122,7 @@ public class GestoresFrm extends javax.swing.JFrame {
         }
     }
 
-
+    */
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -493,7 +493,6 @@ public class GestoresFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblPanelLaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
                         .addComponent(lblGestorDocumentos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
@@ -502,8 +501,8 @@ public class GestoresFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMouseClicked
-        gestorDocVentana.setTitle("Nuevo Documento");
-        gestorDocVentana.setVisible(true);
+        //gestorDocVentana.setTitle("Nuevo Documento");
+        //gestorDocVentana.setVisible(true);
     }//GEN-LAST:event_btnNuevoMouseClicked
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -511,19 +510,19 @@ public class GestoresFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        gestorDocVentana.setVisible(false);
+        //gestorDocVentana.setVisible(false);
     }//GEN-LAST:event_formWindowClosed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        cargarTablaDocumentos();
+        //cargarTablaDocumentos();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        buscarDocumentos();
+        //buscarDocumentos();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
-        buscarDocumentos();
+        //buscarDocumentos();
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed

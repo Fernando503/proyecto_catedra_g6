@@ -1,9 +1,11 @@
 package biblioteca.udb.edu.sv.controlador;
 
 import biblioteca.udb.edu.sv.DAO.UsuarioDAO;
+import biblioteca.udb.edu.sv.entidades.Rol;
 import biblioteca.udb.edu.sv.entidades.Usuario;
 import biblioteca.udb.edu.sv.tools.LogManager;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 public class UsuarioController {
@@ -78,7 +80,7 @@ public class UsuarioController {
         }
     }
 
-    // RESTABLECER CONTRASEÑA
+    // RESTABLECER CONTRASEÑA (siempre 1234 como dijiste)
     public boolean restablecerContraseña(int idUsuario) {
         try {
             return usuarioDAO.restablecerContraseña(idUsuario, "1234");
@@ -89,7 +91,7 @@ public class UsuarioController {
     }
 
     // OBTENER ROLES PARA EL COMBO
-    public List<String> obtenerRoles() {
+    public List<Rol> obtenerRoles() {
         try {
             return usuarioDAO.obtenerRoles();
         } catch (Exception e) {
@@ -97,23 +99,13 @@ public class UsuarioController {
             return Collections.emptyList();
         }
     }
-
-    public Usuario obtenerUsuarioPorId(int idUsuario) {
-        try {
-            return usuarioDAO.obtenerUsuarioPorId(idUsuario);
-        } catch (Exception e) {
-            logger.error("Error al obtener usuario por ID: " + e.getMessage());
-            return null;
-        }
-    }
     
-    // OBTENER ROL_ID POR NOMBRE DE ROL
-    public int obtenerRolId(String nombreRol) {
+    public Rol obtenerRolByNombre(String nombreRol){
         try {
-            return usuarioDAO.obtenerRolID(nombreRol);
+            return usuarioDAO.obtenerRolByNombre(nombreRol);
         } catch (Exception e) {
-            logger.error("Error al obtener rol_id por nombre: " + e.getMessage());
-            return -1; // o 3 si quieres devolver el rol por defecto
+            logger.error("Error al obtener rol: " + e.getMessage());
+            return null;
         }
     }
 }
