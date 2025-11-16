@@ -91,9 +91,11 @@ public class EjemplarDAO {
     public List<Ejemplar> listar() {
         List<Ejemplar> lista = new ArrayList<>();
         String sql = "SELECT e.*, " +
-                     "d.titulo, d.autor, d.tipo, d.categoria, d.editorial, d.idioma, d.formato, d.estado, d.año_publicacion, d.paginas, d.observaciones AS doc_observaciones, " +
-                     "u.sala, u.estanteria, u.nivel, u.codigo_rack, u.descripcion AS ubicacion_descripcion, u.habilitado AS ubicacion_habilitado, " +
-                     "es.nombre AS estado_nombre, es.descripcion AS estado_descripcion, es.habilitado AS estado_habilitado " +
+                    "d.documento_id, d.titulo, d.autor, d.tipo_documento_id, d.categoria_id, d.editorial_id, " +
+                    "d.idioma, d.formato, d.anio_publicacion, d.numero_paginas, " +
+                    "d.codigo_clasificacion, d.observaciones AS doc_observaciones, " +
+                    "u.sala, u.estanteria, u.nivel, u.codigo_rack, u.descripcion AS ubicacion_descripcion, u.habilitado AS ubicacion_habilitado, " +
+                    "es.nombre_estado, es.descripcion AS estado_descripcion, es.habilitado AS estado_habilitado " +
                      "FROM ejemplares e " +
                      "JOIN documentos d ON e.documento_id = d.documento_id " +
                      "LEFT JOIN ubicaciones u ON e.ubicacion_id = u.ubicacion_id " +
@@ -113,10 +115,12 @@ public class EjemplarDAO {
     
     public List<Ejemplar> buscar(String filter) {
         List<Ejemplar> lista = new ArrayList<>();
-        String sql = "SELECT e.ejemplar_id, e.codigo_barra, e.fecha_adquisicion, e.observaciones, e.habilitado, " +
-                     "d.documento_id, d.titulo, d.autor, d.tipo, d.categoria, d.editorial, d.idioma, d.formato, d.estado, d.año_publicacion, d.paginas, d.observaciones AS doc_observaciones, " +
-                     "u.ubicacion_id, u.sala, u.estanteria, u.nivel, u.codigo_rack, u.descripcion AS ubicacion_descripcion, u.habilitado AS ubicacion_habilitado, " +
-                     "es.estado_ejemplar_id, es.nombre AS estado_nombre, es.descripcion AS estado_descripcion, es.habilitado AS estado_habilitado " +
+        String sql = "SELECT e.*, " +
+                    "d.documento_id, d.titulo, d.autor, d.tipo_documento_id, d.categoria_id, d.editorial_id, " +
+                    "d.idioma, d.formato, d.anio_publicacion, d.numero_paginas, " +
+                    "d.codigo_clasificacion, d.observaciones AS doc_observaciones, " +
+                    "u.sala, u.estanteria, u.nivel, u.codigo_rack, u.descripcion AS ubicacion_descripcion, u.habilitado AS ubicacion_habilitado, " +
+                    "es.nombre_estado, es.descripcion AS estado_descripcion, es.habilitado AS estado_habilitado " +
                      "FROM ejemplares e " +
                      "JOIN documentos d ON e.documento_id = d.documento_id " +
                      "LEFT JOIN ubicaciones u ON e.ubicacion_id = u.ubicacion_id " +
@@ -157,14 +161,16 @@ public class EjemplarDAO {
     public List<Ejemplar> listarActivos() {
         List<Ejemplar> lista = new ArrayList<>();
         String sql = "SELECT e.*, " +
-                     "d.titulo, d.autor, d.tipo, d.categoria, d.editorial, d.idioma, d.formato, d.estado, d.año_publicacion, d.paginas, d.observaciones AS doc_observaciones, " +
-                     "u.sala, u.estanteria, u.nivel, u.codigo_rack, u.descripcion AS ubicacion_descripcion, u.habilitado AS ubicacion_habilitado, " +
-                     "es.nombre AS estado_nombre, es.descripcion AS estado_descripcion, es.habilitado AS estado_habilitado " +
-                     "FROM ejemplares e " +
-                     "JOIN documentos d ON e.documento_id = d.documento_id " +
-                     "LEFT JOIN ubicaciones u ON e.ubicacion_id = u.ubicacion_id " +
-                     "LEFT JOIN estados_ejemplar es ON e.estado_ejemplar_id = es.estado_ejemplar_id " +
-                     "WHERE e.habilitado=TRUE";
+             "d.documento_id, d.titulo, d.autor, d.tipo_documento_id, d.categoria_id, d.editorial_id, " +
+             "d.idioma, d.formato, d.anio_publicacion, d.numero_paginas, " +
+             "d.codigo_clasificacion, d.observaciones AS doc_observaciones, " +
+             "u.sala, u.estanteria, u.nivel, u.codigo_rack, u.descripcion AS ubicacion_descripcion, u.habilitado AS ubicacion_habilitado, " +
+             "es.nombre_estado, es.descripcion AS estado_descripcion, es.habilitado AS estado_habilitado " +
+             "FROM ejemplares e " +
+             "JOIN documentos d ON e.documento_id = d.documento_id " +
+             "LEFT JOIN ubicaciones u ON e.ubicacion_id = u.ubicacion_id " +
+             "LEFT JOIN estados_ejemplar es ON e.estado_ejemplar_id = es.estado_ejemplar_id " +
+             "WHERE e.habilitado=TRUE";
         try (Connection conn = Conexion.conectar();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -195,14 +201,15 @@ public class EjemplarDAO {
         doc.setDocumentoID(rs.getInt("documento_id"));
         doc.setTitulo(rs.getString("titulo"));
         doc.setAutor(rs.getString("autor"));
-        doc.setTipo(rs.getString("tipo"));
-        doc.setCategoria(rs.getString("categoria"));
-        doc.setEditorial(rs.getString("editorial"));
+        doc.setTipo(rs.getString("tipo_documento_id"));
+        doc.setCategoria(rs.getString("categoria_id"));
+        doc.setEditorial(rs.getString("editorial_id"));
         doc.setIdioma(rs.getString("idioma"));
         doc.setFormato(rs.getString("formato"));
-        doc.setAñoPublicacion(rs.getInt("año_publicacion"));
-        doc.setPaginas(rs.getInt("paginas"));
+        doc.setAñoPublicacion(rs.getInt("anio_publicacion"));
+        doc.setPaginas(rs.getInt("numero_paginas"));
         doc.setObservaciones(rs.getString("doc_observaciones"));
+        doc.setCodigo(rs.getString("codigo_clasificacion"));
         ej.setDocumento(doc);
 
         // Ubicación
@@ -219,7 +226,7 @@ public class EjemplarDAO {
         // EstadoEjemplar
         EstadoEjemplar est = new EstadoEjemplar();
         est.setEstadoEjemplarID(rs.getInt("estado_ejemplar_id"));
-        est.setNombre(rs.getString("estado_nombre"));
+        est.setNombre(rs.getString("nombre_estado"));
         est.setDescripcion(rs.getString("estado_descripcion"));
         est.setHabilitado(rs.getBoolean("estado_habilitado"));
         ej.setEstadoEjemplar(est);

@@ -57,5 +57,8 @@ public class EstadoEjemplar {
         this.habilitado = habilitado;
     }
     
-    
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

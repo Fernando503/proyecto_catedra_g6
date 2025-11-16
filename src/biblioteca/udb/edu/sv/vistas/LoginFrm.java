@@ -160,6 +160,7 @@ public class LoginFrm extends javax.swing.JFrame {
             SesionUsuario.getInstancia().iniciarSesion(
                     usuario.getIdUsuario(),
                     usuario.getNombre(),
+                    usuario.getCorreo(),
                     usuario.getRol().getNombreRol()
             );
 

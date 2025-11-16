@@ -69,4 +69,30 @@ public class PrestamoController {
             return null;
         }
     }
+    
+    public String validarPrestamo(String correo){
+        try {
+            return prestamoDAO.validarUsuarioPrestamo(correo);
+        } catch (Exception e) {
+            return "Error al verificar correo";
+        }
+    }
+    
+    public String validarDevolucion(String correo){
+        try {
+            return prestamoDAO.verificarPrestamosActivosPorCorreo(correo);
+        } catch (Exception e) {
+            return "Error al verificar correo";
+        }
+    }
+    
+    public String validarMora(String correo){
+        try {
+            return prestamoDAO.verificarMoraPorCorreo(correo);
+        } catch (Exception e) {
+            return "Error al verificar correo";
+        }
+    }
+    
+  
 }

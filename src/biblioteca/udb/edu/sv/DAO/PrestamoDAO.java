@@ -188,4 +188,171 @@ public class PrestamoDAO {
         return lista;
     }
 
+    public String validarUsuarioPrestamo(String correo) {
+        String mensajeError = null;
+
+        String sqlUsuario = "SELECT u.usuario_id, u.nombre, u.correo, u.habilitado, r.rol_id, r.nombre_rol " +
+                            "FROM usuarios u " +
+                            "JOIN roles r ON u.rol_id = r.rol_id " +
+                            "WHERE u.correo = ? AND u.habilitado = TRUE";
+
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement psUsuario = conn.prepareStatement(sqlUsuario)) {
+
+            psUsuario.setString(1, correo);
+            ResultSet rsUsuario = psUsuario.executeQuery();
+
+            if (!rsUsuario.next()) {
+                return "No se encontró el usuario con el correo: " + correo;
+            }
+
+            int usuarioId = rsUsuario.getInt("usuario_id");
+            String rolNombre = rsUsuario.getString("nombre_rol");
+
+            String sqlMora = "SELECT COUNT(*) AS moras_activas " +
+                             "FROM moras WHERE usuario_id = ? AND pagado = FALSE AND habilitado = TRUE";
+            try (PreparedStatement psMora = conn.prepareStatement(sqlMora)) {
+                psMora.setInt(1, usuarioId);
+                ResultSet rsMora = psMora.executeQuery();
+                if (rsMora.next() && rsMora.getInt("moras_activas") > 0) {
+                    return "El usuario con correo " + correo + " tiene mora pendiente.";
+                }
+            }
+
+            String sqlPrestamos = "SELECT COUNT(*) AS activos " +
+                                  "FROM prestamos WHERE usuario_id = ? AND habilitado = TRUE " +
+                                  "AND estado_prestamo_id IN (SELECT estado_prestamo_id FROM estados_prestamo WHERE nombre_estado = 'ACTIVO')";
+            int prestamosActivos = 0;
+            try (PreparedStatement psPrestamos = conn.prepareStatement(sqlPrestamos)) {
+                psPrestamos.setInt(1, usuarioId);
+                ResultSet rsPrestamos = psPrestamos.executeQuery();
+                if (rsPrestamos.next()) {
+                    prestamosActivos = rsPrestamos.getInt("activos");
+                }
+            }
+
+            String parametro = rolNombre.equalsIgnoreCase("Alumno") ? "MaxPrestamosAlumno" : "MaxPrestamoProfesor";
+            String sqlConfig = "SELECT valor_parametro FROM configuraciones_sistema WHERE nombre_parametro = ? AND habilitado = TRUE";
+            int maxPrestamos = 0;
+            try (PreparedStatement psConfig = conn.prepareStatement(sqlConfig)) {
+                psConfig.setString(1, parametro);
+                ResultSet rsConfig = psConfig.executeQuery();
+                if (rsConfig.next()) {
+                    maxPrestamos = Integer.parseInt(rsConfig.getString("valor_parametro"));
+                }
+            }
+
+            if (prestamosActivos >= maxPrestamos) {
+                return "El usuario con correo " + correo + " ya alcanzó el máximo de préstamos permitidos (" + maxPrestamos + ").";
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mensajeError = "Error al validar usuario: " + e.getMessage();
+        }
+
+        return mensajeError;
+    }
+    
+    public String verificarPrestamosActivosPorCorreo(String correo) {
+        String mensajeError = null;
+
+        String sqlUsuario = "SELECT u.usuario_id, u.nombre, r.nombre_rol " +
+                            "FROM usuarios u " +
+                            "JOIN roles r ON u.rol_id = r.rol_id " +
+                            "WHERE u.correo = ? AND u.habilitado = TRUE";
+
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement psUsuario = conn.prepareStatement(sqlUsuario)) {
+
+            psUsuario.setString(1, correo);
+            ResultSet rsUsuario = psUsuario.executeQuery();
+
+            if (!rsUsuario.next()) {
+                return "No se encontró el usuario con el correo: " + correo;
+            }
+
+            int usuarioId = rsUsuario.getInt("usuario_id");
+
+            // 🔹 Verificar préstamos activos
+            String sqlPrestamos = "SELECT COUNT(*) AS activos " +
+                                  "FROM prestamos p " +
+                                  "JOIN estados_prestamo ep ON p.estado_prestamo_id = ep.estado_prestamo_id " +
+                                  "WHERE p.usuario_id = ? AND p.habilitado = TRUE AND ep.nombre_estado = 'ACTIVO'";
+
+            int prestamosActivos = 0;
+            try (PreparedStatement psPrestamos = conn.prepareStatement(sqlPrestamos)) {
+                psPrestamos.setInt(1, usuarioId);
+                ResultSet rsPrestamos = psPrestamos.executeQuery();
+                if (rsPrestamos.next()) {
+                    prestamosActivos = rsPrestamos.getInt("activos");
+                }
+            }
+
+            if (prestamosActivos == 0) {
+                return "El usuario con correo " + correo + " no tiene préstamos activos.";
+            }
+
+            // 🔹 Verificar mora activa
+            String sqlMora = "SELECT COUNT(*) AS moras_activas " +
+                             "FROM moras m " +
+                             "WHERE m.usuario_id = ? AND m.pagado = FALSE AND m.habilitado = TRUE";
+
+            try (PreparedStatement psMora = conn.prepareStatement(sqlMora)) {
+                psMora.setInt(1, usuarioId);
+                ResultSet rsMora = psMora.executeQuery();
+                if (rsMora.next() && rsMora.getInt("moras_activas") > 0) {
+                    return "El usuario con correo " + correo + " tiene mora pendiente.";
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mensajeError = "Error al verificar préstamos activos: " + e.getMessage();
+        }
+
+        return mensajeError; // null si todo está correcto
+    }
+    
+    public String verificarMoraPorCorreo(String correo) {
+        String mensaje = null;
+
+        String sqlUsuario = "SELECT u.usuario_id, u.nombre " +
+                            "FROM usuarios u " +
+                            "WHERE u.correo = ? AND u.habilitado = TRUE";
+
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement psUsuario = conn.prepareStatement(sqlUsuario)) {
+
+            psUsuario.setString(1, correo);
+            ResultSet rsUsuario = psUsuario.executeQuery();
+
+            if (!rsUsuario.next()) {
+                return "No se encontró el usuario con el correo: " + correo;
+            }
+
+            int usuarioId = rsUsuario.getInt("usuario_id");
+
+            // 🔹 Verificar mora activa
+            String sqlMora = "SELECT COUNT(*) AS moras_activas " +
+                             "FROM moras m " +
+                             "WHERE m.usuario_id = ? AND m.pagado = FALSE AND m.habilitado = TRUE";
+
+            try (PreparedStatement psMora = conn.prepareStatement(sqlMora)) {
+                psMora.setInt(1, usuarioId);
+                ResultSet rsMora = psMora.executeQuery();
+                if (rsMora.next() && rsMora.getInt("moras_activas") == 0) {
+                    return "El usuario con correo " + correo + " no tiene mora activa.";
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            mensaje = "Error al verificar mora: " + e.getMessage();
+        }
+
+        return mensaje;
+    }
+    
+    
 }

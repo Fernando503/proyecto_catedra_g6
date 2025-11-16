@@ -6,8 +6,12 @@
 package biblioteca.udb.edu.sv.vistas;
 
 import biblioteca.udb.edu.sv.controlador.EstadisticaController;
+import biblioteca.udb.edu.sv.controlador.MoraController;
+import biblioteca.udb.edu.sv.controlador.PrestamoController;
 import biblioteca.udb.edu.sv.entidades.Estadistica;
 import biblioteca.udb.edu.sv.tools.*;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -17,6 +21,8 @@ public class DashboardFrm extends javax.swing.JFrame {
 
     SesionUsuario sesion = SesionUsuario.getInstancia();
     EstadisticaController estadisticaController = new EstadisticaController();
+    PrestamoController prestamoControler = new PrestamoController();
+    MoraController moraController = new MoraController();
     Estadistica estadistica;
 
 
@@ -39,6 +45,8 @@ public class DashboardFrm extends javax.swing.JFrame {
             lbl_prestamos_counter.setText(String.valueOf(estadistica.getPrestamosActivos()));
             lbl_mora_counter.setText(String.valueOf(estadistica.getMorasPendientes()));
         }
+        // PORCESO AUTOMATICO
+        moraController.procesoGestionMora();
     }
     
     public void configurarAccesosPorRol() {
@@ -272,6 +280,11 @@ public class DashboardFrm extends javax.swing.JFrame {
         );
 
         pnl_card_pres_dev.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_pres_dev.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_pres_devMouseClicked(evt);
+            }
+        });
 
         lbl_prestamos_devoluciones.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
         lbl_prestamos_devoluciones.setText("Préstamos / Devoluciones");
@@ -410,6 +423,65 @@ public class DashboardFrm extends javax.swing.JFrame {
     private void pnl_card_configMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_configMouseClicked
         redirectConfig();
     }//GEN-LAST:event_pnl_card_configMouseClicked
+
+    private void pnl_card_pres_devMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_pres_devMouseClicked
+        JTextField txtCorreo = new JTextField();
+        if(!RoleManager.tienePermiso("GESTION_MORAS","AGREGAR")){
+            txtCorreo.setText(sesion.getCorreo());
+            txtCorreo.setEditable(false);
+        }
+        Object[] opciones = {"Préstamo", "Devolución", "Pagar mora"};
+        int seleccion = JOptionPane.showOptionDialog(
+                null,
+                new Object[]{"Ingrese el correo:", txtCorreo},
+                "Gestión de Ejemplares",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]
+        );
+        String correo = txtCorreo.getText();
+
+        if (correo == null || correo.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un correo válido.");
+        } else {
+            switch (seleccion) {
+                case 0:
+                    String resultadoPrestamo = prestamoControler.validarPrestamo(correo);
+                    if (resultadoPrestamo != null) {
+                        JOptionPane.showMessageDialog(null, resultadoPrestamo, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GestionPrestamoFrm presFrm = new GestionPrestamoFrm(DashboardFrm.this);
+                        setVisible(false);
+                        presFrm.setVisible(true);
+                    }
+                    break;
+                case 1:
+                    String resultadoDevolucion = prestamoControler.validarDevolucion(correo);
+                    if (resultadoDevolucion != null) {
+                        JOptionPane.showMessageDialog(null, resultadoDevolucion, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GestionDevolucionFrm devoFrm = new GestionDevolucionFrm(DashboardFrm.this);
+                        setVisible(false);
+                        devoFrm.setVisible(true);
+                    }
+                    break;
+                case 2:
+                    String resultadoMora = prestamoControler.validarMora(correo);
+                    if (resultadoMora != null) {
+                        JOptionPane.showMessageDialog(null, resultadoMora, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GestionMoraFrm moraFrm = new GestionMoraFrm(DashboardFrm.this);
+                        setVisible(false);
+                        moraFrm.setVisible(true);
+                    }
+                    break;
+                default:
+                    System.out.println("No seleccionó ninguna opción");
+            }
+        }
+    }//GEN-LAST:event_pnl_card_pres_devMouseClicked
 
     private void abrirFormularioUsuarios() {
        GestionUsuariosFrm userFrm = new GestionUsuariosFrm(DashboardFrm.this);

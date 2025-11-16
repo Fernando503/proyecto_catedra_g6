@@ -13,6 +13,7 @@ public class SesionUsuario {
     private static SesionUsuario instancia;
     private int idUsuario;
     private String nombre;
+    private String correo;
     private String rol;
 
     private SesionUsuario() {}
@@ -24,9 +25,10 @@ public class SesionUsuario {
         return instancia;
     }
 
-    public void iniciarSesion(int idUsuario, String nombre, String rol) {
+    public void iniciarSesion(int idUsuario, String nombre, String correo, String rol) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
+        this.correo = correo;
         this.rol = rol;
     }
 
@@ -35,6 +37,8 @@ public class SesionUsuario {
     public int getIdUsuario() { return idUsuario; }
 
     public String getNombre() { return nombre; }
+    
+    public String getCorreo() { return correo; }
 
     public void cerrarSesion() { instancia = null; }
 }

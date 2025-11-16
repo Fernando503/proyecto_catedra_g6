@@ -31,6 +31,7 @@ public class Ubicacion {
         this.habilitado = habilitado;
     }
 
+    
     public Integer getUbicacionID() {
         return ubicacionID;
     }
@@ -87,5 +88,10 @@ public class Ubicacion {
         this.habilitado = habilitado;
     }
     
-    
+    @Override
+    public String toString() {
+        return String.format("Sala %s - Estantería %s - Nivel %s - Rack %s",
+            sala, estanteria, nivel, codigoRack);
+    }
+
 }
