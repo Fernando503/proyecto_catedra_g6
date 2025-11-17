@@ -5,13 +5,39 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
+import biblioteca.udb.edu.sv.controlador.ConfiguracionController;
+import biblioteca.udb.edu.sv.controlador.EjemplarController;
+import biblioteca.udb.edu.sv.controlador.PrestamoController;
+import biblioteca.udb.edu.sv.entidades.Ejemplar;
+import biblioteca.udb.edu.sv.entidades.EstadoPrestamo;
+import biblioteca.udb.edu.sv.entidades.Prestamo;
+import biblioteca.udb.edu.sv.entidades.Rol;
+import biblioteca.udb.edu.sv.entidades.Usuario;
+import biblioteca.udb.edu.sv.tools.RoleManager;
+import biblioteca.udb.edu.sv.tools.SesionUsuario;
+import biblioteca.udb.edu.sv.tools.StoreUserPrestamo;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Fernando Flamenco
  */
 public class GestionPrestamoFrm extends javax.swing.JFrame {
     
+    SesionUsuario sesion = SesionUsuario.getInstancia();
+    StoreUserPrestamo infoPrest = StoreUserPrestamo.getInstancia();
     private final DashboardFrm dashboardFrm;
+    private final DefaultTableModel modelPrestamos;
+    private final DefaultTableModel modelEjemplarByPrestamo;
+    
+    private final PrestamoController prestController = new PrestamoController();
+    private final EjemplarController ejemplarController = new EjemplarController();
+    private final ConfiguracionController configController = new ConfiguracionController();
 
     /**
      * Creates new form GestionPrestamoFrm
@@ -19,7 +45,49 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
     public GestionPrestamoFrm(DashboardFrm dashboardFrm) {
         this.dashboardFrm = dashboardFrm;
         initComponents();
+        
+        modelPrestamos = (DefaultTableModel) tbl_mis_prestamos.getModel();
+        Usuario user = new Usuario();
+        user.setIdUsuario(sesion.getIdUsuario());
+        Rol rol = new Rol();
+        rol.setNombreRol(sesion.getRol());
+        user.setRol(rol);
+        cargarMisPrestamos(prestController.listarPorRol(user));
+        
+        modelEjemplarByPrestamo = (DefaultTableModel) tbl_sol_ejemplar.getModel();
+        cargarSolEjemplares(ejemplarController.listarActivosCMB());
+        
+        lbl_dato_solicitante.setText(infoPrest.getCorreo() + " | " + infoPrest.getNombre());
     }
+    
+    private void cargarMisPrestamos(List<Prestamo> pres){
+        modelPrestamos.setRowCount(0); // Limpiar tabla
+        pres.forEach(p -> {
+            modelPrestamos.addRow(new Object[]{
+                p.getPrestamoId(),
+                p.getEjemplar().getDocumento().getTitulo(),
+                p.getUsuario().getCorreo(),
+                p.getFechaPrestamo(),
+                p.getEstadoPrestamo()
+            });
+        });
+    }
+    
+    private void cargarSolEjemplares(List<Ejemplar> ej){
+        modelEjemplarByPrestamo.setRowCount(0); // Limpiar tabla
+        ej.forEach(e -> {
+            modelEjemplarByPrestamo.addRow(new Object[]{
+                e.getEjemplarID(),
+                e.getDocumento().getTitulo(),
+                e.getUbicacion(),
+                e.getEstadoEjemplar()
+            });
+        });
+    }
+    
+
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,6 +102,18 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
         lbl_title_gn_pres = new javax.swing.JLabel();
         pnl_gn_pres_volver = new javax.swing.JPanel();
         lbl_btn_volver_gn_pres = new javax.swing.JLabel();
+        scp_tbl_prestamos = new javax.swing.JScrollPane();
+        tbl_mis_prestamos = new javax.swing.JTable();
+        lbl_solicitante = new javax.swing.JLabel();
+        lbl_dato_solicitante = new javax.swing.JLabel();
+        pnl_busqueda_prestamo = new javax.swing.JPanel();
+        txt_search_ejemplar_pres = new javax.swing.JTextField();
+        lbl_tbl_titulo_mis_prestamos = new javax.swing.JLabel();
+        scp_tbl_sol_prest = new javax.swing.JScrollPane();
+        tbl_sol_ejemplar = new javax.swing.JTable();
+        lbl_title_tbl_sol_ejempl = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        txt_search_mi_prestamos = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +159,7 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
                 .addComponent(pnl_gn_pres_volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(401, 401, 401)
                 .addComponent(lbl_title_gn_pres)
-                .addContainerGap(497, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnl_header_gn_presLayout.setVerticalGroup(
             pnl_header_gn_presLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,7 +167,114 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_header_gn_presLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbl_title_gn_pres)
-                .addGap(28, 28, 28))
+                .addGap(26, 26, 26))
+        );
+
+        tbl_mis_prestamos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Titulo", "Usuario", "Fecha Prestamo", "Estado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        scp_tbl_prestamos.setViewportView(tbl_mis_prestamos);
+        if (tbl_mis_prestamos.getColumnModel().getColumnCount() > 0) {
+            tbl_mis_prestamos.getColumnModel().getColumn(0).setMinWidth(40);
+            tbl_mis_prestamos.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tbl_mis_prestamos.getColumnModel().getColumn(0).setMaxWidth(40);
+            tbl_mis_prestamos.getColumnModel().getColumn(4).setMinWidth(75);
+            tbl_mis_prestamos.getColumnModel().getColumn(4).setPreferredWidth(75);
+            tbl_mis_prestamos.getColumnModel().getColumn(4).setMaxWidth(75);
+        }
+
+        lbl_solicitante.setText("Solicitante:");
+
+        pnl_busqueda_prestamo.setBorder(javax.swing.BorderFactory.createTitledBorder("Búsqueda de ejemplares"));
+
+        javax.swing.GroupLayout pnl_busqueda_prestamoLayout = new javax.swing.GroupLayout(pnl_busqueda_prestamo);
+        pnl_busqueda_prestamo.setLayout(pnl_busqueda_prestamoLayout);
+        pnl_busqueda_prestamoLayout.setHorizontalGroup(
+            pnl_busqueda_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_busqueda_prestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_search_ejemplar_pres)
+                .addContainerGap())
+        );
+        pnl_busqueda_prestamoLayout.setVerticalGroup(
+            pnl_busqueda_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_busqueda_prestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_search_ejemplar_pres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lbl_tbl_titulo_mis_prestamos.setText("Mis prestamos");
+
+        tbl_sol_ejemplar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Titulo", "Ubicación", "Estado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tbl_sol_ejemplar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_sol_ejemplarMouseClicked(evt);
+            }
+        });
+        scp_tbl_sol_prest.setViewportView(tbl_sol_ejemplar);
+        if (tbl_sol_ejemplar.getColumnModel().getColumnCount() > 0) {
+            tbl_sol_ejemplar.getColumnModel().getColumn(0).setMinWidth(40);
+            tbl_sol_ejemplar.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tbl_sol_ejemplar.getColumnModel().getColumn(0).setMaxWidth(40);
+            tbl_sol_ejemplar.getColumnModel().getColumn(3).setMinWidth(75);
+            tbl_sol_ejemplar.getColumnModel().getColumn(3).setPreferredWidth(75);
+            tbl_sol_ejemplar.getColumnModel().getColumn(3).setMaxWidth(75);
+        }
+
+        lbl_title_tbl_sol_ejempl.setText("Solicitar Ejemplar");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar mi prestamos"));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_search_mi_prestamos)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txt_search_mi_prestamos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -95,12 +282,49 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnl_header_gn_pres, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lbl_solicitante)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lbl_dato_solicitante, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pnl_busqueda_prestamo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scp_tbl_sol_prest, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(lbl_title_tbl_sol_ejempl)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbl_tbl_titulo_mis_prestamos)
+                            .addComponent(scp_tbl_prestamos, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnl_header_gn_pres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 610, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_solicitante)
+                    .addComponent(lbl_dato_solicitante))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_busqueda_prestamo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_title_tbl_sol_ejempl)
+                    .addComponent(lbl_tbl_titulo_mis_prestamos))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scp_tbl_prestamos, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                    .addComponent(scp_tbl_sol_prest))
+                .addGap(8, 8, 8))
         );
 
         pack();
@@ -109,9 +333,78 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
 
     private void pnl_gn_pres_volverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_gn_pres_volverMouseClicked
         dashboardFrm.setVisible(true);
+        infoPrest.limpiarInstancia();
         dispose();
     }//GEN-LAST:event_pnl_gn_pres_volverMouseClicked
 
+    private void tbl_sol_ejemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_sol_ejemplarMouseClicked
+        if(RoleManager.tienePermiso("GESTION_PRESTAMOS","AGREGAR")){
+            
+            String resultadoPrestamo = prestController.valPrestByCorreo(infoPrest.getCorreo());
+            if (resultadoPrestamo != null) {
+               JOptionPane.showMessageDialog(null, resultadoPrestamo, "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                int index = tbl_sol_ejemplar.getSelectedRow();
+                TableModel modeloSol= tbl_sol_ejemplar.getModel();
+                int idEjemplar = Integer.parseInt(modeloSol.getValueAt(index, 0).toString());
+                String tituloSol = modeloSol.getValueAt(index, 1).toString();
+                String estadoSol = modeloSol.getValueAt(index, 3).toString();
+
+                if(estadoSol.equalsIgnoreCase("Disponible")){
+                    if (JOptionPane.showConfirmDialog(null, "Estas seguro de prestar el ejemplar:  " +  tituloSol , "WARNING",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        Prestamo p = new Prestamo();
+
+                        Ejemplar ej = new Ejemplar();
+                        ej.setEjemplarID(idEjemplar);
+                        p.setEjemplar(ej);
+                        Usuario usp = new Usuario();
+                        usp.setIdUsuario(infoPrest.getIdUsuario());
+                        p.setUsuario(usp);
+                        p.setFechaPrestamo(LocalDate.now());
+                        p.setFechaDevolucionPrevista(LocalDate.now().plusDays(configController.obtenerMaxDias()));
+
+                        EstadoPrestamo esp = new EstadoPrestamo();
+                        esp.setEstadoPrestamoID(1);
+                        p.setEstadoPrestamo(esp);
+                        p.setHabilitado(true);
+
+                        Usuario adminData = new Usuario();
+                        if(sesion.getRol().equalsIgnoreCase("Administrador")){
+                            adminData.setIdUsuario(sesion.getIdUsuario());
+                            adminData.setNombre(sesion.getNombre());
+                        }
+                        boolean exito = prestController.insertar(p,adminData, idEjemplar);
+                        if (exito) {
+                            cargarSolEjemplares(ejemplarController.listarActivosCMB());
+                            Usuario user = new Usuario();
+                            user.setIdUsuario(sesion.getIdUsuario());
+                            Rol rol = new Rol();
+                            rol.setNombreRol(sesion.getRol());
+                            user.setRol(rol);
+                            cargarMisPrestamos(prestController.listarPorRol(user));
+                            String resumen = "Préstamo registrado correctamente\n\n"
+                                + "Usuario: " + infoPrest.getNombre() + "\n"
+                                + "Correo: " + infoPrest.getCorreo() + "\n"
+                                + "Ejemplar: " + tituloSol + "\n"
+                                + "Ubicación: " + modeloSol.getValueAt(index, 2).toString() + "\n"
+                                + "Fecha préstamo: " + p.getFechaPrestamo() + "\n"
+                                + "Fecha devolución prevista: " + p.getFechaDevolucionPrevista();
+
+                             JOptionPane.showMessageDialog(null, resumen, "Resumen del préstamo", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al generar prestamo.");
+                        }
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "El ejemplar no se encuentra disponible.");
+                }
+
+            }
+        }
+    }//GEN-LAST:event_tbl_sol_ejemplarMouseClicked
+
+    
     /**
      * @param args the command line arguments
      */
@@ -146,9 +439,21 @@ public class GestionPrestamoFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbl_btn_volver_gn_pres;
+    private javax.swing.JLabel lbl_dato_solicitante;
+    private javax.swing.JLabel lbl_solicitante;
+    private javax.swing.JLabel lbl_tbl_titulo_mis_prestamos;
     private javax.swing.JLabel lbl_title_gn_pres;
+    private javax.swing.JLabel lbl_title_tbl_sol_ejempl;
+    private javax.swing.JPanel pnl_busqueda_prestamo;
     private javax.swing.JPanel pnl_gn_pres_volver;
     private javax.swing.JPanel pnl_header_gn_pres;
+    private javax.swing.JScrollPane scp_tbl_prestamos;
+    private javax.swing.JScrollPane scp_tbl_sol_prest;
+    private javax.swing.JTable tbl_mis_prestamos;
+    private javax.swing.JTable tbl_sol_ejemplar;
+    private javax.swing.JTextField txt_search_ejemplar_pres;
+    private javax.swing.JTextField txt_search_mi_prestamos;
     // End of variables declaration//GEN-END:variables
 }

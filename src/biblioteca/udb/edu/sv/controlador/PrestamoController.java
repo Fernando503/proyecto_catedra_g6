@@ -25,18 +25,18 @@ public class PrestamoController {
         this.prestamoDAO = new PrestamoDAO();
     }
     
-    public boolean insertar(Prestamo prest, Usuario user) {
+    public boolean insertar(Prestamo prest, Usuario user, int idEjemplar) {
         try {
-            return prestamoDAO.insertar(prest, user);
+            return prestamoDAO.prestarEjemplarConPrestamo(prest, user, idEjemplar);
         } catch (Exception e) {
             logger.error("Error al insertar préstamo: " + e.getMessage());
             return false;
         }
     }
     
-    public boolean registrarDevolucion(int prestID, LocalDate devolFecha) {
+    public boolean registrarDevolucion(int prestID, LocalDate devolFecha, int estPrestamo) {
         try {
-            return prestamoDAO.registrarDevolucion(prestID, devolFecha);
+            return prestamoDAO.registrarDevolucion(prestID, devolFecha, estPrestamo);
         } catch (Exception e) {
             logger.error("Error al registrar devolución préstamo: " + e.getMessage());
             return false;
@@ -48,24 +48,6 @@ public class PrestamoController {
             return prestamoDAO.listarPorRol(usuario);
         } catch (Exception e) {
             logger.error("Error al listar por rol en préstamo: " + e.getMessage());
-            return null;
-        }
-    }
-    
-    public List<Prestamo> listarVencidos() {
-        try {
-            return prestamoDAO.listarVencidos();
-        } catch (Exception e) {
-            logger.error("Error al listar vencidos en préstamo: " + e.getMessage());
-            return null;
-        }
-    }
-    
-    public List<Prestamo> listarHistorialPorUsuario(Integer usuarioId) {
-        try {
-            return prestamoDAO.listarHistorialPorUsuario(usuarioId);
-        } catch (Exception e) {
-            logger.error("Error al listar historial por usuario en préstamo: " + e.getMessage());
             return null;
         }
     }
@@ -91,6 +73,22 @@ public class PrestamoController {
             return prestamoDAO.verificarMoraPorCorreo(correo);
         } catch (Exception e) {
             return "Error al verificar correo";
+        }
+    }
+    
+    public String valPrestByCorreo (String correo) {
+        try {
+            return prestamoDAO.verificarPrestamosByCorreo(correo);
+        } catch (Exception e) {
+             return "Error al verificar correo";
+        }
+    }
+    
+    public boolean genMoraPrestamo (int idPrestamo){
+        try {
+            return prestamoDAO.verificarMoraPorPrestamo(idPrestamo);
+        } catch (Exception e) {
+            return true;
         }
     }
     

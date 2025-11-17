@@ -35,10 +35,10 @@ public class LoginFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        txt_login_usuario = new javax.swing.JTextField();
         jbuttonIngresar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txt_login_pass = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -47,10 +47,10 @@ public class LoginFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txt_login_usuario.setFont(new java.awt.Font("Raleway", 1, 14)); // NOI18N
+        txt_login_usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txt_login_usuarioActionPerformed(evt);
             }
         });
 
@@ -96,10 +96,9 @@ public class LoginFrm extends javax.swing.JFrame {
                                 .addComponent(jLabel3)
                                 .addComponent(jLabel2)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jPasswordField1)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txt_login_pass)
+                                    .addComponent(txt_login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel1)
                                 .addGap(88, 88, 88))))
                     .addGroup(layout.createSequentialGroup()
@@ -115,11 +114,11 @@ public class LoginFrm extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txt_login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txt_login_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
@@ -137,15 +136,15 @@ public class LoginFrm extends javax.swing.JFrame {
 
  
     private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
-        String correo = jTextField1.getText(); // tu campo "Usuario" lo usas como correo
-        String contraseña = new String(jPasswordField1.getPassword());
+        String correo = txt_login_usuario.getText(); // tu campo "Usuario" lo usas como correo
+        String contraseña = new String(txt_login_pass.getPassword());
 
         if (correo.isEmpty()|| contraseña.isEmpty()) {
             logger.error("Usuario o contraseña no válidos.");
             return;
         }
 
-        Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
+        Usuario usuario = usuarioController.iniciarSesion(correo + "@udb.edu.sv", contraseña);
         if (usuario != null) {
             if(usuario.getHabilitado().equals(false)){
                 JOptionPane.showMessageDialog(
@@ -166,19 +165,20 @@ public class LoginFrm extends javax.swing.JFrame {
 
             AuditoriaLogger.registrar("LOGIN", "Inicio de sesión correctamente");
             setVisible(false);
-            DashboardFrm dash = new DashboardFrm();
+            DashboardFrm dash = new DashboardFrm(LoginFrm.this);
             dash.configurarAccesosPorRol();
+            txt_login_usuario.setText("");
+            txt_login_pass.setText("");
             dash.setVisible(true);
         } else {
-            logger.error("El usuario no fue encontrado en la base de datos");
-            logger.error("o las credenciales del usuario están incorrectas.");
+            logger.error("El usuario no fue encontrado en la base de datos o las credenciales del usuario están incorrectas.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbuttonIngresarActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txt_login_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_login_usuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txt_login_usuarioActionPerformed
 
     
     /**
@@ -221,9 +221,9 @@ public class LoginFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jbuttonIngresar;
+    private javax.swing.JPasswordField txt_login_pass;
+    private javax.swing.JTextField txt_login_usuario;
     // End of variables declaration//GEN-END:variables
 }

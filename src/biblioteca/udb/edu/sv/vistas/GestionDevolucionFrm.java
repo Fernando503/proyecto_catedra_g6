@@ -5,13 +5,33 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
+import biblioteca.udb.edu.sv.controlador.PrestamoController;
+import biblioteca.udb.edu.sv.entidades.Ejemplar;
+import biblioteca.udb.edu.sv.entidades.EstadoPrestamo;
+import biblioteca.udb.edu.sv.entidades.Prestamo;
+import biblioteca.udb.edu.sv.entidades.Rol;
+import biblioteca.udb.edu.sv.entidades.Usuario;
+import biblioteca.udb.edu.sv.tools.RoleManager;
+import biblioteca.udb.edu.sv.tools.SesionUsuario;
+import biblioteca.udb.edu.sv.tools.StoreUserPrestamo;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author Fernando Flamenco
  */
 public class GestionDevolucionFrm extends javax.swing.JFrame {
     
+    SesionUsuario sesion = SesionUsuario.getInstancia();
+    StoreUserPrestamo infoPrest = StoreUserPrestamo.getInstancia();
     private final DashboardFrm dashboardFrm;
+    private final DefaultTableModel modelPrestamos;
+    
+    private final PrestamoController prestController = new PrestamoController();
 
     /**
      * Creates new form GestionDevolucionFrm
@@ -19,6 +39,28 @@ public class GestionDevolucionFrm extends javax.swing.JFrame {
     public GestionDevolucionFrm(DashboardFrm dashboardFrm) {
         this.dashboardFrm = dashboardFrm;
         initComponents();
+        
+        modelPrestamos = (DefaultTableModel) tbl_mis_prestamos_devo.getModel();
+        Usuario user = new Usuario();
+        user.setIdUsuario(sesion.getIdUsuario());
+        Rol rol = new Rol();
+        rol.setNombreRol(sesion.getRol());
+        user.setRol(rol);
+        cargarMisPrestamos(prestController.listarPorRol(user));
+    }
+    
+    private void cargarMisPrestamos(List<Prestamo> pres){
+        modelPrestamos.setRowCount(0); // Limpiar tabla
+        pres.forEach(p -> {
+            modelPrestamos.addRow(new Object[]{
+                p.getPrestamoId(),
+                p.getEjemplar().getDocumento().getTitulo(),
+                p.getUsuario().getCorreo(),
+                p.getFechaPrestamo(),
+                p.getFechaDevolucionPrevista(),
+                p.getEstadoPrestamo()
+            });
+        });
     }
 
     /**
@@ -34,6 +76,9 @@ public class GestionDevolucionFrm extends javax.swing.JFrame {
         lbl_title_gn_devo = new javax.swing.JLabel();
         pnl_gn_devo_volver = new javax.swing.JPanel();
         lbl_btn_volver_gn_devo = new javax.swing.JLabel();
+        scp_tbl_devo = new javax.swing.JScrollPane();
+        tbl_mis_prestamos_devo = new javax.swing.JTable();
+        pnl_search_pres_to_devo = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,17 +122,62 @@ public class GestionDevolucionFrm extends javax.swing.JFrame {
             pnl_header_gn_devoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_header_gn_devoLayout.createSequentialGroup()
                 .addComponent(pnl_gn_devo_volver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(303, 303, 303)
+                .addGap(354, 354, 354)
                 .addComponent(lbl_title_gn_devo)
-                .addContainerGap(559, Short.MAX_VALUE))
+                .addContainerGap(508, Short.MAX_VALUE))
         );
         pnl_header_gn_devoLayout.setVerticalGroup(
             pnl_header_gn_devoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnl_gn_devo_volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnl_header_gn_devoLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(29, 29, 29)
                 .addComponent(lbl_title_gn_devo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        tbl_mis_prestamos_devo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Titulo", "Usuario", "Fecha Prestamo", "Fecha Prev. Devolución", "Estado prestamo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tbl_mis_prestamos_devo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_mis_prestamos_devoMouseClicked(evt);
+            }
+        });
+        scp_tbl_devo.setViewportView(tbl_mis_prestamos_devo);
+        if (tbl_mis_prestamos_devo.getColumnModel().getColumnCount() > 0) {
+            tbl_mis_prestamos_devo.getColumnModel().getColumn(0).setMinWidth(50);
+            tbl_mis_prestamos_devo.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tbl_mis_prestamos_devo.getColumnModel().getColumn(0).setMaxWidth(50);
+            tbl_mis_prestamos_devo.getColumnModel().getColumn(5).setMinWidth(125);
+            tbl_mis_prestamos_devo.getColumnModel().getColumn(5).setPreferredWidth(125);
+            tbl_mis_prestamos_devo.getColumnModel().getColumn(5).setMaxWidth(125);
+        }
+
+        javax.swing.GroupLayout pnl_search_pres_to_devoLayout = new javax.swing.GroupLayout(pnl_search_pres_to_devo);
+        pnl_search_pres_to_devo.setLayout(pnl_search_pres_to_devoLayout);
+        pnl_search_pres_to_devoLayout.setHorizontalGroup(
+            pnl_search_pres_to_devoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnl_search_pres_to_devoLayout.setVerticalGroup(
+            pnl_search_pres_to_devoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 75, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -95,12 +185,22 @@ public class GestionDevolucionFrm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnl_header_gn_devo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scp_tbl_devo)
+                    .addComponent(pnl_search_pres_to_devo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnl_header_gn_devo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 610, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(pnl_search_pres_to_devo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
+                .addComponent(scp_tbl_devo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -111,6 +211,33 @@ public class GestionDevolucionFrm extends javax.swing.JFrame {
         dashboardFrm.setVisible(true);
         dispose();
     }//GEN-LAST:event_pnl_gn_devo_volverMouseClicked
+
+    private void tbl_mis_prestamos_devoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_mis_prestamos_devoMouseClicked
+        if(RoleManager.tienePermiso("GESTION_DEVOLUCIONES","AGREGAR")){
+            int index = tbl_mis_prestamos_devo.getSelectedRow();
+            TableModel modeloSol= tbl_mis_prestamos_devo.getModel();
+            int idPrestamo = Integer.parseInt(modeloSol.getValueAt(index, 0).toString());
+            String tituloSol = modeloSol.getValueAt(index, 1).toString();
+
+            if (JOptionPane.showConfirmDialog(null, "Confirmación de devolución del ejemplar:  " +  tituloSol , "WARNING",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        boolean isMora = prestController.genMoraPrestamo(idPrestamo);
+                         int idEstaPrestamo = isMora ? 3 : 2;
+                        boolean exito = prestController.registrarDevolucion(idPrestamo,LocalDate.now(), idEstaPrestamo);
+                        if (exito) {
+                            Usuario user = new Usuario();
+                            user.setIdUsuario(sesion.getIdUsuario());
+                            Rol rol = new Rol();
+                            rol.setNombreRol(sesion.getRol());
+                            user.setRol(rol);
+                            cargarMisPrestamos(prestController.listarPorRol(user));
+                            JOptionPane.showMessageDialog(null, "Devolución del ejemplar completado con éxito.", "Devolución de ejemplar", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al generar devolicion.");
+                        }
+                    }
+        }
+    }//GEN-LAST:event_tbl_mis_prestamos_devoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -150,5 +277,8 @@ public class GestionDevolucionFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_title_gn_devo;
     private javax.swing.JPanel pnl_gn_devo_volver;
     private javax.swing.JPanel pnl_header_gn_devo;
+    private javax.swing.JPanel pnl_search_pres_to_devo;
+    private javax.swing.JScrollPane scp_tbl_devo;
+    private javax.swing.JTable tbl_mis_prestamos_devo;
     // End of variables declaration//GEN-END:variables
 }
