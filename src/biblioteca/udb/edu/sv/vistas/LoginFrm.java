@@ -144,7 +144,7 @@ public class LoginFrm extends javax.swing.JFrame {
             return;
         }
 
-        Usuario usuario = usuarioController.iniciarSesion(correo + "@udb.edu.sv", contraseña);
+        Usuario usuario = usuarioController.iniciarSesion(correo, contraseña);
         if (usuario != null) {
             if(usuario.getHabilitado().equals(false)){
                 JOptionPane.showMessageDialog(
