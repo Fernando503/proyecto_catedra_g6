@@ -5,33 +5,31 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
-import biblioteca.udb.edu.sv.controlador.AuditoriaController;
-import biblioteca.udb.edu.sv.controlador.ConfiguracionController;
-import biblioteca.udb.edu.sv.controlador.EditorialController;
-import biblioteca.udb.edu.sv.controlador.EstadoEjemplarController;
-import biblioteca.udb.edu.sv.controlador.EstadoPrestamoController;
-import biblioteca.udb.edu.sv.controlador.TipoDocumentoController;
-import biblioteca.udb.edu.sv.entidades.Auditoria;
-import biblioteca.udb.edu.sv.entidades.Ciudad;
-import biblioteca.udb.edu.sv.entidades.Configuracion;
-import biblioteca.udb.edu.sv.entidades.Editorial;
-import biblioteca.udb.edu.sv.entidades.EstadoEjemplar;
-import biblioteca.udb.edu.sv.entidades.EstadoPrestamo;
-import biblioteca.udb.edu.sv.entidades.Pais;
-import biblioteca.udb.edu.sv.entidades.TipoDocumento;
+import biblioteca.udb.edu.sv.controlador.*;
+import biblioteca.udb.edu.sv.entidades.*;
+import biblioteca.udb.edu.sv.tools.DatePicker;
+import biblioteca.udb.edu.sv.tools.DatePickerUtils;
 import biblioteca.udb.edu.sv.tools.LogManager;
 import biblioteca.udb.edu.sv.tools.Validaciones;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 
 
@@ -49,12 +47,17 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private final DefaultTableModel modelEditoriales;
     private final DefaultTableModel modelEstadoEjemplar;
     private final DefaultTableModel modelEstadoPrestamo;
+    private final DefaultTableModel modelEjemplares;
     private final ConfiguracionController configController = new ConfiguracionController();
     private final AuditoriaController auditController = new AuditoriaController();
     private final TipoDocumentoController tipoDocController = new TipoDocumentoController();
     private final EditorialController editorialController = new EditorialController();
     private final EstadoEjemplarController estadoEjempController = new EstadoEjemplarController();
     private final EstadoPrestamoController estadoPrestController = new EstadoPrestamoController();
+    private final DocumentoController docController = new DocumentoController();
+    private final UbicacionController ubiController = new UbicacionController();
+    private final EjemplarController ejemplarController = new EjemplarController();
+    private DatePicker datePickerWrapper;
 
 
     /**
@@ -65,6 +68,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         super("Formulario Configuración");
         this.dashboardFrm = dashboardFrm;
         initComponents();
+        inicializarDatePicker();
        
         txt_id_config.setVisible(false);
         txt_id_tip_doc.setVisible(false);
@@ -85,6 +89,8 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         cargarEstadoEjemplar(estadoEjempController.listar());
         modelEstadoPrestamo = (DefaultTableModel) tbl_estado_prestamo.getModel();
         cargarEstadoPrestamo(estadoPrestController.listar());
+        modelEjemplares = (DefaultTableModel) tbl_ejemplares.getModel();
+        cargarEjemplares(ejemplarController.listar());
         
         //INICIALIZACION DE COMBOS
         List<Pais> paises = new ArrayList<>();
@@ -95,13 +101,36 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         List<Ciudad> ciudades =  new ArrayList<>();
         ciudades.add(new Ciudad(0, "Seleccione...",new Pais(), true));
         cmb_ciudad_editorial.setModel(new DefaultComboBoxModel<>(ciudades.toArray(new Ciudad[0])));
+        
+        AutoCompleteDecorator.decorate(cmb_documentos_ejemplar);
+        List<Documento> docs = new ArrayList<>();
+        docs.add(new Documento("Seleccione..."));
+        docs.addAll(docController.listarDocumentos());
+        cmb_documentos_ejemplar.setModel(new DefaultComboBoxModel<>(docs.toArray(new Documento[0])));
+        
+        AutoCompleteDecorator.decorate(cmb_ubicacion_ejemplar);
+        List<Ubicacion> ubi = new ArrayList<>();
+        ubi.addAll(ubiController.listarUbicacionesActivas());
+        cmb_ubicacion_ejemplar.setModel(new DefaultComboBoxModel<>(ubi.toArray(new Ubicacion[0])));
+        
+        List<EstadoEjemplar> estEjemp = new ArrayList<>();
+        estEjemp.addAll(estadoEjempController.listarActivosCMB());
+        cmb_estado_ejemplar.setModel(new DefaultComboBoxModel<>(estEjemp.toArray(new EstadoEjemplar[0])));
+        
 
     }
      
-    /**
-     * El orden que se cargan al modeloConfiguracion es como se mostraran, si se desea se puede cambiar el orden acá
-     *
-     */
+    private void inicializarDatePicker() {
+        datePickerWrapper = new DatePicker();
+        JDatePickerImpl datePicker = datePickerWrapper.getComponent();
+        txt_fecha_adqui_ejemplar.setVisible(false);
+        pnl_datos_ejemplar.setLayout(null);
+        datePicker.setBounds(txt_fecha_adqui_ejemplar.getX(), txt_fecha_adqui_ejemplar.getY(),
+                             txt_fecha_adqui_ejemplar.getWidth(), txt_fecha_adqui_ejemplar.getHeight());
+        pnl_datos_ejemplar.add(datePicker);
+        pnl_datos_ejemplar.repaint();
+    }
+
     private void cargarDatosConfig (List<Configuracion> config) {
         modeloConfiguracion.setRowCount(0); // Limpiar tabla
         config.forEach(c -> {
@@ -122,7 +151,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
                 a.getIdAuditoria(),
                 a.getUsuario().getIdUsuario(),
                 a.getUsuario().getNombre(),
-                a.getFechaAccion(),
+                DatePickerUtils.localDateTimeToString(a.getFechaAccion()),
                 a.getTipoAccion(),
                 a.getDetalleAccion()
             });
@@ -182,6 +211,22 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         });
     }
     
+    private void cargarEjemplares (List<Ejemplar> eje){
+        modelEjemplares.setRowCount(0);
+        eje.forEach(e -> {
+            modelEjemplares.addRow(new Object[]{
+                e.getEjemplarID(),
+                e.getDocumento(),
+                e.getCodigoBarra(),
+                e.getUbicacion(),
+                e.getEstadoEjemplar(),
+                DatePickerUtils.localDateToString(e.getFechaAdquisicion()),
+                e.getObservaciones(),
+                e.getHabilitado()
+            });
+        });
+    }
+            
     private void limpiarConfig(){
         txt_id_config.setText("");
         txt_parametro_config.setText("");
@@ -227,6 +272,16 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
 
         
     }
+    
+    private void limpiarEjemplar(){
+        cmb_documentos_ejemplar.setSelectedIndex(0);
+        txt_cod_barra_ejemplar.setText("");
+        cmb_ubicacion_ejemplar.setSelectedIndex(0);
+        cmb_estado_ejemplar.setSelectedIndex(0);
+        txt_observaciones_ejemplar.setText("");
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -336,6 +391,32 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         btn_buscar_est_prestamo = new javax.swing.JButton();
         scp_tbl_est_prestamo = new javax.swing.JScrollPane();
         tbl_estado_prestamo = new javax.swing.JTable();
+        pnl_menu_ejemplar = new javax.swing.JPanel();
+        pnl_datos_ejemplar = new javax.swing.JPanel();
+        txt_cod_barra_ejemplar = new javax.swing.JTextField();
+        txt_id_ejemplar = new javax.swing.JTextField();
+        lbl_nombre_editorial1 = new javax.swing.JLabel();
+        lbl_sitio_web_editorial1 = new javax.swing.JLabel();
+        lbl_observaciones_editorial1 = new javax.swing.JLabel();
+        scp_txt_obser_editorial1 = new javax.swing.JScrollPane();
+        txt_observaciones_ejemplar = new javax.swing.JTextArea();
+        lbl_pais_editorial1 = new javax.swing.JLabel();
+        cmb_ubicacion_ejemplar = new javax.swing.JComboBox<>();
+        lbl_correo_editorial1 = new javax.swing.JLabel();
+        lbl_telefono_editorial1 = new javax.swing.JLabel();
+        cmb_documentos_ejemplar = new javax.swing.JComboBox<>();
+        cmb_estado_ejemplar = new javax.swing.JComboBox<>();
+        txt_fecha_adqui_ejemplar = new javax.swing.JTextField();
+        pnl_acciones_ejemplar = new javax.swing.JPanel();
+        btn_agregar_ejemplar = new javax.swing.JButton();
+        btn_editar_ejemplar = new javax.swing.JButton();
+        btn_eliminar_ejemplar = new javax.swing.JButton();
+        btn_limpiar_ejemplar = new javax.swing.JButton();
+        pnl_buscar_ejemplar = new javax.swing.JPanel();
+        txt_buscar_ejemplar = new javax.swing.JTextField();
+        btn_buscar_ejemplar = new javax.swing.JButton();
+        scp_tbl_ejemplares = new javax.swing.JScrollPane();
+        tbl_ejemplares = new javax.swing.JTable();
         pnl_menu_auditoria = new javax.swing.JPanel();
         scp_auditoria = new javax.swing.JScrollPane();
         tbl_auditoria = new javax.swing.JTable();
@@ -803,6 +884,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             tbl_editoriales.getColumnModel().getColumn(6).setMinWidth(100);
             tbl_editoriales.getColumnModel().getColumn(6).setPreferredWidth(100);
             tbl_editoriales.getColumnModel().getColumn(6).setMaxWidth(100);
+            tbl_editoriales.getColumnModel().getColumn(6).setHeaderValue("Teléfono");
             tbl_editoriales.getColumnModel().getColumn(8).setMinWidth(75);
             tbl_editoriales.getColumnModel().getColumn(8).setPreferredWidth(75);
             tbl_editoriales.getColumnModel().getColumn(8).setMaxWidth(75);
@@ -1436,6 +1518,256 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         );
 
         tabConfig.addTab("Estado de prestamo", pnl_menu_estado_prestamo);
+
+        pnl_datos_ejemplar.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
+
+        lbl_nombre_editorial1.setText("Documento:");
+
+        lbl_sitio_web_editorial1.setText("Código barra:");
+
+        lbl_observaciones_editorial1.setText("Observaciones:");
+
+        txt_observaciones_ejemplar.setColumns(20);
+        txt_observaciones_ejemplar.setRows(5);
+        scp_txt_obser_editorial1.setViewportView(txt_observaciones_ejemplar);
+
+        lbl_pais_editorial1.setText("Ubicación:");
+
+        cmb_ubicacion_ejemplar.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmb_ubicacion_ejemplarItemStateChanged(evt);
+            }
+        });
+
+        lbl_correo_editorial1.setText("Estado:");
+
+        lbl_telefono_editorial1.setText("Fecha adquisición:");
+
+        javax.swing.GroupLayout pnl_datos_ejemplarLayout = new javax.swing.GroupLayout(pnl_datos_ejemplar);
+        pnl_datos_ejemplar.setLayout(pnl_datos_ejemplarLayout);
+        pnl_datos_ejemplarLayout.setHorizontalGroup(
+            pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_correo_editorial1)
+                    .addComponent(lbl_pais_editorial1)
+                    .addComponent(lbl_nombre_editorial1)
+                    .addComponent(lbl_sitio_web_editorial1))
+                .addGap(10, 10, 10)
+                .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                        .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                                .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_cod_barra_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                    .addComponent(cmb_documentos_ejemplar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbl_observaciones_editorial1))
+                            .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                                .addComponent(cmb_ubicacion_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lbl_telefono_editorial1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scp_txt_obser_editorial1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(txt_fecha_adqui_ejemplar))
+                        .addGap(34, 34, 34))
+                    .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                        .addComponent(cmb_estado_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_datos_ejemplarLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txt_id_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        pnl_datos_ejemplarLayout.setVerticalGroup(
+            pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_nombre_editorial1)
+                            .addComponent(lbl_observaciones_editorial1)
+                            .addComponent(cmb_documentos_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_cod_barra_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbl_sitio_web_editorial1)))
+                    .addGroup(pnl_datos_ejemplarLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txt_id_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scp_txt_obser_editorial1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_pais_editorial1)
+                    .addComponent(cmb_ubicacion_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_telefono_editorial1)
+                    .addComponent(txt_fecha_adqui_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnl_datos_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_correo_editorial1)
+                    .addComponent(cmb_estado_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnl_acciones_ejemplar.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
+
+        btn_agregar_ejemplar.setText("Agregar");
+        btn_agregar_ejemplar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_agregar_ejemplarMouseClicked(evt);
+            }
+        });
+        btn_agregar_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_agregar_ejemplarActionPerformed(evt);
+            }
+        });
+
+        btn_editar_ejemplar.setText("Editar");
+        btn_editar_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editar_ejemplarActionPerformed(evt);
+            }
+        });
+
+        btn_eliminar_ejemplar.setText("Eliminar");
+        btn_eliminar_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_ejemplarActionPerformed(evt);
+            }
+        });
+
+        btn_limpiar_ejemplar.setText("Limpiar");
+        btn_limpiar_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_ejemplarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_acciones_ejemplarLayout = new javax.swing.GroupLayout(pnl_acciones_ejemplar);
+        pnl_acciones_ejemplar.setLayout(pnl_acciones_ejemplarLayout);
+        pnl_acciones_ejemplarLayout.setHorizontalGroup(
+            pnl_acciones_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_ejemplarLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(pnl_acciones_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_limpiar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_editar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_agregar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+        pnl_acciones_ejemplarLayout.setVerticalGroup(
+            pnl_acciones_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_acciones_ejemplarLayout.createSequentialGroup()
+                .addComponent(btn_agregar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_editar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_eliminar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_limpiar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnl_buscar_ejemplar.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar"));
+
+        btn_buscar_ejemplar.setText("Buscar");
+        btn_buscar_ejemplar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_buscar_ejemplarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnl_buscar_ejemplarLayout = new javax.swing.GroupLayout(pnl_buscar_ejemplar);
+        pnl_buscar_ejemplar.setLayout(pnl_buscar_ejemplarLayout);
+        pnl_buscar_ejemplarLayout.setHorizontalGroup(
+            pnl_buscar_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_buscar_ejemplarLayout.createSequentialGroup()
+                .addComponent(txt_buscar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_buscar_ejemplar)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pnl_buscar_ejemplarLayout.setVerticalGroup(
+            pnl_buscar_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txt_buscar_ejemplar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btn_buscar_ejemplar, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        tbl_ejemplares.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Documento", "Código barra", "Ubicación", "Estado ejemplar", "Fecha adquisición", "Observaciones", "Habilitado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_ejemplares.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_ejemplaresMouseClicked(evt);
+            }
+        });
+        scp_tbl_ejemplares.setViewportView(tbl_ejemplares);
+        if (tbl_ejemplares.getColumnModel().getColumnCount() > 0) {
+            tbl_ejemplares.getColumnModel().getColumn(0).setMinWidth(50);
+            tbl_ejemplares.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tbl_ejemplares.getColumnModel().getColumn(0).setMaxWidth(50);
+            tbl_ejemplares.getColumnModel().getColumn(7).setMinWidth(75);
+            tbl_ejemplares.getColumnModel().getColumn(7).setPreferredWidth(75);
+            tbl_ejemplares.getColumnModel().getColumn(7).setMaxWidth(75);
+        }
+
+        javax.swing.GroupLayout pnl_menu_ejemplarLayout = new javax.swing.GroupLayout(pnl_menu_ejemplar);
+        pnl_menu_ejemplar.setLayout(pnl_menu_ejemplarLayout);
+        pnl_menu_ejemplarLayout.setHorizontalGroup(
+            pnl_menu_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_menu_ejemplarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnl_menu_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scp_tbl_ejemplares)
+                    .addComponent(pnl_buscar_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnl_menu_ejemplarLayout.createSequentialGroup()
+                        .addComponent(pnl_datos_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(pnl_acciones_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        pnl_menu_ejemplarLayout.setVerticalGroup(
+            pnl_menu_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_menu_ejemplarLayout.createSequentialGroup()
+                .addGroup(pnl_menu_ejemplarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnl_acciones_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnl_datos_ejemplar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnl_buscar_ejemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scp_tbl_ejemplares, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        tabConfig.addTab("Ejemplares", pnl_menu_ejemplar);
 
         tbl_auditoria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2078,6 +2410,76 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_descripcion_est_prestamo.setText(Validaciones.safeGetValue(modelo, index, 2)); // posible campo vacío
     }//GEN-LAST:event_tbl_estado_prestamoMouseClicked
 
+    private void cmb_ubicacion_ejemplarItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_ubicacion_ejemplarItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_ubicacion_ejemplarItemStateChanged
+
+    private void btn_agregar_ejemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_agregar_ejemplarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_agregar_ejemplarMouseClicked
+
+    private void btn_agregar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_ejemplarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_agregar_ejemplarActionPerformed
+
+    private void btn_editar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_ejemplarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_editar_ejemplarActionPerformed
+
+    private void btn_eliminar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_ejemplarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_eliminar_ejemplarActionPerformed
+
+    private void btn_limpiar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_ejemplarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_limpiar_ejemplarActionPerformed
+
+    private void btn_buscar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_ejemplarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_buscar_ejemplarActionPerformed
+
+    private void tbl_ejemplaresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_ejemplaresMouseClicked
+        limpiarEjemplar();
+        int index = tbl_ejemplares.getSelectedRow();
+        TableModel modelo = tbl_ejemplares.getModel();
+        txt_id_ejemplar.setText(modelo.getValueAt(index, 0).toString());
+        
+        String titDoc = modelo.getValueAt(index, 1).toString();
+        for (int i = 0; i < cmb_documentos_ejemplar.getItemCount(); i++) {
+            Documento d = (Documento) cmb_documentos_ejemplar.getItemAt(i);
+            if (d.getTitulo().equalsIgnoreCase(titDoc)) {
+                cmb_documentos_ejemplar.setSelectedIndex(i);
+                break;
+            }
+        }
+        txt_cod_barra_ejemplar.setText(modelo.getValueAt(index, 2).toString());
+        
+        String infUbi = modelo.getValueAt(index, 3).toString();
+        for (int i = 0; i < cmb_ubicacion_ejemplar.getItemCount(); i++) {
+            Ubicacion u = (Ubicacion) cmb_ubicacion_ejemplar.getItemAt(i);
+            if (u.toString().equalsIgnoreCase(infUbi)) {
+                cmb_ubicacion_ejemplar.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        String estEjem = modelo.getValueAt(index, 4).toString();
+        for (int i = 0; i < cmb_estado_ejemplar.getItemCount(); i++) {
+            EstadoEjemplar ee = (EstadoEjemplar) cmb_estado_ejemplar.getItemAt(i);
+            if (ee.toString().equalsIgnoreCase(estEjem)) {
+                cmb_estado_ejemplar.setSelectedIndex(i);
+                break;
+            }
+        }
+       
+        DatePicker dp = new DatePicker();
+        JDatePickerImpl datePicker = dp.getComponent();
+        DatePickerUtils.setDateFromString(datePicker, modelo.getValueAt(index, 5).toString());
+        
+        txt_observaciones_ejemplar.setText(Validaciones.safeGetValue(modelo, index, 6)); // posible campo vacío
+
+    }//GEN-LAST:event_tbl_ejemplaresMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -2116,60 +2518,77 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_agregar_config;
     private javax.swing.JButton btn_agregar_editorial;
+    private javax.swing.JButton btn_agregar_ejemplar;
     private javax.swing.JButton btn_agregar_est_ejemplar;
     private javax.swing.JButton btn_agregar_est_prestamo;
     private javax.swing.JButton btn_agregar_tip_doc;
     private javax.swing.JButton btn_buscar_editorial;
+    private javax.swing.JButton btn_buscar_ejemplar;
     private javax.swing.JButton btn_buscar_est_ejemplar;
     private javax.swing.JButton btn_buscar_est_prestamo;
     private javax.swing.JButton btn_buscar_tip_doc;
     private javax.swing.JButton btn_editar_config;
     private javax.swing.JButton btn_editar_editorial;
+    private javax.swing.JButton btn_editar_ejemplar;
     private javax.swing.JButton btn_editar_est_ejemplar;
     private javax.swing.JButton btn_editar_est_prestamo;
     private javax.swing.JButton btn_editar_tip_doc;
     private javax.swing.JButton btn_eliminar_config;
     private javax.swing.JButton btn_eliminar_editorial;
+    private javax.swing.JButton btn_eliminar_ejemplar;
     private javax.swing.JButton btn_eliminar_est_ejemplar;
     private javax.swing.JButton btn_eliminar_est_prestamo;
     private javax.swing.JButton btn_eliminar_tip_doc;
     private javax.swing.JButton btn_limpiar_config;
     private javax.swing.JButton btn_limpiar_editorial;
+    private javax.swing.JButton btn_limpiar_ejemplar;
     private javax.swing.JButton btn_limpiar_est_ejemplar;
     private javax.swing.JButton btn_limpiar_est_prestamo;
     private javax.swing.JButton btn_limpiar_tip_doc;
     private javax.swing.JComboBox<Ciudad> cmb_ciudad_editorial;
+    private javax.swing.JComboBox<Documento> cmb_documentos_ejemplar;
+    private javax.swing.JComboBox<EstadoEjemplar> cmb_estado_ejemplar;
     private javax.swing.JComboBox<Pais> cmb_pais_editorial;
+    private javax.swing.JComboBox<Ubicacion> cmb_ubicacion_ejemplar;
     private javax.swing.JLabel lbl_btn_volver;
     private javax.swing.JLabel lbl_ciudad_editorial;
     private javax.swing.JLabel lbl_correo_editorial;
+    private javax.swing.JLabel lbl_correo_editorial1;
     private javax.swing.JLabel lbl_descripcion_config;
     private javax.swing.JLabel lbl_descripcion_est_ejemplar;
     private javax.swing.JLabel lbl_descripcion_est_prestamo;
     private javax.swing.JLabel lbl_descripcion_tip_doc;
     private javax.swing.JLabel lbl_nombre_editorial;
+    private javax.swing.JLabel lbl_nombre_editorial1;
     private javax.swing.JLabel lbl_nombre_est_ejemplar;
     private javax.swing.JLabel lbl_nombre_est_prestamo;
     private javax.swing.JLabel lbl_nombre_tip_doc;
     private javax.swing.JLabel lbl_observaciones_editorial;
+    private javax.swing.JLabel lbl_observaciones_editorial1;
     private javax.swing.JLabel lbl_pais_editorial;
+    private javax.swing.JLabel lbl_pais_editorial1;
     private javax.swing.JLabel lbl_parametro_config;
     private javax.swing.JLabel lbl_sitio_web_editorial;
+    private javax.swing.JLabel lbl_sitio_web_editorial1;
     private javax.swing.JLabel lbl_telefono_editorial;
+    private javax.swing.JLabel lbl_telefono_editorial1;
     private javax.swing.JLabel lbl_title_configuracion;
     private javax.swing.JLabel lbl_valor_config;
     private javax.swing.JPanel pnl_acciones_config;
     private javax.swing.JPanel pnl_acciones_editorial;
+    private javax.swing.JPanel pnl_acciones_ejemplar;
     private javax.swing.JPanel pnl_acciones_est_ejemplar;
     private javax.swing.JPanel pnl_acciones_est_prestamo;
     private javax.swing.JPanel pnl_acciones_tip_doc;
     private javax.swing.JPanel pnl_buscar_editorial;
+    private javax.swing.JPanel pnl_buscar_ejemplar;
     private javax.swing.JPanel pnl_buscar_est_ejemplar;
     private javax.swing.JPanel pnl_buscar_est_prestamo;
     private javax.swing.JPanel pnl_buscar_tip_doc;
     private javax.swing.JPanel pnl_config_volver;
     private javax.swing.JPanel pnl_datos_config;
     private javax.swing.JPanel pnl_datos_editorial;
+    private javax.swing.JPanel pnl_datos_ejemplar;
     private javax.swing.JPanel pnl_datos_est_ejemplar;
     private javax.swing.JPanel pnl_datos_est_prestamo;
     private javax.swing.JPanel pnl_datos_tip_doc;
@@ -2177,34 +2596,42 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private javax.swing.JPanel pnl_menu_auditoria;
     private javax.swing.JPanel pnl_menu_config;
     private javax.swing.JPanel pnl_menu_editorial;
+    private javax.swing.JPanel pnl_menu_ejemplar;
     private javax.swing.JPanel pnl_menu_estado_ejemplar;
     private javax.swing.JPanel pnl_menu_estado_prestamo;
     private javax.swing.JPanel pnl_menu_tipo_documentos;
     private javax.swing.JScrollPane scp_auditoria;
     private javax.swing.JScrollPane scp_tbl_config;
     private javax.swing.JScrollPane scp_tbl_editoriales;
+    private javax.swing.JScrollPane scp_tbl_ejemplares;
     private javax.swing.JScrollPane scp_tbl_est_ejemplar;
     private javax.swing.JScrollPane scp_tbl_est_prestamo;
     private javax.swing.JScrollPane scp_tbl_tip_doc;
     private javax.swing.JScrollPane scp_txt_obser_editorial;
+    private javax.swing.JScrollPane scp_txt_obser_editorial1;
     private javax.swing.JTabbedPane tabConfig;
     private javax.swing.JTable tbl_auditoria;
     private javax.swing.JTable tbl_configuracion;
     private javax.swing.JTable tbl_editoriales;
+    private javax.swing.JTable tbl_ejemplares;
     private javax.swing.JTable tbl_estado_ejemplar;
     private javax.swing.JTable tbl_estado_prestamo;
     private javax.swing.JTable tbl_tipo_documento;
     private javax.swing.JTextField txt_buscar_editorial;
+    private javax.swing.JTextField txt_buscar_ejemplar;
     private javax.swing.JTextField txt_buscar_est_ejemplar;
     private javax.swing.JTextField txt_buscar_est_prestamo;
     private javax.swing.JTextField txt_buscar_tip_doc;
+    private javax.swing.JTextField txt_cod_barra_ejemplar;
     private javax.swing.JTextField txt_correo_editorial;
     private javax.swing.JTextField txt_descripcion_config;
     private javax.swing.JTextField txt_descripcion_est_ejemplar;
     private javax.swing.JTextField txt_descripcion_est_prestamo;
     private javax.swing.JTextField txt_descripcion_tip_doc;
+    private javax.swing.JTextField txt_fecha_adqui_ejemplar;
     private javax.swing.JTextField txt_id_config;
     private javax.swing.JTextField txt_id_editorial;
+    private javax.swing.JTextField txt_id_ejemplar;
     private javax.swing.JTextField txt_id_est_ejemplar;
     private javax.swing.JTextField txt_id_est_prestamo;
     private javax.swing.JTextField txt_id_tip_doc;
@@ -2213,6 +2640,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     private javax.swing.JTextField txt_nombre_est_prestamo;
     private javax.swing.JTextField txt_nombre_tip_doc;
     private javax.swing.JTextArea txt_observaciones_editorial;
+    private javax.swing.JTextArea txt_observaciones_ejemplar;
     private javax.swing.JTextField txt_parametro_config;
     private javax.swing.JTextField txt_sitio_web_editorial;
     private javax.swing.JTextField txt_telefono_editorial;

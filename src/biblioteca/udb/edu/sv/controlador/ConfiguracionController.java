@@ -59,5 +59,14 @@ public class ConfiguracionController {
             return null;
         }
     }
+    
+    public Integer obtenerMaxDias(){
+        try {
+            return configuracionDAO.obternerMaxDiasPrestamo();
+        } catch (Exception e) {
+            logger.error("Error al parametro configuraciones: " + e.getMessage());
+            return null;
+        }
+    }
 
 }

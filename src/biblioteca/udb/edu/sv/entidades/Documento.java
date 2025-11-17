@@ -15,6 +15,13 @@ public class Documento {
     private String observaciones;
     private String codigo;
 
+    public Documento() {
+    }
+
+    public Documento(String titulo) {
+        this.titulo = titulo;
+    }
+
     // Getters y setters
     public int getDocumentoID() { return documentoID; }
     public void setDocumentoID(int id) { this.documentoID = id; }
@@ -54,4 +61,9 @@ public class Documento {
     
     public String getCodigo() { return codigo; }
     public void setCodigo(String c) { this.codigo = c; }
+    
+    @Override
+    public String toString() {
+        return titulo;
+    }
 }

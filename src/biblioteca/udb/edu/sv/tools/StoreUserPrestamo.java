@@ -9,30 +9,24 @@ package biblioteca.udb.edu.sv.tools;
  *
  * @author Fernando Flamenco
  */
-public class SesionUsuario {
-    private static SesionUsuario instancia;
+public class StoreUserPrestamo {
+    private static StoreUserPrestamo instancia;
     private int idUsuario;
     private String nombre;
     private String correo;
-    private String rol;
-
-    private SesionUsuario() {}
-
-    public static SesionUsuario getInstancia() {
+    
+    public static StoreUserPrestamo getInstancia() {
         if (instancia == null) {
-            instancia = new SesionUsuario();
+            instancia = new StoreUserPrestamo();
         }
         return instancia;
     }
 
-    public void iniciarSesion(int idUsuario, String nombre, String correo, String rol) {
+    public void DatosPrestamosSesion(int idUsuario, String nombre, String correo) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.correo = correo;
-        this.rol = rol;
     }
-
-    public String getRol() { return rol; }
 
     public int getIdUsuario() { return idUsuario; }
 
@@ -40,5 +34,5 @@ public class SesionUsuario {
     
     public String getCorreo() { return correo; }
 
-    public void cerrarSesion() { instancia = null; }
+    public void limpiarInstancia() { instancia = null; }
 }

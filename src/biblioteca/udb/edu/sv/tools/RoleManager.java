@@ -36,7 +36,7 @@ public class RoleManager {
         profesor.put("GESTION_EJEMPLARES", crearPermisos(true, true, false, true));
         profesor.put("GESTION_UBICACIONES", crearPermisos(false, false, false, false));
         profesor.put("GESTION_PRESTAMOS", crearPermisos(true, true, false, true));
-        profesor.put("GESTION_DEVOLUCIONES", crearPermisos(true, true, false, true));
+        profesor.put("GESTION_DEVOLUCIONES", crearPermisos(false, false, false, true));
         profesor.put("GESTION_MORAS", crearPermisos(false, false, false, true));
         profesor.put("GESTION_EDITORIALES", crearPermisos(false, false, false, false));
         profesor.put("CONFIGURACION_SISTEMA", crearPermisos(false, false, false, false));
@@ -51,7 +51,7 @@ public class RoleManager {
         alumno.put("GESTION_EJEMPLARES", crearPermisos(false, false, false, true));
         alumno.put("GESTION_UBICACIONES", crearPermisos(false, false, false, false));
         alumno.put("GESTION_PRESTAMOS", crearPermisos(true, false, false, true));
-        alumno.put("GESTION_DEVOLUCIONES", crearPermisos(true, false, false, true));
+        alumno.put("GESTION_DEVOLUCIONES", crearPermisos(false, false, false, true));
         alumno.put("GESTION_MORAS", crearPermisos(false, false, false, true));
         alumno.put("GESTION_EDITORIALES", crearPermisos(false, false, false, false));
         alumno.put("CONFIGURACION_SISTEMA", crearPermisos(false, false, false, false));

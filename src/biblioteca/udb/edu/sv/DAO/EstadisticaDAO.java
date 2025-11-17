@@ -23,8 +23,8 @@ public class EstadisticaDAO {
         String sqlDocumentos = "SELECT COUNT(*) FROM documentos WHERE habilitado = TRUE";
         String sqlEjemplares = "SELECT COUNT(*) FROM ejemplares WHERE habilitado = TRUE";
         String sqlPrestamos = esAdmin
-            ? "SELECT COUNT(*) FROM prestamos WHERE habilitado = TRUE AND estado_prestamo_id IN (SELECT estado_prestamo_id FROM estados_prestamo WHERE nombre_estado = 'Activo')"
-            : "SELECT COUNT(*) FROM prestamos WHERE habilitado = TRUE AND usuario_id = ? AND estado_prestamo_id IN (SELECT estado_prestamo_id FROM estados_prestamo WHERE nombre_estado = 'Activo')";
+            ? "SELECT COUNT(*) FROM prestamos WHERE habilitado = TRUE AND estado_prestamo_id IN (SELECT estado_prestamo_id FROM estados_prestamo WHERE nombre_estado = 'En curso')"
+            : "SELECT COUNT(*) FROM prestamos WHERE habilitado = TRUE AND usuario_id = ? AND estado_prestamo_id IN (SELECT estado_prestamo_id FROM estados_prestamo WHERE nombre_estado = 'En curso')";
         String sqlMoras = esAdmin
             ? "SELECT COUNT(*) FROM moras WHERE habilitado = TRUE AND pagado = FALSE"
             : "SELECT COUNT(*) FROM moras WHERE habilitado = TRUE AND pagado = FALSE AND usuario_id = ?";

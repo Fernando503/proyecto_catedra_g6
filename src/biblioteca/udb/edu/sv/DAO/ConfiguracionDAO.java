@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 public class ConfiguracionDAO {
     private static final Logger logger = LogManager.getLogger(ConfiguracionDAO.class);
     
+      private static final Integer MAX_DIAS_PRESTAMO_DEFAULT = new Integer(3);
+    
     public boolean insertarConfiguracion(Configuracion config) {
         String sql = "INSERT INTO configuraciones_sistema (nombre_parametro, valor_parametro, descripcion, habilitado) " +
                      "VALUES (?, ?, ?, ?)";
@@ -108,6 +110,26 @@ public class ConfiguracionDAO {
         }
 
         return lista;
+    }
+    
+    public Integer obternerMaxDiasPrestamo(){
+        String sql = "SELECT valor_parametro FROM configuraciones_sistema " +
+                     "WHERE nombre_parametro = 'MaxDiasPrestamo' AND habilitado = TRUE";
+
+       try (Connection conn = Conexion.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                String valor = rs.getString("valor_parametro");
+                return new Integer(valor);
+            } else {
+                return MAX_DIAS_PRESTAMO_DEFAULT;
+            }
+        } catch (SQLException e) {
+           logger.error("Error al obtener parametro configuraciones: " + e.getMessage());
+           return MAX_DIAS_PRESTAMO_DEFAULT;
+        }
     }
 
 
