@@ -5,40 +5,60 @@
  */
 package biblioteca.udb.edu.sv.vistas;
 
-import biblioteca.udb.edu.sv.tools.RoleManager;
+import biblioteca.udb.edu.sv.controlador.EstadisticaController;
+import biblioteca.udb.edu.sv.controlador.MoraController;
+import biblioteca.udb.edu.sv.controlador.PrestamoController;
+import biblioteca.udb.edu.sv.entidades.Estadistica;
+import biblioteca.udb.edu.sv.tools.*;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Fernando Flamenco
  */
 public class DashboardFrm extends javax.swing.JFrame {
+    
+    private final LoginFrm login;
+    private final SesionUsuario sesion = SesionUsuario.getInstancia();
+    private final EstadisticaController estadisticaController = new EstadisticaController();
+    private final PrestamoController prestamoControler = new PrestamoController();
+    private final MoraController moraController = new MoraController();
+    private final Estadistica estadistica;
 
-    UsuarioFrm ventanaUsuarios = new UsuarioFrm();
-    GestoresFrm ventanaGestores = new GestoresFrm();
 
     /**
      * Creates new form DashboardFrm
      */
-    public DashboardFrm() {
+    public DashboardFrm(LoginFrm login) {
+        this.login = login;
         initComponents();
+        
+        if(sesion.getRol().equals("Administrador")){
+            estadistica = estadisticaController.obtenerEstadistica(sesion.getIdUsuario(), true);
+            lbl_documento_counter.setText(String.valueOf(estadistica.getTotalDocumentos()));
+            lbl_ejemplares_counter.setText(String.valueOf(estadistica.getTotalEjemplares()));
+            lbl_prestamos_counter.setText(String.valueOf(estadistica.getPrestamosActivos()));
+            lbl_mora_counter.setText(String.valueOf(estadistica.getMorasPendientes()));
+        } else {
+            estadistica = estadisticaController.obtenerEstadistica(sesion.getIdUsuario(), false);
+            lbl_documento_counter.setText(String.valueOf(estadistica.getTotalDocumentos()));
+            lbl_ejemplares_counter.setText(String.valueOf(estadistica.getTotalEjemplares()));
+            lbl_prestamos_counter.setText(String.valueOf(estadistica.getPrestamosActivos()));
+            lbl_mora_counter.setText(String.valueOf(estadistica.getMorasPendientes()));
+        }
+        // PORCESO AUTOMATICO
+        moraController.procesoGestionMora();
     }
     
     public void configurarAccesosPorRol() {
         // Ejemplo con botones
-        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS"));
-        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS"));
-        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-
-
-        /*btnUsuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS"));
-        btnUbicaciones.setVisible(RoleManager.tienePermiso("GESTION_UBICACIONES"));
-        btnMoras.setVisible(RoleManager.tienePermiso("GESTION_MORAS"));
-        btnAuditoria.setVisible(RoleManager.tienePermiso("AUDITORIA"));
-
-        // Ejemplo con menú
-        menuConfiguracion.setEnabled(RoleManager.tienePermiso("CONFIGURACION_SISTEMA"));
-        menuReportes.setEnabled(RoleManager.tienePermiso("REPORTES_GENERALES"));*/
+        pnl_card_gestion_doc.setVisible(RoleManager.tienePermiso("GESTION_DOCUMENTOS","LISTAR"));
+        pnl_card_pres_dev.setVisible(RoleManager.tienePermiso("GESTION_PRESTAMOS","LISTAR"));
+        pnl_card_gestion_usuarios.setVisible(RoleManager.tienePermiso("GESTION_USUARIOS","LISTAR"));
+        pnl_card_config.setVisible(RoleManager.tienePermiso("CONFIGURACION_SISTEMA","LISTAR"));
+        lbl_username_up.setText(sesion.getNombre());
+        
     }
 
     /**
@@ -51,156 +71,223 @@ public class DashboardFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        lbl_username_up = new javax.swing.JLabel();
+        lbl_mediateca_udb = new javax.swing.JLabel();
+        lbl_cerrar_sesion = new javax.swing.JLabel();
         pnl_card_documentos = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lbl_documentos_count = new javax.swing.JLabel();
+        lbl_documento_counter = new javax.swing.JLabel();
+        lbl_ejemplares_count = new javax.swing.JPanel();
+        lbl_title_ejemplares_dash = new javax.swing.JLabel();
+        lbl_ejemplares_counter = new javax.swing.JLabel();
+        pnl_estadistica_prestamo = new javax.swing.JPanel();
+        lbl_prestamos_count = new javax.swing.JLabel();
+        lbl_prestamos_counter = new javax.swing.JLabel();
+        lbl_pres_curso = new javax.swing.JLabel();
+        pnl_estaditica_mora = new javax.swing.JPanel();
+        lbl_moras_count = new javax.swing.JLabel();
+        lbl_mora_counter = new javax.swing.JLabel();
+        lbl_mora_pendiente = new javax.swing.JLabel();
         pnl_card_gestion_doc = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
+        lbl_gestion_documentos = new javax.swing.JLabel();
         pnl_card_pres_dev = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
+        lbl_prestamos_devoluciones = new javax.swing.JLabel();
         pnl_card_gestion_usuarios = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
+        lbl_gestion_usuario = new javax.swing.JLabel();
         pnl_card_config = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
+        lbl_configuracion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(14, 20, 56));
+        jPanel1.setPreferredSize(new java.awt.Dimension(771, 90));
+
+        lbl_username_up.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_username_up.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_username_up.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbl_username_up.setText("Usuario");
+
+        lbl_mediateca_udb.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_mediateca_udb.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_mediateca_udb.setText("Mediateca UDB");
+
+        lbl_cerrar_sesion.setFont(new java.awt.Font("Raleway", 1, 12)); // NOI18N
+        lbl_cerrar_sesion.setForeground(new java.awt.Color(255, 215, 0));
+        lbl_cerrar_sesion.setText("Cerrar Sesión");
+        lbl_cerrar_sesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbl_cerrar_sesionMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(lbl_mediateca_udb, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_username_up, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_cerrar_sesion, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(28, 28, 28))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 59, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .addComponent(lbl_mediateca_udb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(34, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbl_username_up)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_cerrar_sesion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pnl_card_documentos.setBackground(new java.awt.Color(105, 95, 254));
 
-        jLabel1.setText("Documentos");
+        lbl_documentos_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_documentos_count.setText("Documentos");
 
-        jLabel5.setText("120");
+        lbl_documento_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
+        lbl_documento_counter.setText("120");
 
         javax.swing.GroupLayout pnl_card_documentosLayout = new javax.swing.GroupLayout(pnl_card_documentos);
         pnl_card_documentos.setLayout(pnl_card_documentosLayout);
         pnl_card_documentosLayout.setHorizontalGroup(
             pnl_card_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_documentosLayout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(79, 79, 79))
             .addGroup(pnl_card_documentosLayout.createSequentialGroup()
-                .addGap(85, 85, 85)
-                .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE)
+                .addGroup(pnl_card_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_documentosLayout.createSequentialGroup()
+                        .addComponent(lbl_documentos_count)
+                        .addGap(43, 43, 43))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_documentosLayout.createSequentialGroup()
+                        .addComponent(lbl_documento_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80))))
         );
         pnl_card_documentosLayout.setVerticalGroup(
             pnl_card_documentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_documentosLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addComponent(lbl_documentos_count)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(lbl_documento_counter)
+                .addContainerGap())
         );
 
-        jPanel3.setBackground(new java.awt.Color(7, 180, 238));
+        lbl_ejemplares_count.setBackground(new java.awt.Color(7, 180, 238));
 
-        jLabel2.setText("Ejemplares");
+        lbl_title_ejemplares_dash.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_title_ejemplares_dash.setText("Ejemplares");
 
-        jLabel6.setText("120");
+        lbl_ejemplares_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
+        lbl_ejemplares_counter.setText("120");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addComponent(jLabel6)))
-                .addContainerGap(75, Short.MAX_VALUE))
+        javax.swing.GroupLayout lbl_ejemplares_countLayout = new javax.swing.GroupLayout(lbl_ejemplares_count);
+        lbl_ejemplares_count.setLayout(lbl_ejemplares_countLayout);
+        lbl_ejemplares_countLayout.setHorizontalGroup(
+            lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(lbl_ejemplares_countLayout.createSequentialGroup()
+                .addContainerGap(53, Short.MAX_VALUE)
+                .addGroup(lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lbl_ejemplares_countLayout.createSequentialGroup()
+                        .addComponent(lbl_title_ejemplares_dash)
+                        .addGap(49, 49, 49))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, lbl_ejemplares_countLayout.createSequentialGroup()
+                        .addComponent(lbl_ejemplares_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(81, 81, 81))))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        lbl_ejemplares_countLayout.setVerticalGroup(
+            lbl_ejemplares_countLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(lbl_ejemplares_countLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addComponent(lbl_title_ejemplares_dash)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(lbl_ejemplares_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        jPanel4.setBackground(new java.awt.Color(81, 129, 255));
+        pnl_estadistica_prestamo.setBackground(new java.awt.Color(81, 129, 255));
+        pnl_estadistica_prestamo.setPreferredSize(new java.awt.Dimension(200, 100));
 
-        jLabel3.setText("Prestamos");
+        lbl_prestamos_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_prestamos_count.setText("Prestamos");
 
-        jLabel7.setText("120");
+        lbl_prestamos_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
+        lbl_prestamos_counter.setText("120");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(94, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(56, 56, 56))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(73, 73, 73))))
+        lbl_pres_curso.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lbl_pres_curso.setForeground(new java.awt.Color(51, 51, 51));
+        lbl_pres_curso.setText("En curso");
+
+        javax.swing.GroupLayout pnl_estadistica_prestamoLayout = new javax.swing.GroupLayout(pnl_estadistica_prestamo);
+        pnl_estadistica_prestamo.setLayout(pnl_estadistica_prestamoLayout);
+        pnl_estadistica_prestamoLayout.setHorizontalGroup(
+            pnl_estadistica_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_estadistica_prestamoLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(lbl_prestamos_count)
+                .addContainerGap(58, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_estadistica_prestamoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnl_estadistica_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_pres_curso)
+                    .addComponent(lbl_prestamos_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(82, 82, 82))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
-
-        jPanel5.setBackground(new java.awt.Color(254, 138, 139));
-
-        jLabel4.setText("Moras");
-
-        jLabel8.setText("120");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(102, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel4))
-                .addGap(69, 69, 69))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        pnl_estadistica_prestamoLayout.setVerticalGroup(
+            pnl_estadistica_prestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_estadistica_prestamoLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addComponent(lbl_prestamos_count, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_pres_curso)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbl_prestamos_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        pnl_estaditica_mora.setBackground(new java.awt.Color(254, 138, 139));
+
+        lbl_moras_count.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_moras_count.setText("Moras");
+
+        lbl_mora_counter.setFont(new java.awt.Font("Raleway", 0, 18)); // NOI18N
+        lbl_mora_counter.setText("120");
+
+        lbl_mora_pendiente.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lbl_mora_pendiente.setForeground(new java.awt.Color(51, 51, 51));
+        lbl_mora_pendiente.setText("Pendientes");
+
+        javax.swing.GroupLayout pnl_estaditica_moraLayout = new javax.swing.GroupLayout(pnl_estaditica_mora);
+        pnl_estaditica_mora.setLayout(pnl_estaditica_moraLayout);
+        pnl_estaditica_moraLayout.setHorizontalGroup(
+            pnl_estaditica_moraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_estaditica_moraLayout.createSequentialGroup()
+                .addContainerGap(77, Short.MAX_VALUE)
+                .addGroup(pnl_estaditica_moraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_moras_count)
+                    .addGroup(pnl_estaditica_moraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnl_estaditica_moraLayout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(lbl_mora_counter))
+                        .addComponent(lbl_mora_pendiente)))
+                .addGap(70, 70, 70))
+        );
+        pnl_estaditica_moraLayout.setVerticalGroup(
+            pnl_estaditica_moraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_estaditica_moraLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(lbl_moras_count)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_mora_pendiente)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_mora_counter, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pnl_card_gestion_doc.setBackground(new java.awt.Color(47, 48, 51));
@@ -210,8 +297,8 @@ public class DashboardFrm extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel10.setText("Gestión de documentos");
+        lbl_gestion_documentos.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_gestion_documentos.setText("Gestión de documentos");
 
         javax.swing.GroupLayout pnl_card_gestion_docLayout = new javax.swing.GroupLayout(pnl_card_gestion_doc);
         pnl_card_gestion_doc.setLayout(pnl_card_gestion_docLayout);
@@ -219,21 +306,26 @@ public class DashboardFrm extends javax.swing.JFrame {
             pnl_card_gestion_docLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_gestion_docLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addComponent(jLabel10)
+                .addComponent(lbl_gestion_documentos)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         pnl_card_gestion_docLayout.setVerticalGroup(
             pnl_card_gestion_docLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_docLayout.createSequentialGroup()
                 .addContainerGap(39, Short.MAX_VALUE)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbl_gestion_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
 
         pnl_card_pres_dev.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_pres_dev.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_pres_devMouseClicked(evt);
+            }
+        });
 
-        jLabel9.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel9.setText("Préstamos / Devoluciones");
+        lbl_prestamos_devoluciones.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_prestamos_devoluciones.setText("Préstamos / Devoluciones");
 
         javax.swing.GroupLayout pnl_card_pres_devLayout = new javax.swing.GroupLayout(pnl_card_pres_dev);
         pnl_card_pres_dev.setLayout(pnl_card_pres_devLayout);
@@ -241,14 +333,14 @@ public class DashboardFrm extends javax.swing.JFrame {
             pnl_card_pres_devLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_pres_devLayout.createSequentialGroup()
                 .addContainerGap(35, Short.MAX_VALUE)
-                .addComponent(jLabel9)
+                .addComponent(lbl_prestamos_devoluciones)
                 .addGap(33, 33, 33))
         );
         pnl_card_pres_devLayout.setVerticalGroup(
             pnl_card_pres_devLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_pres_devLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbl_prestamos_devoluciones, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
 
@@ -259,53 +351,58 @@ public class DashboardFrm extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel12.setText("Gestión de Usuarios");
+        lbl_gestion_usuario.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_gestion_usuario.setText("Gestión de Usuarios");
 
         javax.swing.GroupLayout pnl_card_gestion_usuariosLayout = new javax.swing.GroupLayout(pnl_card_gestion_usuarios);
         pnl_card_gestion_usuarios.setLayout(pnl_card_gestion_usuariosLayout);
         pnl_card_gestion_usuariosLayout.setHorizontalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jLabel12)
-                .addContainerGap(80, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
+                .addContainerGap(65, Short.MAX_VALUE)
+                .addComponent(lbl_gestion_usuario)
+                .addGap(61, 61, 61))
         );
         pnl_card_gestion_usuariosLayout.setVerticalGroup(
             pnl_card_gestion_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_gestion_usuariosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+            .addGroup(pnl_card_gestion_usuariosLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(lbl_gestion_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pnl_card_config.setBackground(new java.awt.Color(47, 48, 51));
+        pnl_card_config.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnl_card_configMouseClicked(evt);
+            }
+        });
 
-        jLabel11.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel11.setText("Configuración");
+        lbl_configuracion.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_configuracion.setText("Configuración");
 
         javax.swing.GroupLayout pnl_card_configLayout = new javax.swing.GroupLayout(pnl_card_config);
         pnl_card_config.setLayout(pnl_card_configLayout);
         pnl_card_configLayout.setHorizontalGroup(
             pnl_card_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnl_card_configLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel11)
-                .addGap(81, 81, 81))
+            .addGroup(pnl_card_configLayout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addComponent(lbl_configuracion)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnl_card_configLayout.setVerticalGroup(
             pnl_card_configLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_card_configLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(lbl_configuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1119, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(63, 63, 63)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,12 +418,12 @@ public class DashboardFrm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnl_card_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbl_ejemplares_count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(44, 44, 44)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_estadistica_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(91, Short.MAX_VALUE))
+                        .addComponent(pnl_estaditica_mora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,9 +432,9 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pnl_card_documentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl_ejemplares_count, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnl_estadistica_prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnl_estaditica_mora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(104, 104, 104)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnl_card_pres_dev, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -346,7 +443,7 @@ public class DashboardFrm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnl_card_config, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_card_gestion_usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
@@ -358,15 +455,94 @@ public class DashboardFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_pnl_card_gestion_usuariosMouseClicked
 
     private void pnl_card_gestion_docMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_gestion_docMouseClicked
-        abrirGestores();
+        abrirFormularioDocumentos();
     }//GEN-LAST:event_pnl_card_gestion_docMouseClicked
 
+    private void pnl_card_configMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_configMouseClicked
+        redirectConfig();
+    }//GEN-LAST:event_pnl_card_configMouseClicked
+
+    private void pnl_card_pres_devMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl_card_pres_devMouseClicked
+        JTextField txtCorreo = new JTextField();
+        if(!RoleManager.tienePermiso("GESTION_MORAS","AGREGAR")){
+            txtCorreo.setText(sesion.getCorreo());
+            txtCorreo.setEditable(false);
+        }
+        Object[] opciones = {"Préstamo", "Devolución", "Pagar mora"};
+        int seleccion = JOptionPane.showOptionDialog(
+                null,
+                new Object[]{"Ingrese el correo:", txtCorreo},
+                "Gestión de Ejemplares",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]
+        );
+        String correo = txtCorreo.getText();
+
+        if (correo == null || correo.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un correo válido.");
+        } else {
+            switch (seleccion) {
+                case 0:
+                    String resultadoPrestamo = prestamoControler.validarPrestamo(correo);
+                    if (resultadoPrestamo != null) {
+                        JOptionPane.showMessageDialog(null, resultadoPrestamo, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GestionPrestamoFrm presFrm = new GestionPrestamoFrm(DashboardFrm.this);
+                        setVisible(false);
+                        presFrm.setVisible(true);
+                    }
+                    break;
+                case 1:
+                    String resultadoDevolucion = prestamoControler.validarDevolucion(correo);
+                    if (resultadoDevolucion != null) {
+                        JOptionPane.showMessageDialog(null, resultadoDevolucion, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GestionDevolucionFrm devoFrm = new GestionDevolucionFrm(DashboardFrm.this);
+                        setVisible(false);
+                        devoFrm.setVisible(true);
+                    }
+                    break;
+                case 2:
+                    String resultadoMora = prestamoControler.validarMora(correo);
+                    if (resultadoMora != null) {
+                        JOptionPane.showMessageDialog(null, resultadoMora, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GestionMoraFrm moraFrm = new GestionMoraFrm(DashboardFrm.this);
+                        setVisible(false);
+                        moraFrm.setVisible(true);
+                    }
+                    break;
+                default:
+                    System.out.println("No seleccionó ninguna opción");
+            }
+        }
+    }//GEN-LAST:event_pnl_card_pres_devMouseClicked
+
+    private void lbl_cerrar_sesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_cerrar_sesionMouseClicked
+        sesion.cerrarSesion();
+        login.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_lbl_cerrar_sesionMouseClicked
+
     private void abrirFormularioUsuarios() {
-        ventanaUsuarios.setVisible(true);
+       GestionUsuariosFrm userFrm = new GestionUsuariosFrm(DashboardFrm.this);
+       setVisible(false);
+       userFrm.setVisible(true);
     }
     
-    private void abrirGestores() {
-        ventanaGestores.setVisible(true);
+    private void abrirFormularioDocumentos() {
+       GestionDocumentosFrm docsFrm = new GestionDocumentosFrm(DashboardFrm.this);
+       setVisible(false);
+       docsFrm.setVisible(true);
+    }
+    
+    private void redirectConfig(){
+        ConfiguracionFrm config = new ConfiguracionFrm(DashboardFrm.this);
+        setVisible(false);
+        config.setVisible(true);
     }
     
     /**
@@ -398,33 +574,36 @@ public class DashboardFrm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new DashboardFrm().setVisible(true);
-            }
+            public void run() {}
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lbl_cerrar_sesion;
+    private javax.swing.JLabel lbl_configuracion;
+    private javax.swing.JLabel lbl_documento_counter;
+    private javax.swing.JLabel lbl_documentos_count;
+    private javax.swing.JPanel lbl_ejemplares_count;
+    private javax.swing.JLabel lbl_ejemplares_counter;
+    private javax.swing.JLabel lbl_gestion_documentos;
+    private javax.swing.JLabel lbl_gestion_usuario;
+    private javax.swing.JLabel lbl_mediateca_udb;
+    private javax.swing.JLabel lbl_mora_counter;
+    private javax.swing.JLabel lbl_mora_pendiente;
+    private javax.swing.JLabel lbl_moras_count;
+    private javax.swing.JLabel lbl_pres_curso;
+    private javax.swing.JLabel lbl_prestamos_count;
+    private javax.swing.JLabel lbl_prestamos_counter;
+    private javax.swing.JLabel lbl_prestamos_devoluciones;
+    private javax.swing.JLabel lbl_title_ejemplares_dash;
+    private javax.swing.JLabel lbl_username_up;
     private javax.swing.JPanel pnl_card_config;
     private javax.swing.JPanel pnl_card_documentos;
     private javax.swing.JPanel pnl_card_gestion_doc;
     private javax.swing.JPanel pnl_card_gestion_usuarios;
     private javax.swing.JPanel pnl_card_pres_dev;
+    private javax.swing.JPanel pnl_estadistica_prestamo;
+    private javax.swing.JPanel pnl_estaditica_mora;
     // End of variables declaration//GEN-END:variables
 }

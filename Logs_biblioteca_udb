@@ -1,0 +1,74 @@
+2025-11-11 13:02:21 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:13:49 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:13:53 ERROR Conexion:38 - Error de conexión: Access denied for user 'root'@'localhost' (using password: YES)
+2025-11-11 15:13:55 ERROR UsuarioController:24 - Error en iniciarSesion: Cannot invoke "java.sql.Connection.prepareStatement(String)" because "conn" is null
+2025-11-11 15:13:55 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 15:13:55 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 15:14:09 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:14:32 ERROR UsuarioController:67 - Error al editar usuario: For input string: "Administrador"
+2025-11-11 15:15:30 ERROR UsuarioController:67 - Error al editar usuario: For input string: "Administrador"
+2025-11-11 15:15:36 ERROR UsuarioController:67 - Error al editar usuario: For input string: "Administrador"
+2025-11-11 15:15:44 ERROR UsuarioController:67 - Error al editar usuario: For input string: "Administrador"
+2025-11-11 15:17:28 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:17:35 ERROR UsuarioController:67 - Error al editar usuario: For input string: "Administrador"
+2025-11-11 15:17:46 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:17:48 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 15:17:48 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 15:19:39 ERROR UsuarioController:67 - Error al editar usuario: For input string: "Administrador"
+2025-11-11 15:22:32 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:43:47 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 15:47:34 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:05:27 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:05:30 ERROR UsuarioDAO:47 - Error al obtener usuario por credenciales: Column 'rol_id' not found.
+2025-11-11 16:05:30 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 16:05:30 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 16:05:33 ERROR UsuarioDAO:47 - Error al obtener usuario por credenciales: Column 'rol_id' not found.
+2025-11-11 16:05:33 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 16:05:33 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 16:05:37 ERROR UsuarioDAO:47 - Error al obtener usuario por credenciales: Column 'rol_id' not found.
+2025-11-11 16:05:37 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 16:05:37 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 16:06:13 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:06:20 ERROR UsuarioDAO:47 - Error al obtener usuario por credenciales: Unknown column 'u.rol_idu.habilitado' in 'field list'
+2025-11-11 16:06:20 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 16:06:20 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 16:06:31 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:15:13 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:16:28 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:17:14 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:42:32 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:52:34 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 16:52:48 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 18:46:55 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 18:50:20 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 20:27:46 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 20:27:48 ERROR Application:160 - El usuario no fue encontrado en la base de datos
+2025-11-11 20:27:48 ERROR Application:161 - o las credenciales del usuario están incorrectas.
+2025-11-11 21:15:46 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-11 23:11:43 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 02:38:55 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:01:42 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:29:33 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:35:09 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:46:05 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:47:36 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:52:30 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:52:50 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:55:05 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:55:35 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 11:58:00 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:00:25 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:05:55 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:12:20 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:13:23 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:16:20 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:19:41 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:21:44 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:22:25 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:25:19 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:27:05 ERROR CategoriaDAO:156 - Error al eliminar categoría: Cannot delete or update a parent row: a foreign key constraint fails (`pro_catedra_g6`.`documentos`, CONSTRAINT `fk_doc_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`categoria_id`) ON UPDATE CASCADE)
+2025-11-15 12:35:07 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:42:15 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:46:55 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:48:33 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
+2025-11-15 12:49:30 INFO  Application:25 - Iniciando sistema de Mediateca UDB.
