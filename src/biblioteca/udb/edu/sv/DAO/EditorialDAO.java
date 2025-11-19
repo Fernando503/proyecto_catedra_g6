@@ -49,7 +49,7 @@ public class EditorialDAO {
 
     public boolean actualizar(Editorial editorial) {
         String sql = "UPDATE editoriales SET nombre_editorial = ?, pais_id = ?, ciudad_id = ?, sitio_web = ?, contacto_email = ?, contacto_telefono = ?,  observaciones = ? " +
-                     "WHERE editorial_id = ?";
+                     "WHERE editorial_id = ? AND habilitado = TRUE";
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -74,7 +74,7 @@ public class EditorialDAO {
     }
 
     public boolean eliminar(Integer id) {
-        String sql = "UPDATE editoriales SET habilitado = FALSE WHERE editorial_id = ?";
+        String sql = "UPDATE editoriales SET habilitado = FALSE WHERE editorial_id = ? AND habilitado = TRUE";
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

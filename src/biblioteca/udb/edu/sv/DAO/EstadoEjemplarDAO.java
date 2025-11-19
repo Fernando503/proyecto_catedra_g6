@@ -41,7 +41,7 @@ public class EstadoEjemplarDAO {
     }
 
     public boolean actualizar(EstadoEjemplar estado) {
-        String sql = "UPDATE estados_ejemplar SET nombre_estado = ?, descripcion = ?, habilitado = ? WHERE estado_ejemplar_id = ?";
+        String sql = "UPDATE estados_ejemplar SET nombre_estado = ?, descripcion = ?, habilitado = ? WHERE estado_ejemplar_id = ? AND habilitado = TRUE";
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -62,7 +62,7 @@ public class EstadoEjemplarDAO {
     }
 
     public boolean eliminar(Integer id) {
-        String sql = "UPDATE estados_ejemplar SET habilitado = FALSE WHERE estado_ejemplar_id = ?";
+        String sql = "UPDATE estados_ejemplar SET habilitado = FALSE WHERE estado_ejemplar_id = ? AND habilitado = TRUE";
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

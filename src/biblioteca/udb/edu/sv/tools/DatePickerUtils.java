@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -53,6 +54,27 @@ public class DatePickerUtils {
      public static String localDateTimeToString(LocalDateTime localDatetime) {
         if (localDatetime == null) return "";
         return localDatetime.format(dtft);
+    }
+
+    public static LocalDate parseToLocalDate(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            return LocalDate.parse(dateStr, formatter);
+        } catch (DateTimeParseException e) {
+            System.err.println("Formato inválido: " + dateStr);
+            return null;
+        }
+    }
+
+    public static Date utilDateToSqlDate(java.util.Date utilDate) {
+        if (utilDate == null) return null;
+        return new java.sql.Date(utilDate.getTime());
+    }
+
+    
+    public static java.sql.Date localDateToSqlDate(LocalDate localDate) {
+        if (localDate == null) return null;
+        return java.sql.Date.valueOf(localDate);
     }
 
 
