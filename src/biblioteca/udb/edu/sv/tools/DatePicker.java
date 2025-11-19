@@ -5,9 +5,11 @@
  */
 package biblioteca.udb.edu.sv.tools;
 
-import java.sql.Date;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -39,13 +41,13 @@ public class DatePicker {
     public String getFormattedDate() {
         Date date = (Date) datePicker.getModel().getValue();
         if (date != null) {
-            return new SimpleDateFormat("yyyy-MM-dd").format(date);
+            return new SimpleDateFormat("dd/MM/yyyy").format(date);
         }
         return "";
     }
 
     private static class DateLabelFormatter extends AbstractFormatter {
-        private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         @Override
         public Object stringToValue(String text) throws java.text.ParseException {
@@ -65,4 +67,31 @@ public class DatePicker {
         }
 
     }
+    
+    public void setDateFromString(String fecha) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date fechaUtil = sdf.parse(fecha);
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fechaUtil);
+
+            datePicker.getModel().setDate(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            );
+            datePicker.getModel().setSelected(true);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void clearDate() {
+        datePicker.getModel().setValue(null);
+        datePicker.getModel().setSelected(false);
+    }
+
+
 }

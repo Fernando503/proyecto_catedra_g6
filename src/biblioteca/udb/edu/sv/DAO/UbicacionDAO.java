@@ -156,7 +156,7 @@ public class UbicacionDAO {
     public boolean actualizarUbicacion(Ubicacion u) {
         String sql = "UPDATE ubicaciones SET sala = ?, estanteria = ?, nivel = ?, codigo_rack = ?, "
                    + "descripcion = ?, habilitado = ? "
-                   + "WHERE ubicacion_id = ?";
+                   + "WHERE ubicacion_id = ? AND habilitado = TRUE";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -186,7 +186,7 @@ public class UbicacionDAO {
     // ELIMINAR UBICACIÓN
     // ---------------------------------------------------------
     public boolean eliminarUbicacion(int id) {
-        String sql = "UPDATE ubicaciones SET habilitado = 0 WHERE ubicacion_id = ?";
+        String sql = "UPDATE ubicaciones SET habilitado = 0 WHERE ubicacion_id = ? AND habilitado = TRUE";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {

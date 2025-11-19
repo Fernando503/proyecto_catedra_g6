@@ -209,7 +209,7 @@ public class DocumentoDAO {
     
     public boolean actualizarDocumento(Documento d, int idTipo, int idCategoria, int idEditorial) {
         String sql = "UPDATE documentos SET titulo = ?, autor = ?, tipo_documento_id = ?, categoria_id = ?, editorial_id = ?, idioma = ?, formato = ?, anio_publicacion = ?, numero_paginas = ?, observaciones = ?, codigo_clasificacion = ?, habilitado = ? "
-                + "WHERE documento_id = ?";
+                + "WHERE documento_id = ? AND habilitado = TRUE";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -239,7 +239,7 @@ public class DocumentoDAO {
     }
     
     public boolean eliminarDocumento(String nombre, int id) {
-        String sql = "DELETE FROM documentos WHERE documento_id = ?";
+        String sql = "DELETE FROM documentos WHERE documento_id = ? AND habilitado = TRUE";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {

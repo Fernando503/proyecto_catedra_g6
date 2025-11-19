@@ -47,7 +47,7 @@ public class ConfiguracionDAO {
     
     public boolean actualizarConfiguracion(Configuracion config) {
         String sql = "UPDATE configuraciones_sistema SET nombre_parametro = ?, valor_parametro = ?, descripcion = ?, habilitado = ? " +
-                     "WHERE config_id = ?";
+                     "WHERE config_id = ? AND habilitado = TRUE";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -70,7 +70,7 @@ public class ConfiguracionDAO {
     }
 
     public boolean eliminarConfiguracion(int idConfig) {
-        String sql = "UPDATE configuraciones_sistema SET habilitado = false WHERE config_id = ?";
+        String sql = "UPDATE configuraciones_sistema SET habilitado = false WHERE config_id = ? AND habilitado = TRUE";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {

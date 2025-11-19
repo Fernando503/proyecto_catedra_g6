@@ -41,7 +41,7 @@ public class TipoDocumentoDAO {
     }
 
     public boolean actualizar(TipoDocumento tipo) {
-        String sql = "UPDATE tipos_documento SET nombre_tipo = ?, descripcion = ?, habilitado = ? WHERE tipo_documento_id = ?";
+        String sql = "UPDATE tipos_documento SET nombre_tipo = ?, descripcion = ?, habilitado = ? WHERE tipo_documento_id = ? AND habilitado = TRUE";
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -62,7 +62,7 @@ public class TipoDocumentoDAO {
     }
 
     public boolean eliminar(Integer id) {
-        String sql = "UPDATE tipos_documento SET habilitado = FALSE WHERE tipo_documento_id = ?";
+        String sql = "UPDATE tipos_documento SET habilitado = FALSE WHERE tipo_documento_id = ? AND habilitado = TRUE";
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

@@ -36,14 +36,14 @@ public class LoginFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         txt_login_usuario = new javax.swing.JTextField();
-        jbuttonIngresar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        btn_ingresar = new javax.swing.JButton();
+        lbl_login_title = new javax.swing.JLabel();
         txt_login_pass = new javax.swing.JPasswordField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lbl_username_title = new javax.swing.JLabel();
+        lbl_pass_title = new javax.swing.JLabel();
+        spt_login = new javax.swing.JSeparator();
+        lbl_olv_pass = new javax.swing.JLabel();
+        lbl_click_aqui = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,79 +54,84 @@ public class LoginFrm extends javax.swing.JFrame {
             }
         });
 
-        jbuttonIngresar.setText("Ingresar");
-        jbuttonIngresar.addActionListener(new java.awt.event.ActionListener() {
+        btn_ingresar.setText("Ingresar");
+        btn_ingresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbuttonIngresarActionPerformed(evt);
+                btn_ingresarActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Raleway", 1, 36)); // NOI18N
-        jLabel1.setText("Login");
+        lbl_login_title.setFont(new java.awt.Font("Raleway", 1, 36)); // NOI18N
+        lbl_login_title.setText("Login");
 
-        jLabel2.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel2.setText("Usuario");
+        lbl_username_title.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_username_title.setText("Usuario");
 
-        jLabel3.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
-        jLabel3.setText("Contraseña");
+        lbl_pass_title.setFont(new java.awt.Font("Raleway", 1, 18)); // NOI18N
+        lbl_pass_title.setText("Contraseña");
 
-        jLabel4.setFont(new java.awt.Font("Raleway", 0, 10)); // NOI18N
-        jLabel4.setText("Olvidé mi contraseña, haz click");
+        lbl_olv_pass.setFont(new java.awt.Font("Raleway", 0, 10)); // NOI18N
+        lbl_olv_pass.setText("Olvidé mi contraseña, haz click");
 
-        jLabel5.setFont(new java.awt.Font("Raleway", 3, 10)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 153, 51));
-        jLabel5.setText("AQUI");
+        lbl_click_aqui.setFont(new java.awt.Font("Raleway", 3, 10)); // NOI18N
+        lbl_click_aqui.setForeground(new java.awt.Color(255, 153, 51));
+        lbl_click_aqui.setText("AQUI");
+        lbl_click_aqui.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbl_click_aquiMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
+            .addComponent(spt_login)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jLabel4)
+                        .addComponent(lbl_olv_pass)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5))
+                        .addComponent(lbl_click_aqui))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(70, 70, 70)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2)
+                                .addComponent(lbl_pass_title)
+                                .addComponent(lbl_username_title)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(txt_login_pass)
                                     .addComponent(txt_login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
+                                .addComponent(lbl_login_title)
                                 .addGap(88, 88, 88))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(136, 136, 136)
-                        .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btn_ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(62, 62, 62)
-                .addComponent(jLabel1)
+                .addComponent(lbl_login_title)
                 .addGap(41, 41, 41)
-                .addComponent(jLabel2)
+                .addComponent(lbl_username_title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txt_login_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(lbl_pass_title)
                 .addGap(18, 18, 18)
                 .addComponent(txt_login_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jbuttonIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spt_login, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(lbl_olv_pass)
+                    .addComponent(lbl_click_aqui))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -135,7 +140,7 @@ public class LoginFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
  
-    private void jbuttonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonIngresarActionPerformed
+    private void btn_ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ingresarActionPerformed
         String correo = txt_login_usuario.getText(); // tu campo "Usuario" lo usas como correo
         String contraseña = new String(txt_login_pass.getPassword());
 
@@ -174,11 +179,17 @@ public class LoginFrm extends javax.swing.JFrame {
             logger.error("El usuario no fue encontrado en la base de datos o las credenciales del usuario están incorrectas.");
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jbuttonIngresarActionPerformed
+    }//GEN-LAST:event_btn_ingresarActionPerformed
 
     private void txt_login_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_login_usuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_login_usuarioActionPerformed
+
+    private void lbl_click_aquiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_click_aquiMouseClicked
+        CambiarPassFrm changeP = new CambiarPassFrm(LoginFrm.this);
+        setVisible(false);
+        changeP.setVisible(true);
+    }//GEN-LAST:event_lbl_click_aquiMouseClicked
 
     
     /**
@@ -216,13 +227,13 @@ public class LoginFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JButton jbuttonIngresar;
+    private javax.swing.JButton btn_ingresar;
+    private javax.swing.JLabel lbl_click_aqui;
+    private javax.swing.JLabel lbl_login_title;
+    private javax.swing.JLabel lbl_olv_pass;
+    private javax.swing.JLabel lbl_pass_title;
+    private javax.swing.JLabel lbl_username_title;
+    private javax.swing.JSeparator spt_login;
     private javax.swing.JPasswordField txt_login_pass;
     private javax.swing.JTextField txt_login_usuario;
     // End of variables declaration//GEN-END:variables

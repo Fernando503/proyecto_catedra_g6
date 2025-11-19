@@ -13,22 +13,16 @@ import biblioteca.udb.edu.sv.tools.LogManager;
 import biblioteca.udb.edu.sv.tools.Validaciones;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.log4j.Logger;
-import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 
@@ -75,6 +69,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         txt_id_editorial.setVisible(false);
         txt_id_est_ejemplar.setVisible(false);
         txt_id_est_prestamo.setVisible(false);
+        txt_id_ejemplar.setVisible(false);
         
         // INICIALIZACION DE TABLAS
         modeloConfiguracion = (DefaultTableModel) tbl_configuracion.getModel();
@@ -279,7 +274,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
         cmb_ubicacion_ejemplar.setSelectedIndex(0);
         cmb_estado_ejemplar.setSelectedIndex(0);
         txt_observaciones_ejemplar.setText("");
-        
+        datePickerWrapper.clearDate();
     }
     
     /**
@@ -2415,7 +2410,39 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_cmb_ubicacion_ejemplarItemStateChanged
 
     private void btn_agregar_ejemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_agregar_ejemplarMouseClicked
-        // TODO add your handling code here:
+        try {
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_cod_barra_ejemplar}, new JComboBox[]{cmb_documentos_ejemplar, cmb_estado_ejemplar, cmb_ubicacion_ejemplar})) {
+                Documento docEjemplar = (Documento) cmb_documentos_ejemplar.getSelectedItem();
+                String codBarra = txt_cod_barra_ejemplar.getText();
+                Ubicacion ubiEjemplar = (Ubicacion) cmb_ubicacion_ejemplar.getSelectedItem();
+                EstadoEjemplar estEjemplar = (EstadoEjemplar) cmb_estado_ejemplar.getSelectedItem();
+                String observaciones = txt_observaciones_ejemplar.getText();
+                String fechaAdquisicion = datePickerWrapper.getFormattedDate();
+
+                Ejemplar model = new Ejemplar();
+                model.setDocumento(docEjemplar);
+                model.setCodigoBarra(codBarra);
+                model.setUbicacion(ubiEjemplar);
+                model.setEstadoEjemplar(estEjemplar);
+                model.setObservaciones(observaciones);
+                model.setFechaAdquisicion(DatePickerUtils.parseToLocalDate(fechaAdquisicion));
+                model.setHabilitado(true);
+               
+                Boolean exito = ejemplarController.insertar(model);
+
+                if (exito) {
+                    limpiarEjemplar();
+                    cargarEjemplares(ejemplarController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Ejemplar agregado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al agregar el ejemplar.");
+                }
+            }
+         } catch (HeadlessException e) {
+            logger.error("Error al procesar ejemplar: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
     }//GEN-LAST:event_btn_agregar_ejemplarMouseClicked
 
     private void btn_agregar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregar_ejemplarActionPerformed
@@ -2423,19 +2450,70 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_agregar_ejemplarActionPerformed
 
     private void btn_editar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editar_ejemplarActionPerformed
-        // TODO add your handling code here:
+        try {
+            if (Validaciones.validarCamposRequeridos(new JTextField[]{txt_cod_barra_ejemplar}, new JComboBox[]{cmb_documentos_ejemplar, cmb_estado_ejemplar, cmb_ubicacion_ejemplar})) {
+                int idEjemplar = Integer.parseInt(txt_id_ejemplar.getText());
+                Documento docEjemplar = (Documento) cmb_documentos_ejemplar.getSelectedItem();
+                String codBarra = txt_cod_barra_ejemplar.getText();
+                Ubicacion ubiEjemplar = (Ubicacion) cmb_ubicacion_ejemplar.getSelectedItem();
+                EstadoEjemplar estEjemplar = (EstadoEjemplar) cmb_estado_ejemplar.getSelectedItem();
+                String observaciones = txt_observaciones_ejemplar.getText();
+                String fechaAdquisicion = datePickerWrapper.getFormattedDate();
+
+                Ejemplar model = new Ejemplar();
+                model.setEjemplarID(idEjemplar);
+                model.setDocumento(docEjemplar);
+                model.setCodigoBarra(codBarra);
+                model.setUbicacion(ubiEjemplar);
+                model.setEstadoEjemplar(estEjemplar);
+                model.setObservaciones(observaciones);
+                model.setFechaAdquisicion(DatePickerUtils.parseToLocalDate(fechaAdquisicion));
+                model.setHabilitado(true);
+               
+                Boolean exito = ejemplarController.actualizar(model);
+
+                if (exito) {
+                    limpiarEjemplar();
+                    cargarEjemplares(ejemplarController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Ejemplar modificado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al modificar el ejemplar.");
+                }
+            }
+         } catch (HeadlessException e) {
+            logger.error("Error al procesar ejemplar: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+        }
     }//GEN-LAST:event_btn_editar_ejemplarActionPerformed
 
     private void btn_eliminar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_ejemplarActionPerformed
-        // TODO add your handling code here:
+        if(txt_id_ejemplar.getText().length() > 0){
+            if (JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar el ejemplar con ID: " +  txt_id_ejemplar.getText() , "WARNING",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                boolean exito = ejemplarController.eliminar(Integer.parseInt(txt_id_ejemplar.getText()));
+                if (exito) {
+                    limpiarEjemplar();
+                    cargarEjemplares(ejemplarController.listar());
+                    cargarAuditoria(auditController.listar());
+                    JOptionPane.showMessageDialog(null, "Esjemplar eliminado correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar el ejemplar.");
+                }
+            }
+        }else {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un ejemplar antes de eliminarlo.");
+        }
     }//GEN-LAST:event_btn_eliminar_ejemplarActionPerformed
 
     private void btn_limpiar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_ejemplarActionPerformed
-        // TODO add your handling code here:
+        limpiarEjemplar();
     }//GEN-LAST:event_btn_limpiar_ejemplarActionPerformed
 
     private void btn_buscar_ejemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_ejemplarActionPerformed
-        // TODO add your handling code here:
+        String filter = txt_buscar_ejemplar.getText();
+        cargarEjemplares(ejemplarController.buscar(filter));
+        txt_buscar_ejemplar.setText("");
     }//GEN-LAST:event_btn_buscar_ejemplarActionPerformed
 
     private void tbl_ejemplaresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_ejemplaresMouseClicked
@@ -2472,10 +2550,7 @@ public class ConfiguracionFrm extends javax.swing.JFrame {
             }
         }
        
-        DatePicker dp = new DatePicker();
-        JDatePickerImpl datePicker = dp.getComponent();
-        DatePickerUtils.setDateFromString(datePicker, modelo.getValueAt(index, 5).toString());
-        
+        datePickerWrapper.setDateFromString(modelo.getValueAt(index, 5).toString());
         txt_observaciones_ejemplar.setText(Validaciones.safeGetValue(modelo, index, 6)); // posible campo vacío
 
     }//GEN-LAST:event_tbl_ejemplaresMouseClicked
