@@ -81,12 +81,12 @@ public class UsuarioController {
     }
 
     // RESTABLECER CONTRASEÑA
-    public boolean restablecerContraseña(int idUsuario) {
+    public String restablecerContrasenia(String correo, String newPass) {
         try {
-            return usuarioDAO.restablecerContraseña(idUsuario, "1234");
+            return usuarioDAO.restablecerContrasenia(correo, newPass);
         } catch (Exception e) {
             logger.error("Error al restablecer contraseña: " + e.getMessage());
-            return false;
+            return "";
         }
     }
 

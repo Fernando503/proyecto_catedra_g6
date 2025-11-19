@@ -142,7 +142,7 @@ public class CategoriaDAO {
     // ---------------------------------------------------------
     public boolean actualizarCategoria(Categoria c) {
         String sql = "UPDATE categorias SET nombre_categoria = ?, descripcion = ?, habilitado = ? "
-                   + "WHERE categoria_id = ?";
+                   + "WHERE categoria_id = ? AND habilitado = TRUE";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -169,7 +169,7 @@ public class CategoriaDAO {
     // ELIMINAR CATEGORÍA
     // ---------------------------------------------------------
     public boolean eliminarCategoria(int id) {
-        String sql = "UPDATE categorias SET habilitado = 0 WHERE categoria_id = ?";
+        String sql = "UPDATE categorias SET habilitado = 0 WHERE categoria_id = ? AND habilitado = TRUE";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {

@@ -191,7 +191,7 @@ public class UsuarioDAO {
     public boolean actualizarUsuario(Usuario usuario) {
         String sql = "UPDATE usuarios " +
                      "SET nombre = ?, correo = ?, rol_id = ?, habilitado = ? " +
-                     "WHERE usuario_id = ?";
+                     "WHERE usuario_id = ? AND habilitado = TRUE";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -219,7 +219,7 @@ public class UsuarioDAO {
     // ELIMINAR USUARIO
     // =====================================================
     public boolean eliminarUsuario(int idUsuario) {
-        String sql = "UPDATE usuarios SET habilitado = false WHERE usuario_id = ?";
+        String sql = "UPDATE usuarios SET habilitado = false WHERE usuario_id = ? AND habilitado = TRUE";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -240,22 +240,38 @@ public class UsuarioDAO {
     // =====================================================
     // RESTABLECER CONTRASEÑA
     // =====================================================
-    public boolean restablecerContraseña(int idUsuario, String nuevaContraseña) {
-        String sql = "UPDATE usuarios SET password = SHA2(?, 256) WHERE usuario_id = ?";
+    public String restablecerContrasenia(String correo, String nuevaContraseña) {
+        String sqlCheck = "SELECT COUNT(*) FROM usuarios WHERE correo = ? AND habilitado = TRUE";
+        String sqlUpdate = "UPDATE usuarios SET password = SHA2(?, 256) WHERE correo = ? AND habilitado = TRUE";
 
-         try (Connection conn = Conexion.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
-            ps.setString(1, nuevaContraseña);
-            ps.setInt(2, idUsuario);
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
 
-            // Auditoría
-            AuditoriaLogger.registrar("CAMBIAR_CONTRASEÑA_USUARIO", "Se actualizó la contraseña para el usuario con ID: " + idUsuario);
-            return ps.executeUpdate() > 0;
+            psCheck.setString(1, correo);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    return "Error: El usuario no existe o no está habilitado.";
+                }
+            }
+
+            try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate)) {
+                psUpdate.setString(1, nuevaContraseña);
+                psUpdate.setString(2, correo);
+
+                int filas = psUpdate.executeUpdate();
+                if (filas > 0) {
+                    // Auditoría
+                    AuditoriaLogger.registrar("CAMBIAR_CONTRASEÑA_USUARIO",
+                            "Se actualizó la contraseña para el usuario con correo: " + correo);
+                    return "Contraseña actualizada correctamente.";
+                } else {
+                    return "Error: No se pudo actualizar la contraseña.";
+                }
+            }
 
         } catch (SQLException e) {
             logger.error("Error al restablecer contraseña: " + e.getMessage());
-            return false;
+            return "Error en la base de datos: " + e.getMessage();
         }
     }
 
